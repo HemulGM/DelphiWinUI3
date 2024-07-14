@@ -1,0 +1,24 @@
+object FrameDialogInput: TFrameDialogInput
+  Size.Width = 320.000000000000000000
+  Size.Height = 66.000000000000000000
+  Size.PlatformDefault = False
+  object LabelInputTitle: TLabel
+    Align = Top
+    Size.Width = 320.000000000000000000
+    Size.Height = 20.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'labelstyle'
+    Text = 'Title'
+    TabOrder = 0
+  end
+  object EditInput: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    Align = Top
+    TabOrder = 1
+    Position.Y = 28.000000000000000000
+    Margins.Top = 8.000000000000000000
+    Size.Width = 320.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

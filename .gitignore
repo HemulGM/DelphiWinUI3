@@ -1,0 +1,9 @@
+/Demo/__history/*
+/Demo/Android64/*
+*/__history/*
+*.~*
+/Demo/Linux64/*
+*.dcu
+*.vlb
+*.dsk
+/Demo/Win32/*

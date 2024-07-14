@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{24E271C8-1BE6-4EA9-AB7F-803F682474F0}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="WinUI3Style.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\#Default\ShareWinTest\Project53.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\#Default\ShareWinTest\Project54.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="WinUI3Style">
+        <MSBuild Projects="WinUI3Style.dproj"/>
+    </Target>
+    <Target Name="WinUI3Style:Clean">
+        <MSBuild Projects="WinUI3Style.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="WinUI3Style:Make">
+        <MSBuild Projects="WinUI3Style.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Project53">
+        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project53.dproj"/>
+    </Target>
+    <Target Name="Project53:Clean">
+        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project53.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Project53:Make">
+        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project53.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Project54">
+        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project54.dproj"/>
+    </Target>
+    <Target Name="Project54:Clean">
+        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project54.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Project54:Make">
+        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project54.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="WinUI3Style;Project53;Project54"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="WinUI3Style:Clean;Project53:Clean;Project54:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="WinUI3Style:Make;Project53:Make;Project54:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

@@ -1,0 +1,9 @@
+[submodule "WindowsNotificationManager"]
+	path = WindowsNotificationManager
+	url = https://github.com/HemulGM/WindowsNotificationManager
+[submodule "DelphiWindowStyle"]
+	path = DelphiWindowStyle
+	url = https://github.com/HemulGM/DelphiWindowStyle
+[submodule "FMXWindowsDispatch"]
+	path = FMXWindowsDispatch
+	url = https://github.com/HemulGM/FMXWindowsDispatch
