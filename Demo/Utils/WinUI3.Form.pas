@@ -5,11 +5,13 @@ interface
 uses
   System.SysUtils, System.Classes, System.Types, FMX.Edit, FMX.Controls,
   System.UITypes, FMX.Memo, FMX.StdCtrls, FMX.Graphics, FMX.Forms, FMX.Types,
-  FMX.Ani, FMX.ActnList;
+  FMX.Ani, FMX.Filter.Effects, FMX.ActnList, DelphiWindowStyle.FMX;
 
 type
   TPopup = class(FMX.Controls.TPopup)
   end;
+
+  TSystemBackdropType = DelphiWindowStyle.FMX.TSystemBackdropType;
 
   TWinUIForm = class(TForm)
   protected
@@ -23,6 +25,7 @@ type
     FTimerHint: TTimer;
     FLabelHint: TLabel;
     FFloatAnimationHint: TFloatAnimation;
+    FSystemBackdropType: TSystemBackdropType;
     procedure FloatAnimationHintProcess(Sender: TObject);
     procedure TimerHintCloseTimer(Sender: TObject);
     procedure TimerHintTimer(Sender: TObject);
@@ -35,12 +38,13 @@ type
     constructor Create(AOwner: TComponent); override;
     procedure BeginLauncher(Proc: TProc = nil);
     procedure EndLauncher(Proc: TProc = nil);
+    procedure SystemBackdropType(AType: TSystemBackdropType);
   end;
 
 implementation
 
 uses
-  FMX.Menus, FMX.Platform, DelphiWindowStyle.FMX;
+  FMX.Menus, FMX.Platform;
 
 procedure TWinUIForm.AfterConstruction;
 begin
@@ -51,12 +55,13 @@ end;
 
 constructor TWinUIForm.Create(AOwner: TComponent);
 begin
+  FSystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
   inherited;
   TAnimation.AniFrameRate := 120;
   if not NotInitStyle then
   begin
     SetWindowColorMode(True);
-    if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
+    if SetSystemBackdropType(FSystemBackdropType) then
     begin
       Fill.Kind := TBrushKind.Solid;
       Fill.Color := TAlphaColorRec.Null;
@@ -90,7 +95,7 @@ procedure TWinUIForm.EndLauncher(Proc: TProc);
 begin
   if Assigned(Proc) then
     Proc;
-  if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
+  if SetSystemBackdropType(FSystemBackdropType) then
   begin
     Fill.Kind := TBrushKind.Solid;
     Fill.Color := TAlphaColorRec.Null;
@@ -272,6 +277,12 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TWinUIForm.SystemBackdropType(AType: TSystemBackdropType);
+begin
+  FSystemBackdropType := AType;
+  SetSystemBackdropType(FSystemBackdropType);
 end;
 
 end.

@@ -19,8 +19,8 @@ uses
   {$IFDEF MSWINDOWS}
   FMX.Win.NotificationManager,
   {$ENDIF}
-  FMX.Ani, FMX.ActnList, System.Actions, FMXTee.Engine, FMXTee.Series,
-  FMXTee.Procs, FMXTee.Chart, WinUI3.Form, WinUI3.Frame.Inner.InfoBar;
+  FMX.Ani, FMX.ActnList, System.Actions, WinUI3.Form, WinUI3.Frame.Inner.InfoBar,
+  WinUI3.Frame.Dialog.ColorPicker;
 
 type
   TFormMain = class(TWinUIForm)
@@ -472,7 +472,6 @@ type
     CheckBox8: TCheckBox;
     Switch2: TSwitch;
     Switch3: TSwitch;
-    StyleBookWinUI3: TStyleBook;
     TabItemExpander: TTabItem;
     Button40: TButton;
     Button23: TButton;
@@ -528,13 +527,6 @@ type
     Layout20: TLayout;
     Label14: TLabel;
     Label62: TLabel;
-    TabItemTabView: TTabItem;
-    TabControlView: TTabControl;
-    TabItem23: TTabItem;
-    TabItem24: TTabItem;
-    TabItem25: TTabItem;
-    TabItem26: TTabItem;
-    TabItemAdd: TTabItem;
     ButtonTaskTest: TButton;
     Label63: TLabel;
     Path1: TPath;
@@ -549,7 +541,6 @@ type
     Button47: TButton;
     Button159: TButton;
     Button166: TButton;
-    Button129: TButton;
     Label49: TLabel;
     SpinBox1: TSpinBox;
     Label25: TLabel;
@@ -586,13 +577,6 @@ type
     TreeViewItem27: TTreeViewItem;
     Selection1: TSelection;
     SelectionPoint1: TSelectionPoint;
-    ToolBar1: TToolBar;
-    Button24: TButton;
-    Button25: TButton;
-    Button26: TButton;
-    Button27: TButton;
-    Button28: TButton;
-    Panel13: TPanel;
     SearchBox1: TSearchBox;
     TabItemTabs: TTabItem;
     TabControl2: TTabControl;
@@ -604,7 +588,6 @@ type
     Image2: TImage;
     Image3: TImage;
     Image4: TImage;
-    Panel24: TPanel;
     Panel25: TPanel;
     Layout2: TLayout;
     Label22: TLabel;
@@ -736,8 +719,6 @@ type
     Layout26: TLayout;
     Panel35: TPanel;
     Panel36: TPanel;
-    Chart1: TChart;
-    Series1: TBarSeries;
     Button185: TButton;
     Button189: TButton;
     Button190: TButton;
@@ -914,10 +895,6 @@ type
     Button237: TButton;
     Button238: TButton;
     Button239: TButton;
-    Button240: TButton;
-    Button241: TButton;
-    Button242: TButton;
-    Button243: TButton;
     Layout35: TLayout;
     Rectangle18: TRectangle;
     Rectangle19: TRectangle;
@@ -1004,6 +981,131 @@ type
     CheckBoxInfoBarActionIsClose: TCheckBox;
     SpinBoxInfoBarAC: TSpinBox;
     Label101: TLabel;
+    PanelStoreMenu: TPanel;
+    Button284: TButton;
+    Button285: TButton;
+    Button286: TButton;
+    Button287: TButton;
+    Button288: TButton;
+    ImageListIcons: TImageList;
+    Label102: TLabel;
+    Label103: TLabel;
+    EditWrongTest: TEdit;
+    EditButton9: TEditButton;
+    LabelWrongTest: TLabel;
+    Panel51: TPanel;
+    HorzScrollBoxFilter: THorzScrollBox;
+    RadioButton4: TRadioButton;
+    RadioButton5: TRadioButton;
+    RadioButton6: TRadioButton;
+    RadioButton7: TRadioButton;
+    RadioButton8: TRadioButton;
+    RadioButton9: TRadioButton;
+    RadioButton10: TRadioButton;
+    Button289: TButton;
+    Button290: TButton;
+    ButtonScrollFilterLeft: TButton;
+    ButtonScrollFilterRight: TButton;
+    Layout37: TLayout;
+    Panel52: TPanel;
+    Expander9: TExpander;
+    TabControl6: TTabControl;
+    TabItem6: TTabItem;
+    TabItem8: TTabItem;
+    Memo3: TMemo;
+    Memo4: TMemo;
+    VertScrollBox3: TVertScrollBox;
+    Label104: TLabel;
+    CalloutPanel3: TCalloutPanel;
+    Layout38: TLayout;
+    Label105: TLabel;
+    Label106: TLabel;
+    CalloutPanel4: TCalloutPanel;
+    Layout39: TLayout;
+    Label107: TLabel;
+    Label108: TLabel;
+    ImageViewer1: TImageViewer;
+    PlotGrid1: TPlotGrid;
+    CheckBoxInfoBarAsPanel: TCheckBox;
+    ColorAnimation1: TColorAnimation;
+    StyleBookWinUI3: TStyleBook;
+    Layout40: TLayout;
+    ButtonMenuHome: TButton;
+    ButtonMenuButtons: TButton;
+    ButtonMenuStandart: TButton;
+    ButtonMenuLabels: TButton;
+    ButtonMenuDT: TButton;
+    ButtonMenuInput: TButton;
+    ButtonMenuActions: TButton;
+    VertScrollBoxMenu: TVertScrollBox;
+    ButtonMenuLists: TButton;
+    ButtonMenuSplitter: TButton;
+    ButtonMenuMore: TButton;
+    ButtonMenuGrid: TButton;
+    ButtonMenuIndicators: TButton;
+    ButtonMenuOther: TButton;
+    ButtonMenuMultiView: TButton;
+    ButtonMenuExpander: TButton;
+    ButtonMenuTabControl: TButton;
+    ButtonMenuColors: TButton;
+    ButtonMenuNotify: TButton;
+    ButtonMenuDialogs: TButton;
+    Panel53: TPanel;
+    ButtonMenuMenus: TButton;
+    TabItemMenus: TTabItem;
+    ToolBar1: TToolBar;
+    Button24: TButton;
+    Button25: TButton;
+    Button26: TButton;
+    Button27: TButton;
+    Button28: TButton;
+    Panel13: TPanel;
+    ToolBar2: TToolBar;
+    Button296: TButton;
+    Button297: TButton;
+    Button298: TButton;
+    Button299: TButton;
+    Button240: TButton;
+    TabItemHome: TTabItem;
+    TabControlView: TTabControl;
+    TabItem23: TTabItem;
+    TabItem24: TTabItem;
+    TabItem25: TTabItem;
+    TabItem26: TTabItem;
+    TabItemAdd: TTabItem;
+    ScrollBox7: TScrollBox;
+    ColorPanel1: TColorPanel;
+    ColorPanel3: TColorPanel;
+    Button129: TButton;
+    ListBox13: TListBox;
+    ListBoxItem131: TListBoxItem;
+    ListBoxItem133: TListBoxItem;
+    ListBoxItem134: TListBoxItem;
+    MetropolisUIListBoxItem6: TMetropolisUIListBoxItem;
+    ListBoxHeader2: TListBoxHeader;
+    SearchBox4: TSearchBox;
+    ListBoxGroupHeader6: TListBoxGroupHeader;
+    ListBoxItem132: TListBoxItem;
+    ListBoxItem135: TListBoxItem;
+    ListBoxItem136: TListBoxItem;
+    ListBoxItem137: TListBoxItem;
+    ListBoxGroupFooter6: TListBoxGroupFooter;
+    Button241: TButton;
+    Button242: TButton;
+    Button243: TButton;
+    Button291: TButton;
+    Label109: TLabel;
+    Label110: TLabel;
+    Label111: TLabel;
+    Label112: TLabel;
+    Label113: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    Label114: TLabel;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1040,12 +1142,23 @@ type
     procedure EditSearchKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
     procedure EditSearchKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
     procedure ListBoxSearchKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
-    procedure Panel40Click(Sender: TObject);
     procedure Button240Click(Sender: TObject);
     procedure Button241Click(Sender: TObject);
     procedure Button242Click(Sender: TObject);
     procedure Button243Click(Sender: TObject);
     procedure ButtonInfoBarShowClick(Sender: TObject);
+    procedure Button284Click(Sender: TObject);
+    procedure EditWrongTestChangeTracking(Sender: TObject);
+    procedure HorzScrollBoxFilterViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
+    procedure ButtonScrollFilterLeftClick(Sender: TObject);
+    procedure ButtonScrollFilterRightClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ButtonMenuActionsClick(Sender: TObject);
+    procedure TabControlMainChange(Sender: TObject);
+    procedure ButtonMenuActionsMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+    procedure Button7Click(Sender: TObject);
+    procedure ColorPanel1Change(Sender: TObject);
+    procedure Button223Click(Sender: TObject);
   private
     {$IFDEF MSWINDOWS}
     FNotifyManager: TNotificationManager;
@@ -1068,7 +1181,7 @@ implementation
 uses
   DelphiWindowStyle.FMX, FMX.BehaviorManager, System.Math, System.IOUtils,
   System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery, FMX.Platform,
-  FMX.Platform.Win, WinUI3.Frame.Dialog.Test, WinUI3.Dialogs;
+  WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic;
 
 {$R *.fmx}
 
@@ -1215,9 +1328,32 @@ begin                 {
     Params);
 end;
 
+procedure TFormMain.ButtonMenuActionsClick(Sender: TObject);
+begin
+  TabControlMain.ActiveTab := TabControlMain.Tabs[(Sender as TButton).Tag];
+end;
+
+procedure TFormMain.ButtonMenuActionsMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+  TabControlMainChange(nil);
+end;
+
 procedure TFormMain.ButtonMoreFluentIconsClick(Sender: TObject);
 begin
   //https://icones.js.org/collection/fluent
+end;
+
+procedure TFormMain.Button223Click(Sender: TObject);
+begin
+  TTask.Run(
+    procedure
+    begin
+      Button1.BeginInvoke(
+        procedure
+        begin
+          Button1.Text := 'Test';
+        end, Button1);
+    end);
 end;
 
 procedure TFormMain.Button240Click(Sender: TObject);
@@ -1260,6 +1396,13 @@ begin
   Fill.Color := $FF1C1C1C;
 end;
 
+procedure TFormMain.Button284Click(Sender: TObject);
+begin
+  for var Control in PanelStoreMenu.Controls do
+    if Control is TButton then
+      TButton(Control).IsPressed := Control = Sender;
+end;
+
 procedure TFormMain.ButtonInfoBarShowClick(Sender: TObject);
 begin
   var Params: TInfoBarParams;
@@ -1272,12 +1415,13 @@ begin
   Params.ActionAsHyperLink := CheckBoxInfoBarHyper.IsChecked;
   Params.ActionIsClose := CheckBoxInfoBarActionIsClose.IsChecked;
   Params.AutoCloseDelay := Trunc(SpinBoxInfoBarAC.Value) * 1000;
-  TWinUIDialog.ShowInfoBar(Self,
+  Params.AsPanel := CheckBoxInfoBarAsPanel.IsChecked;
+  TWinUIDialog.ShowInfoBar(LayoutContent,
     procedure(WasAction: Boolean)
     begin
       if WasAction then
         ShowUIMessage(Self, 'Was action pressed');
-    end, Params);
+    end, nil, Params);
 end;
 
 procedure TFormMain.Button4Click(Sender: TObject);
@@ -1285,8 +1429,14 @@ begin
   TFormGallery.Create(Application).Show;
 end;
 
+procedure TFormMain.Button7Click(Sender: TObject);
+begin
+  TFormMusic.Create(Application).Show;
+end;
+
 procedure TFormMain.ButtonShareClick(Sender: TObject);
 begin
+  {$IFDEF MSWINDOWS}
   TWinUIDialog.ShowShare(Self,
     procedure(Share: TShareContract)
     begin
@@ -1300,6 +1450,7 @@ begin
       //Share.IconFile := 'D:\Downloads\75614.jpg';
       //Share.LogoFile := 'D:\Downloads\75614.jpg';
     end);
+  {$ENDIF}
 end;
 
 procedure TFormMain.ButtonNotifyClick(Sender: TObject);
@@ -1309,7 +1460,7 @@ begin
 
   var NotifyContent := TToastContentBuilder.Create
     .UseButtonStyle(True)
-    .AddText(TToastText.Create.Text('{title}'))
+    .AddText(TToastText.Create.Text('{title}{'))
     .AddText(TToastText.Create.Text('This is the Windows 10+ notifications engine for Delphi'))
     .AddGroup(TToastGroup.Create.SubGroups([
     TToastSubGroup.Create
@@ -1392,11 +1543,6 @@ begin
   ShowUIMessage(Self, 'NotifDismissed', Ord(Reason).ToString);
 end;
 
-procedure TFormMain.Panel40Click(Sender: TObject);
-begin
-
-end;
-
 {$ENDIF}
 
 procedure TFormMain.ColorButton1Click(Sender: TObject);
@@ -1413,6 +1559,13 @@ end;
 procedure TFormMain.ColorComboBox1Change(Sender: TObject);
 begin
   ColorButton3.Color := ColorComboBox1.Color;
+end;
+
+procedure TFormMain.ColorPanel1Change(Sender: TObject);
+begin
+  Fill.Kind := TBrushKind.Gradient;
+  Fill.Gradient.Color := ColorPanel1.Color;
+  Fill.Gradient.Color1 := ColorPanel3.Color;
 end;
 
 procedure TFormMain.DropTarget1Dropped(Sender: TObject; const Data: TDragObject; const Point: TPointF);
@@ -1573,6 +1726,12 @@ begin
     TryOpenTabByName(EditSearch.Text);
 end;
 
+procedure TFormMain.EditWrongTestChangeTracking(Sender: TObject);
+begin
+  LabelWrongTest.Visible := EditWrongTest.Text.Length < 3;
+  Invalidate;
+end;
+
 procedure TFormMain.TryOpenTabByName(const Text: string);
 begin
   for var i := 0 to TabControlMain.TabCount - 1 do
@@ -1602,6 +1761,22 @@ end;
 procedure TFormMain.FormDestroy(Sender: TObject);
 begin
   //
+end;
+
+procedure TFormMain.HorzScrollBoxFilterViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
+begin
+  ButtonScrollFilterLeft.Visible := NewViewportPosition.X <> 0;
+  ButtonScrollFilterRight.Visible := NewViewportPosition.X + HorzScrollBoxFilter.Width < HorzScrollBoxFilter.ContentBounds.Width;
+end;
+
+procedure TFormMain.ButtonScrollFilterLeftClick(Sender: TObject);
+begin
+  HorzScrollBoxFilter.AniCalculations.MouseWheel(-HorzScrollBoxFilter.Width / 3, 0);
+end;
+
+procedure TFormMain.ButtonScrollFilterRightClick(Sender: TObject);
+begin
+  HorzScrollBoxFilter.AniCalculations.MouseWheel(+HorzScrollBoxFilter.Width / 3, 0);
 end;
 
 procedure TFormMain.HorzScrollBoxSpinViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
@@ -1635,6 +1810,13 @@ begin
       FSearchItemClick(ListBoxSearch.Selected);
 end;
 
+procedure TFormMain.TabControlMainChange(Sender: TObject);
+begin
+  for var Control in VertScrollBoxMenu.Content.Controls do
+    if Control is TButton then
+      TButton(Control).IsPressed := Control.Tag = TabControlMain.ActiveTab.Index;
+end;
+
 procedure TFormMain.TabItemAddClick(Sender: TObject);
 begin
   if TabControlView.ActiveTab = TabItemAdd then
@@ -1657,14 +1839,7 @@ begin
   //
   var Tab := TFMXObjectHelper.GetNearestParentOfClass<TTabItem>(Btn);
   if Assigned(Tab) then
-  begin
-    var TabIndex := Tab.Index;
-    TThread.ForceQueue(nil,
-      procedure
-      begin
-        TabControlView.Delete(TabIndex);
-      end);
-  end;
+    Tab.Release;
 end;
 
 procedure TFormMain.VertScrollBoxCaruselViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
@@ -1691,22 +1866,34 @@ begin
   end;
 end;
 
+procedure TFormMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  //
+end;
+
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
+  TAnimation.AniFrameRate := 120;
   ScrollBox1.AniCalculations.Animation := True;
   ScrollBox2.AniCalculations.Animation := True;
   ScrollBox3.AniCalculations.Animation := True;
   ScrollBox4.AniCalculations.Animation := True;
   ScrollBox5.AniCalculations.Animation := True;
   ScrollBox6.AniCalculations.Animation := True;
+  ScrollBox7.AniCalculations.Animation := True;
   VertScrollBox2.AniCalculations.Animation := True;
   VertScrollBoxCarusel.AniCalculations.Animation := True;
   VertScrollBox1.AniCalculations.Animation := True;
+  VertScrollBox3.AniCalculations.Animation := True;
+  VertScrollBoxMenu.AniCalculations.Animation := True;
   HorzScrollBoxSpin.AniCalculations.Animation := True;
   Grid1.AniCalculations.Animation := True;
   StringGrid1.AniCalculations.Animation := True;
   Memo1.ScrollAnimation := TBehaviorBoolean.True;
   Memo2.ScrollAnimation := TBehaviorBoolean.True;
+  Memo3.ScrollAnimation := TBehaviorBoolean.True;
+  Memo4.ScrollAnimation := TBehaviorBoolean.True;
+  MemoInfoBarBody.ScrollAnimation := TBehaviorBoolean.True;
 
   ListBox1.AniCalculations.Animation := True;
   ListBox2.AniCalculations.Animation := True;
@@ -1719,9 +1906,11 @@ begin
   ListBox9.AniCalculations.Animation := True;
   ListBox10.AniCalculations.Animation := True;
   ListBox11.AniCalculations.Animation := True;
+  ListBox13.AniCalculations.Animation := True;
   TreeView1.AniCalculations.Animation := True;
   ColorListBox1.AniCalculations.Animation := True;
   ListBoxSearch.AniCalculations.Animation := True;
+  HorzScrollBoxFilter.AniCalculations.Animation := True;
 
   for var i := 0 to VertScrollBoxCarusel.Content.ControlsCount - 1 do
     if VertScrollBoxCarusel.Content.Controls[i] is TButton then
@@ -1737,7 +1926,6 @@ begin
     procedure
     begin
       LayoutContent.Visible := False;
-      LayoutContent.PrepareForPaint;
       LayoutLauncher.Visible := True;
       TimerEndLaunch.Enabled := True;
     end);
@@ -1767,12 +1955,7 @@ begin
   EndLauncher(
     procedure
     begin
-      LayoutContent.Opacity := 0.1;
-      LayoutContent.PrepareForPaint;
       LayoutContent.Visible := True;
-      TAnimator.AnimateFloat(LayoutContent, 'Opacity', 1);
-      LayoutLauncher.Opacity := 1;
-      TAnimator.AnimateFloat(LayoutLauncher, 'Opacity', 0);
       LayoutLauncher.Visible := False;
     end);
 end;

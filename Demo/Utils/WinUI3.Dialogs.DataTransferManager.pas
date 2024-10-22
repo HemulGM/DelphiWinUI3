@@ -3,11 +3,16 @@
 interface
 
 uses
-  System.SysUtils, System.Classes, Winapi.Windows, Winapi.WinRT,
-  System.Generics.Collections, System.Win.ShareContract, FMX.Forms,
-  Winapi.ApplicationModel.DataTransfer, System.Win.WinRT, Winapi.CommonTypes;
+  System.SysUtils, System.Classes,
+  {$IFDEF MSWINDOWS}
+  Winapi.Windows, Winapi.WinRT, System.Generics.Collections,
+  System.Win.ShareContract, Winapi.ApplicationModel.DataTransfer,
+  System.Win.WinRT, Winapi.CommonTypes,
+  {$ENDIF}
+  FMX.Forms;
 
 type
+  {$IFDEF MSWINDOWS}
   TShareContract = class(System.Win.ShareContract.TShareContract)
     type
       TDataTransferEventHandler = class(TInspectableObject, TypedEventHandler_2__IDataTransferManager__IDataRequestedEventArgs_Delegate_Base, TypedEventHandler_2__IDataTransferManager__IDataRequestedEventArgs)
@@ -31,6 +36,11 @@ type
     function First: IIterator_1__IStorageItem; safecall;
     procedure Add(AItem: IStorageItem);
   end;
+  {$ELSE}
+
+  TShareContract = class
+  end;
+  {$ENDIF}
 
 var
   LastShare: TShareContract = nil;
@@ -39,11 +49,15 @@ procedure ShowShareUI(Form: TCustomForm; Proc: TProc<TShareContract>);
 
 implementation
 
+{$IFDEF MSWINDOWS}
+
 uses
   FMX.Platform.Win, Winapi.Foundation, Winapi.Storage;
+{$ENDIF}
 
 procedure ShowShareUI(Form: TCustomForm; Proc: TProc<TShareContract>);
 begin
+  {$IFDEF MSWINDOWS}
   TShareContract.OnProcessMessages := Application.ProcessMessages;
   if LastShare <> nil then
   begin
@@ -58,7 +72,10 @@ begin
     LastShare.Free;
     LastShare := nil;
   end;
+  {$ENDIF}
 end;
+
+{$IFDEF MSWINDOWS}
 
 { TShareContract.TDataTransferEventHandler }
 
@@ -239,6 +256,7 @@ function TIterableStorageItems.First: IIterator_1__IStorageItem;
 begin
   Result := TIteratorStorageItems.Create(FItems);
 end;
+{$ENDIF}
 
 initialization
 

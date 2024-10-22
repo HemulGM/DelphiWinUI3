@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.790,D:\Projects\#Default\ProjectGroup6.groupproj=D:\Projects\#Styles\WinUI3\Demo\ProjectGroup6.groupproj</Transaction>
-    <Transaction>2024.07.10 21:05:53.034,D:\Projects\#Styles\WinUI3\Demo\WinUI3StyleGroup.groupproj=D:\Projects\#Styles\WinUI3\Demo\ProjectGroup6.groupproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.034,D:\Projects\#Styles\WinUI3\Demo\ProjectGroup6.groupproj=D:\Projects\#Styles\WinUI3\Demo\WinUI3StyleGroup.groupproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.790,D:\Projects\#Styles\WinUI3\Demo\ProjectGroup6.groupproj=D:\Projects\#Default\ProjectGroup6.groupproj</Transaction>
   </Transactions>
 	<Default.Personality>
 		<Projects ActiveProject="D:\Projects\#Styles\WinUI3\Demo\WinUI3Style.dproj"/>

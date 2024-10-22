@@ -12,6 +12,12 @@
         <Projects Include="..\..\..\#Default\ShareWinTest\Project54.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\..\..\#Lessons\ChatGPTNote\Project55.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\..\HGMGetIt\HGetIt.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -47,14 +53,32 @@
     <Target Name="Project54:Make">
         <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project54.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Project55">
+        <MSBuild Projects="..\..\..\#Lessons\ChatGPTNote\Project55.dproj"/>
+    </Target>
+    <Target Name="Project55:Clean">
+        <MSBuild Projects="..\..\..\#Lessons\ChatGPTNote\Project55.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Project55:Make">
+        <MSBuild Projects="..\..\..\#Lessons\ChatGPTNote\Project55.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="HGetIt">
+        <MSBuild Projects="..\..\..\HGMGetIt\HGetIt.dproj"/>
+    </Target>
+    <Target Name="HGetIt:Clean">
+        <MSBuild Projects="..\..\..\HGMGetIt\HGetIt.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="HGetIt:Make">
+        <MSBuild Projects="..\..\..\HGMGetIt\HGetIt.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="WinUI3Style;Project53;Project54"/>
+        <CallTarget Targets="WinUI3Style;Project53;Project54;Project55;HGetIt"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="WinUI3Style:Clean;Project53:Clean;Project54:Clean"/>
+        <CallTarget Targets="WinUI3Style:Clean;Project53:Clean;Project54:Clean;Project55:Clean;HGetIt:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="WinUI3Style:Make;Project53:Make;Project54:Make"/>
+        <CallTarget Targets="WinUI3Style:Make;Project53:Make;Project54:Make;Project55:Make;HGetIt:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -53,7 +53,7 @@ type
   public //share
     class procedure ShowShare(Owner: TCustomForm; Params: TProc<TShareContract>);
   public //infobar
-    class function ShowInfoBar(Owner: TFmxObject; OnClose: TProc<Boolean>; Params: TInfoBarParams): TFrameInnerInfoBar;
+    class function ShowInfoBar(Owner: TFmxObject; OnClose: TProc<Boolean>; OnAction: TProc; Params: TInfoBarParams): TFrameInnerInfoBar;
   end;
 
 procedure ShowUIMessage(Owner: TCustomForm; const Body: string); overload;
@@ -75,7 +75,7 @@ begin
   var Data: TDialogTextParams;
   Data.Title := Title;
   Data.Body := Body;
-  Data.Buttons := ['OK'];
+  Data.Buttons := [Translate('OK')];
   Data.AccentId := -1;
   Data.DefaultId := 0;
   Data.CanClose := True;
@@ -130,9 +130,9 @@ begin
   TFrameInnerDialog.Execute(Owner, Callback, Title, Body, Buttons, AccentId, DefaultId, CanClose, FrameColor);
 end;
 
-class function TWinUIDialog.ShowInfoBar(Owner: TFmxObject; OnClose: TProc<Boolean>; Params: TInfoBarParams): TFrameInnerInfoBar;
+class function TWinUIDialog.ShowInfoBar(Owner: TFmxObject; OnClose: TProc<Boolean>; OnAction: TProc; Params: TInfoBarParams): TFrameInnerInfoBar;
 begin
-  Result := TFrameInnerInfoBar.Execute(Owner, OnClose, Params);
+  Result := TFrameInnerInfoBar.Execute(Owner, OnClose, OnAction, Params);
 end;
 
 class procedure TWinUIDialog.ShowInline(Owner: TCustomForm; Callback: TProc<Integer>; const Title, Body: string; Buttons: TArray<string>; AccentId, DefaultId: Integer; CanClose: Boolean; FrameColor: TColor);

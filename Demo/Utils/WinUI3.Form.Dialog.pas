@@ -228,7 +228,11 @@ begin
     end);
   if Assigned(Ready) then
     Ready;
+  {$IF DEFINED(ANDROID) or DEFINED(IOS)}
+  Form.Show;
+  {$ELSE}
   Form.ShowModal;
+  {$ENDIF}
   Result.Result := Form.FResult;
   Result.IsChecked := Form.FCheck;
 end;

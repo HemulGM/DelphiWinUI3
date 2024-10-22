@@ -7,3 +7,6 @@
 [submodule "FMXWindowsDispatch"]
 	path = FMXWindowsDispatch
 	url = https://github.com/HemulGM/FMXWindowsDispatch
+[submodule "FMXWindowsHint"]
+	path = FMXWindowsHint
+	url = https://github.com/HemulGM/FMXWindowsHint

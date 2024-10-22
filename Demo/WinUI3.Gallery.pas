@@ -9,7 +9,7 @@ uses
   FMX.ImgList, FMX.MultiView, FMX.Objects, FMX.Edit, Data.Bind.EngExt,
   Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components, FMX.Ani, FMX.TabControl, System.Generics.Collections,
-  FMX.Memo, WinUI3.Form;
+  FMX.Memo, WinUI3.Main, WinUI3.Form;
 
 type
   TNavigationItem = record
@@ -160,7 +160,7 @@ var
 implementation
 
 uses
-  WinUI3.Main, DelphiWindowStyle.FMX, System.Math;
+  DelphiWindowStyle.FMX, System.Math;
 
 {$R *.fmx}
 

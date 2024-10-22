@@ -25,7 +25,8 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
   end
   object AlphaTrackBar: TAlphaTrackBar
     CanParentFocus = True
-    Frequency = 0.050000000745058060
+    Frequency = 1.000000000000000000
+    Max = 255.000000000000000000
     Orientation = Horizontal
     Position.X = 4.000000000000000000
     Position.Y = 323.000000000000000000
@@ -38,7 +39,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
   end
   object BWTrackBar: TBWTrackBar
     CanParentFocus = True
-    Frequency = 0.050000000745058060
+    Frequency = 0.003000000026077032
     Orientation = Horizontal
     Position.X = 4.000000000000000000
     Position.Y = 288.000000000000000000
@@ -47,7 +48,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
     Size.PlatformDefault = False
     StyleLookup = 'trackbarstyle_color'
     TabOrder = 6
-    Value = 0.800000011920929000
+    Value = 0.801000006962567600
     OnChange = BWTrackBarChange
   end
   object ComboBoxType: TComboBox
@@ -127,7 +128,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       TextSettings.WordWrap = False
-      Text = 'LabelR'
+      Text = 'LabelG'
       TabOrder = 0
     end
   end
@@ -154,7 +155,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       TextSettings.WordWrap = False
-      Text = 'LabelR'
+      Text = 'LabelB'
       TabOrder = 0
     end
   end

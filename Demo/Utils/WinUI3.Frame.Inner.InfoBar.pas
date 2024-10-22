@@ -26,6 +26,7 @@ type
     ActionAsHyperLink: Boolean;
     ActionIsClose: Boolean;
     AutoCloseDelay: Int64;
+    AsPanel: Boolean;
   end;
 
   TFrameInnerInfoBar = class(TFrame, ITabStopController)
@@ -64,6 +65,8 @@ type
     FActionAsHyperLink: Boolean;
     FActionIsClose: Boolean;
     FAutoCloseDelay: Int64;
+    FAsPanel: Boolean;
+    FOnAction: TProc;
     procedure SetTitle(const Value: string);
     procedure SetBody(const Value: string);
     procedure SetInfoType(const Value: TInfoBarType);
@@ -80,6 +83,8 @@ type
     procedure UpdateSize;
     procedure InternalClose;
     procedure CloseAni;
+    procedure SetAsPanel(const Value: Boolean);
+    procedure SetOnAction(const Value: TProc);
   public
     constructor Create(AOwner: TFmxObject); reintroduce;
     procedure EndUpdate; override;
@@ -94,13 +99,15 @@ type
     property WasActionPressed: Boolean read FWasActionPressed;
     property CanClose: Boolean read FCanClose write SetCanClose;
     property OnClose: TProc<Boolean> read FOnClose write SetOnClose;
+    property OnAction: TProc read FOnAction write SetOnAction;
     property BarPosition: TInfoBarPosition read FBarPosition write SetBarPosition;
+    property AsPanel: Boolean read FAsPanel write SetAsPanel;
     /// <summary>
     /// In milliseconds
     /// </summary>
     property AutoCloseDelay: Int64 read FAutoCloseDelay write SetAutoCloseDelay;
   public
-    class function Execute(Owner: TFmxObject; OnClose: TProc<Boolean>; Params: TInfoBarParams): TFrameInnerInfoBar;
+    class function Execute(Owner: TFmxObject; OnClose: TProc<Boolean>; OnAction: TProc; Params: TInfoBarParams): TFrameInnerInfoBar;
   end;
 
 implementation
@@ -137,8 +144,13 @@ end;
 procedure TFrameInnerInfoBar.ButtonActionClick(Sender: TObject);
 begin
   FWasActionPressed := True;
-  if FActionIsClose then
-    Close;
+  try
+    if Assigned(FOnAction) then
+      FOnAction();
+  finally
+    if FActionIsClose then
+      Close;
+  end;
 end;
 
 procedure TFrameInnerInfoBar.FloatAnimationCloseFinish(Sender: TObject);
@@ -195,6 +207,12 @@ begin
   UpdateSize;
 end;
 
+procedure TFrameInnerInfoBar.SetAsPanel(const Value: Boolean);
+begin
+  FAsPanel := Value;
+  UpdateSize;
+end;
+
 procedure TFrameInnerInfoBar.SetAutoCloseDelay(const Value: Int64);
 begin
   FAutoCloseDelay := Value;
@@ -232,6 +250,23 @@ begin
     Exit;
   if IsUpdating then
     Exit;
+  if FAsPanel then
+  begin
+    PanelInfoBar.StylesData['bg.XRadius'] := 0;
+    PanelInfoBar.StylesData['bg.YRadius'] := 0;
+    case FBarPosition of
+      TInfoBarPosition.Top:
+        Align := TAlignLayout.Top;
+      TInfoBarPosition.Bottom:
+        Align := TAlignLayout.Bottom;
+    end;
+  end
+  else
+  begin
+    PanelInfoBar.StylesData['bg.XRadius'] := 7;
+    PanelInfoBar.StylesData['bg.YRadius'] := 7;
+    Align := TAlignLayout.Contents;
+  end;
   var MaxWidth := GetMaxWidth;
   var MaxWidthLeft := MaxWidth;
   var ContentWidth: Single := 0;
@@ -298,8 +333,19 @@ begin
   else
     ContentWidth := ContentWidth - FlowLayoutContent.HorizontalGap;
   FlowLayoutContent.RecalcSize;
-  PanelInfoBar.Width := ContentWidth + PanelInfoBar.Padding.Left + PanelInfoBar.Padding.Right;
-  LayoutContent.Height := PanelInfoBar.Height + 100;
+  if FAsPanel then
+  begin
+    PanelInfoBar.Width := LayoutContent.Width;
+    LayoutContent.Height := PanelInfoBar.Height;
+    Height := LayoutContent.Height;
+    ShadowEffect1.Enabled := False;
+  end
+  else
+  begin
+    PanelInfoBar.Width := ContentWidth + PanelInfoBar.Padding.Left + PanelInfoBar.Padding.Right;
+    LayoutContent.Height := PanelInfoBar.Height + 100;
+    ShadowEffect1.Enabled := True;
+  end;
   if FActionAsHyperLink and (ButtonAction.Position.X <= 0) then
     ButtonAction.Margins.Left := -8
   else
@@ -338,6 +384,11 @@ begin
   end;
   LayoutLeft.Visible := Value <> TInfoBarType.None;
   UpdateSize;
+end;
+
+procedure TFrameInnerInfoBar.SetOnAction(const Value: TProc);
+begin
+  FOnAction := Value;
 end;
 
 procedure TFrameInnerInfoBar.SetOnClose(const Value: TProc<Boolean>);
@@ -422,14 +473,16 @@ begin
   end;
 end;
 
-class function TFrameInnerInfoBar.Execute(Owner: TFmxObject; OnClose: TProc<Boolean>; Params: TInfoBarParams): TFrameInnerInfoBar;
+class function TFrameInnerInfoBar.Execute(Owner: TFmxObject; OnClose: TProc<Boolean>; OnAction: TProc; Params: TInfoBarParams): TFrameInnerInfoBar;
 begin
   Result := TFrameInnerInfoBar.Create(Owner);
   Result.Parent := Owner;
   Result.BeginUpdate;
   Result.OnClose := OnClose;
+  Result.OnAction := OnAction;
   try
     Result.Align := TAlignLayout.Contents;
+    Result.AsPanel := Params.AsPanel;
     Result.Title := Params.Title;
     Result.Body := Params.Body;
     Result.InfoType := Params.InfoType;

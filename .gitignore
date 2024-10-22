@@ -7,3 +7,4 @@
 *.vlb
 *.dsk
 /Demo/Win32/*
+/Demo/Android/Debug/*

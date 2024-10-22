@@ -3,10 +3,13 @@
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, System.Types, System.UITypes, System.Classes,
-  System.Variants, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs,
-  FMX.StdCtrls, FMX.Edit, FMX.ListBox, FMX.Colors, FMX.Controls.Presentation,
-  FMX.Objects;
+  System.SysUtils,
+  {$IFDEF MSWINDOWS}
+  Winapi.Windows,
+  {$ENDIF}
+  System.Types, System.UITypes, System.Classes, System.Variants, FMX.Types,
+  FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls, FMX.Edit,
+  FMX.ListBox, FMX.Colors, FMX.Controls.Presentation, FMX.Objects;
 
 type
   TDialogColorParams = record
@@ -149,12 +152,11 @@ begin
   BeginUpdate;
   try
     var Color := ChangeHSVValue(FRawColor, BWTrackBar.Value);
-    Color := ChangeAlpha(Color, Trunc(AlphaTrackBar.Value * 255));
+    Color := ChangeAlpha(Color, Trunc(AlphaTrackBar.Value));
+
     RectangleColor.Fill.Color := Color;
+
     var Rec := TAlphaColorRec.Create(Color);
-    EditHEX.Text := '#' + IntToHex(Color, 8);
-    var H, S, V: Double;
-    RGBToHSV(Rec.R, Rec.G, Rec.B, H, S, V);
     case ComboBoxType.ItemIndex of
       0:
         begin
@@ -167,6 +169,8 @@ begin
         end;
       1:
         begin
+          var H, S, V: Double;
+          RGBToHSV(Rec.R, Rec.G, Rec.B, H, S, V);
           EditR.Text := Trunc(H * 360).ToString;
           EditG.Text := Trunc(S * 100).ToString;
           EditB.Text := Trunc(V * 100).ToString;
@@ -175,7 +179,12 @@ begin
           LabelB.Text := 'V';
         end;
     end;
+    EditHEX.Text := '#' + IntToHex(Color, 8);
     EditA.Text := Rec.A.ToString;
+    BWTrackBar.InputColor := FRawColor;
+    BWTrackBar.UpdateBitmap;
+    AlphaTrackBar.InputColor := FRawColor;
+    AlphaTrackBar.UpdateBitmap;
   finally
     EndUpdate;
   end;
@@ -257,10 +266,10 @@ begin
       0:
         begin
           var Cl: TAlphaColorRec;
-          Cl.A := Min(StrToInt(EditA.Text), 255);
           Cl.R := Min(StrToInt(EditR.Text), 255);
           Cl.G := Min(StrToInt(EditG.Text), 255);
           Cl.B := Min(StrToInt(EditB.Text), 255);
+          Cl.A := Min(StrToInt(EditA.Text), 255);
           NewColor := Cl.Color;
         end;
       1:
@@ -317,7 +326,7 @@ end;
 procedure TFrameDialogColorPicker.FindColor(Color: TAlphaColor);
 begin
   var Rec := TAlphaColorRec.Create(Color);
-  AlphaTrackBar.Value := Rec.A / 255;
+  AlphaTrackBar.Value := Rec.A;
   Rec.A := 255;
   var H, S, V: Double;
   RGBToHSV(Rec.R, Rec.G, Rec.B, H, S, V);
@@ -327,19 +336,30 @@ begin
   Rec.G := G;
   Rec.B := B;
   BWTrackBar.Value := V;
+  var ClosePt := TPoint.Zero;
+  var CloseDiff := 1000;
   var Bits: TBitmapData;
   if FBitmap.Map(TMapAccess.Read, Bits) then
   try
-    CircleBoxPoint.Visible := False;
     for var X := 0 to Bits.Width - 1 do
       for var Y := 0 to Bits.Height - 1 do
         if Bits.GetPixel(X, Y) = Rec.Color then
         begin
-          var Pt := TPointF.Create(X, Y);
-          CircleBoxPoint.Position.Point := Pt - TPointF.Create(8, 8);
-          CircleBoxPoint.Visible := True;
+          var Pt := TPoint.Create(X, Y);
+          CircleBoxPoint.Position.Point := Pt - TPoint.Create(8, 8);
           Exit;
+        end
+        else  //more close
+        begin
+          var Pix := TAlphaColorRec.Create(Bits.GetPixel(X, Y));
+          var Diff := Abs(Rec.R - Pix.R) + Abs(Rec.G - Pix.G) + Abs(Rec.B - Pix.B);
+          if CloseDiff > Diff then
+          begin
+            CloseDiff := Diff;
+            ClosePt := TPoint.Create(X, Y);
+          end;
         end;
+    CircleBoxPoint.Position.Point := ClosePt - TPoint.Create(8, 8);
   finally
     FBitmap.Unmap(Bits);
   end;
@@ -376,13 +396,14 @@ end;
 
 procedure TFrameDialogColorPicker.RectangleBoxMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 var
-  RC: TRect;
   TL, BR: TPoint;
 begin
   TL := RectangleBox.LocalToScreen(TPoint.Create(0, 0)).Truncate;
   BR := RectangleBox.LocalToScreen(TPointF.Create(RectangleBox.Width, RectangleBox.Height)).Truncate;
-  RC := TRect.Create(TL, BR);
+  {$IFDEF MSWINDOWS}
+  var RC := TRect.Create(TL, BR);
   ClipCursor(@RC);
+  {$ENDIF}
   CircleBoxPoint.Visible := True;
   UpdateBoxColor(RectangleBox.ScreenToLocal(Screen.MousePos));
 end;
@@ -398,10 +419,6 @@ begin
   finally
     FBitmap.Unmap(Bits);
   end;
-  BWTrackBar.InputColor := FRawColor;
-  BWTrackBar.UpdateBitmap;
-  AlphaTrackBar.InputColor := FRawColor;
-  AlphaTrackBar.UpdateBitmap;
   UpdateResultColor;
 end;
 
@@ -415,7 +432,9 @@ end;
 
 procedure TFrameDialogColorPicker.RectangleBoxMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 begin
+  {$IFDEF MSWINDOWS}
   ClipCursor(nil);
+  {$ENDIF}
 end;
 
 procedure TFrameDialogColorPicker.SetColor(const Value: TAlphaColor);
@@ -426,7 +445,7 @@ begin
     Rec.A := 255;
   end;
 
-  AlphaTrackBar.Value := Rec.A / 255;
+  AlphaTrackBar.Value := Rec.A;
   AlphaTrackBar.InputColor := FRawColor;
   AlphaTrackBar.UpdateBitmap;
 

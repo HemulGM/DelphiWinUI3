@@ -1634,7 +1634,7 @@ object FormGallery: TFormGallery
           CanFocus = False
           Cursor = crArrow
           Size.Width = 28.000000000000000000
-          Size.Height = 24.000000000000000000
+          Size.Height = 28.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
         end

@@ -58,7 +58,7 @@ begin
     Height := 353;
   end
   else
-    DisposeOf;
+    Release;
 end;
 
 end.

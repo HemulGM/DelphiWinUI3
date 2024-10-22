@@ -216,6 +216,8 @@ end;
 
 procedure TFrameDialog.FillContent(const Title: string; Body: TFrame; const CheckText: string; CheckValue: Boolean);
 begin
+  if not Assigned(Body) then
+    Exit;
   LabelTitle.Text := Title;
   if Title.IsEmpty then
     LabelTitle.Visible := False;
