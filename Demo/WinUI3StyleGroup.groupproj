@@ -6,16 +6,7 @@
         <Projects Include="WinUI3Style.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\..\..\#Default\ShareWinTest\Project53.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\#Default\ShareWinTest\Project54.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\#Lessons\ChatGPTNote\Project55.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\..\HGMGetIt\HGetIt.dproj">
+        <Projects Include="C:\Users\HemulGM\Desktop\EditIntoTitle-Source-23-02\EditIntoTitleD23.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -35,50 +26,23 @@
     <Target Name="WinUI3Style:Make">
         <MSBuild Projects="WinUI3Style.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Project53">
-        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project53.dproj"/>
+    <Target Name="EditIntoTitleD23">
+        <MSBuild Projects="C:\Users\HemulGM\Desktop\EditIntoTitle-Source-23-02\EditIntoTitleD23.dproj"/>
     </Target>
-    <Target Name="Project53:Clean">
-        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project53.dproj" Targets="Clean"/>
+    <Target Name="EditIntoTitleD23:Clean">
+        <MSBuild Projects="C:\Users\HemulGM\Desktop\EditIntoTitle-Source-23-02\EditIntoTitleD23.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="Project53:Make">
-        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project53.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="Project54">
-        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project54.dproj"/>
-    </Target>
-    <Target Name="Project54:Clean">
-        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project54.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Project54:Make">
-        <MSBuild Projects="..\..\..\#Default\ShareWinTest\Project54.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="Project55">
-        <MSBuild Projects="..\..\..\#Lessons\ChatGPTNote\Project55.dproj"/>
-    </Target>
-    <Target Name="Project55:Clean">
-        <MSBuild Projects="..\..\..\#Lessons\ChatGPTNote\Project55.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Project55:Make">
-        <MSBuild Projects="..\..\..\#Lessons\ChatGPTNote\Project55.dproj" Targets="Make"/>
-    </Target>
-    <Target Name="HGetIt">
-        <MSBuild Projects="..\..\..\HGMGetIt\HGetIt.dproj"/>
-    </Target>
-    <Target Name="HGetIt:Clean">
-        <MSBuild Projects="..\..\..\HGMGetIt\HGetIt.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="HGetIt:Make">
-        <MSBuild Projects="..\..\..\HGMGetIt\HGetIt.dproj" Targets="Make"/>
+    <Target Name="EditIntoTitleD23:Make">
+        <MSBuild Projects="C:\Users\HemulGM\Desktop\EditIntoTitle-Source-23-02\EditIntoTitleD23.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="WinUI3Style;Project53;Project54;Project55;HGetIt"/>
+        <CallTarget Targets="WinUI3Style;EditIntoTitleD23"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="WinUI3Style:Clean;Project53:Clean;Project54:Clean;Project55:Clean;HGetIt:Clean"/>
+        <CallTarget Targets="WinUI3Style:Clean;EditIntoTitleD23:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="WinUI3Style:Make;Project53:Make;Project54:Make;Project55:Make;HGetIt:Make"/>
+        <CallTarget Targets="WinUI3Style:Make;EditIntoTitleD23:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

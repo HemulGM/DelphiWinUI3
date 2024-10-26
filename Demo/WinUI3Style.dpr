@@ -29,7 +29,12 @@ uses
   WinUI3.Frame.Inner.InfoBarPanel in 'Utils\WinUI3.Frame.Inner.InfoBarPanel.pas' {FrameInfoBarPanel: TFrame},
   WinUI3.YandexMusic in 'WinUI3.YandexMusic.pas' {FormMusic},
   FMX.Windows.Hints in '..\FMXWindowsHint\FMX.Windows.Hints.pas',
-  FMX.Menus in 'Fixes\D12\FMX.Menus.pas';
+  WinUI3.RADIDE in 'WinUI3.RADIDE.pas' {FormIDE},
+  FMX.RichEdit.Style in 'Utils\FMX.RichEdit.Style.pas',
+  ChatGPT.Code in 'Utils\Code\ChatGPT.Code.pas',
+  ChatGPT.Code.Pascal in 'Utils\Code\ChatGPT.Code.Pascal.pas',
+  FMX.Menus in 'Fixes\D12\FMX.Menus.pas',
+  FMX.Windows.Dispatch in '..\FMXWindowsDispatch\FMX.Windows.Dispatch.pas';
 
 {$R *.res}
 

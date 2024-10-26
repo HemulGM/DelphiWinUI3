@@ -5,6 +5,9 @@ interface
 uses
   System.SysUtils, System.Classes, System.Types, FMX.Edit, FMX.Controls,
   System.UITypes, FMX.Memo, FMX.StdCtrls, FMX.Graphics, FMX.Forms, FMX.Types,
+  {$IFDEF MSWINDOWS}
+  Winapi.Windows, Winapi.Messages, FMX.Windows.Dispatch, FMX.Platform.Win,
+  {$ENDIF}
   FMX.Ani, FMX.Filter.Effects, FMX.ActnList, DelphiWindowStyle.FMX;
 
 type
@@ -14,10 +17,6 @@ type
   TSystemBackdropType = DelphiWindowStyle.FMX.TSystemBackdropType;
 
   TWinUIForm = class(TForm)
-  protected
-    function NotInitStyle: Boolean; virtual;
-    procedure PaintRects(const UpdateRects: array of TRectF); override;
-    procedure CreateHandle; override;
   private
     FModeFocus: Boolean;
     FPopupHint: TPopup;
@@ -26,25 +25,140 @@ type
     FLabelHint: TLabel;
     FFloatAnimationHint: TFloatAnimation;
     FSystemBackdropType: TSystemBackdropType;
-    procedure FloatAnimationHintProcess(Sender: TObject);
-    procedure TimerHintCloseTimer(Sender: TObject);
-    procedure TimerHintTimer(Sender: TObject);
-    procedure FOnAppHint(Sender: TObject);
+    FCaptionControls: TArray<TControl>;
+    FHideTitleBar: Boolean;
+    FFocusStyle: TStrokeBrush;
+    FFocusXRadius: Single;
+    FFocusYRadius: Single;
+    FFocusOpacity: Single;
+    FFocusCornerType: TCornerType;
+    FFocusCorners: TCorners;
+    FFocusInflate: Single;
+    procedure SetFocusCorners(const Value: TCorners);
+    procedure SetFocusCornerType(const Value: TCornerType);
+    procedure SetFocusOpacity(const Value: Single);
+    procedure SetFocusXRadius(const Value: Single);
+    procedure SetFocusYRadius(const Value: Single);
+    procedure SetFocusInflate(const Value: Single);
+  protected
+    procedure PaintRects(const UpdateRects: array of TRectF); override;
+    procedure CreateHandle; override;
+  protected
+    function NotInitStyle: Boolean; virtual;
+    procedure TimerHintCloseTimer(Sender: TObject); virtual;
+    procedure TimerHintTimer(Sender: TObject); virtual;
+    procedure FloatAnimationHintProcess(Sender: TObject); virtual;
+    procedure FOnAppHint(Sender: TObject); virtual;
+    procedure SetCaptionControls(const Value: TArray<TControl>); virtual;
+    procedure SetHideTitleBar(const Value: Boolean); virtual;
+    {$IFDEF MSWINDOWS}
+    procedure InvalidateNonClient;
+    procedure WMNCCalcSize(var Message: TWMNCCalcSize); message WM_NCCALCSIZE;
+    procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
+    {$ENDIF}
   public
     procedure AfterConstruction; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; AFormX, AFormY: Single); override;
     procedure KeyDown(var Key: Word; var KeyChar: System.WideChar; Shift: TShiftState); override;
-    procedure HookHints;
     constructor Create(AOwner: TComponent); override;
-    procedure BeginLauncher(Proc: TProc = nil);
-    procedure EndLauncher(Proc: TProc = nil);
-    procedure SystemBackdropType(AType: TSystemBackdropType);
+    destructor Destroy; override;
+  public
+    procedure HookHints; virtual;
+    procedure BeginLauncher(Proc: TProc = nil); virtual;
+    procedure EndLauncher(Proc: TProc = nil); virtual;
+    procedure SystemBackdropType(AType: TSystemBackdropType); virtual;
+    //
+    property CaptionControls: TArray<TControl> read FCaptionControls write SetCaptionControls;
+    property HideTitleBar: Boolean read FHideTitleBar write SetHideTitleBar;
+    property FocusStyle: TStrokeBrush read FFocusStyle;
+    property FocusXRadius: Single read FFocusXRadius write SetFocusXRadius;
+    property FocusYRadius: Single read FFocusYRadius write SetFocusYRadius;
+    property FocusCorners: TCorners read FFocusCorners write SetFocusCorners;
+    property FocusOpacity: Single read FFocusOpacity write SetFocusOpacity;
+    property FocusCornerType: TCornerType read FFocusCornerType write SetFocusCornerType;
+    property FocusInflate: Single read FFocusInflate write SetFocusInflate;
   end;
 
 implementation
 
 uses
   FMX.Menus, FMX.Platform;
+
+{$REGION 'WinAPI for no TitleBar'}
+{$IFDEF MSWINDOWS}
+procedure TWinUIForm.InvalidateNonClient;
+begin
+  var Handle := FormToHWND(Self);
+  LockWindowUpdate(Handle);
+  SetWindowPos(Handle, 0, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE or
+    SWP_NOZORDER or SWP_NOACTIVATE or SWP_NOSENDCHANGING or SWP_FRAMECHANGED);
+  LockWindowUpdate(0);
+end;
+
+procedure TWinUIForm.WMNCCalcSize(var Message: TWMNCCalcSize);
+begin
+  if (not FHideTitleBar) or (Length(FCaptionControls) <= 0) or (not Message.CalcValidRects) then
+  begin
+    inherited;
+    Exit;
+  end;
+  if WindowState <> TWindowState.wsMinimized then
+  begin
+    var R := GetAdjustWindowRect;
+    if IsZoomed(FormToHWND(Self)) then
+      FCaptionControls[0].Margins.Top := R.Bottom
+    else
+      FCaptionControls[0].Margins.Top := 0;
+
+    Inc(Message.CalcSize_Params.rgrc[0].Top, R.Top);
+  end
+  else
+    inherited;
+end;
+
+procedure TWinUIForm.WMNCHitTest(var Message: TWMNCHitTest);
+begin
+  if (not FHideTitleBar) or (Length(FCaptionControls) <= 0) then
+  begin
+    inherited;
+    Exit;
+  end;
+  case Message.Result of
+    HTNOWHERE:
+      begin
+        var P := ScreenToClient(Point(Message.XPos, Message.YPos)).Round;
+        if P.Y > FCaptionControls[0].Height then
+          Exit;
+        var R := TRect.Create(0, 0, 20, 20);
+        if (P.X < R.Right) and ((WindowState = TWindowState.wsMaximized) or ((P.Y >= R.Top) and (P.Y < R.Bottom))) then
+          Message.Result := HTSYSMENU
+        else if (P.Y < 4) and (BorderStyle in [TFmxFormBorderStyle.Sizeable, TFmxFormBorderStyle.SizeToolWin]) then
+          Message.Result := HTTOP
+        else
+        begin
+          var Obj := ObjectAtPoint(Point(Message.XPos, Message.YPos));
+          if Assigned(Obj) and
+            (function: Boolean
+            begin
+              for var Item in FCaptionControls do
+                if Item = Obj.GetObject then
+                  Exit(True);
+              Result := False;
+            end)()
+           then
+            Message.Result := HTCAPTION;
+        end;
+      end;
+    HTMINBUTTON, HTMAXBUTTON, HTCLOSE:
+      begin
+        Message.Result := HTCAPTION;
+        Exit;
+      end;
+  end;
+  inherited;
+end;
+{$ENDIF}
+{$ENDREGION}
 
 procedure TWinUIForm.AfterConstruction;
 begin
@@ -55,9 +169,21 @@ end;
 
 constructor TWinUIForm.Create(AOwner: TComponent);
 begin
+  // Focus defaluts
+  FFocusStyle := TStrokeBrush.Create(TBrushKind.Solid, TAlphaColors.White);
+  FFocusStyle.Thickness := 2;
+  FFocusXRadius := 3;
+  FFocusYRadius := 3;
+  FFocusCorners := AllCorners;
+  FFocusOpacity := 1;
+  FFocusCornerType := TCornerType.Round;
+
+  // Style defaults
   FSystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
   inherited;
   TAnimation.AniFrameRate := 120;
+
+  // Override method if skip step
   if not NotInitStyle then
   begin
     SetWindowColorMode(True);
@@ -75,6 +201,15 @@ end;
 procedure TWinUIForm.CreateHandle;
 begin
   inherited;
+  {$IFDEF MSWINDOWS}
+  AllowDispatchWindowMessages(Self);
+  {$ENDIF}
+end;
+
+destructor TWinUIForm.Destroy;
+begin
+  inherited;
+  FFocusStyle.Free;
 end;
 
 procedure TWinUIForm.BeginLauncher(Proc: TProc);
@@ -259,24 +394,70 @@ end;
 
 procedure TWinUIForm.PaintRects(const UpdateRects: array of TRectF);
 begin
-  inherited;
+  // draw all form if focus mode is on
+  if FModeFocus then
+    inherited PaintRects(ClientRect)
+  else
+    inherited;
   if FModeFocus and Assigned(Focused) then
   begin
     if (Focused is TControl) and not (Focused is TCustomEdit) and not (Focused is TCustomMemo) then
     begin
       Canvas.BeginScene;
       try
-        Canvas.Stroke.Kind := TBrushKind.Solid;
-        Canvas.Stroke.Color := TAlphaColorRec.White;
-        Canvas.Stroke.Thickness := 2;
+        Canvas.Stroke.Assign(FFocusStyle);
         var R := TControl(Focused).AbsoluteRect;
-        R.Inflate(2, 2);
-        Canvas.DrawRect(R, 3, 3, AllCorners, 1);
+        R.Inflate(FFocusInflate, FFocusInflate);
+        Canvas.DrawRect(R, FFocusXRadius, FFocusYRadius, FFocusCorners, FFocusOpacity, FFocusCornerType);
       finally
         Canvas.EndScene;
       end;
     end;
   end;
+end;
+
+procedure TWinUIForm.SetCaptionControls(const Value: TArray<TControl>);
+begin
+  FCaptionControls := Value;
+end;
+
+procedure TWinUIForm.SetFocusCorners(const Value: TCorners);
+begin
+  FFocusCorners := Value;
+end;
+
+procedure TWinUIForm.SetFocusCornerType(const Value: TCornerType);
+begin
+  FFocusCornerType := Value;
+end;
+
+procedure TWinUIForm.SetFocusInflate(const Value: Single);
+begin
+  FFocusInflate := Value;
+end;
+
+procedure TWinUIForm.SetFocusOpacity(const Value: Single);
+begin
+  FFocusOpacity := Value;
+end;
+
+procedure TWinUIForm.SetFocusXRadius(const Value: Single);
+begin
+  FFocusXRadius := Value;
+end;
+
+procedure TWinUIForm.SetFocusYRadius(const Value: Single);
+begin
+  FFocusYRadius := Value;
+end;
+
+procedure TWinUIForm.SetHideTitleBar(const Value: Boolean);
+begin
+  FHideTitleBar := Value;
+  {$IFDEF MSWINDOWS}
+  DwmWinProcProirity := FHideTitleBar;
+  InvalidateNonClient;
+  {$ENDIF}
 end;
 
 procedure TWinUIForm.SystemBackdropType(AType: TSystemBackdropType);

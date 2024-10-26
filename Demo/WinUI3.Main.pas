@@ -11,13 +11,14 @@ uses
   FMX.NumberBox, FMX.SpinBox, FMX.Grid, FMX.MultiView, FMX.Objects, FMX.Layouts,
   Fmx.Bind.Navigator, FMX.TreeView, FMX.ListBox, FMX.Calendar, FMX.DateTimeCtrls,
   FMX.Edit, FMX.ScrollBox, FMX.Memo, FMX.Memo.Style, FMX.EditBox,
-  FMX.ComboTrackBar, FMX.ComboEdit, FMX.Controls.Presentation, FMX.TabControl,
-  FMX.Menus, System.ImageList, FMX.ImgList, FMX.Effects, FMX.Filter.Effects,
-  FMX.Switch.Style, Fmx.Bind.GenData, Data.Bind.GenData, System.Bindings.Outputs,
-  Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
+  FMX.ComboEdit.Style, FMX.ComboTrackBar, FMX.ComboEdit,
+  FMX.Controls.Presentation, FMX.TabControl, FMX.Menus, System.ImageList,
+  FMX.ImgList, FMX.Effects, FMX.Filter.Effects, FMX.Switch.Style,
+  Fmx.Bind.GenData, Data.Bind.GenData, System.Bindings.Outputs, Fmx.Bind.Editors,
+  Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
   Data.Bind.ObjectScope, Fmx.Bind.Grid, Data.Bind.Grid, FMX.SearchBox,
   {$IFDEF MSWINDOWS}
-  FMX.Win.NotificationManager,
+  FMX.Win.NotificationManager, 
   {$ENDIF}
   FMX.Ani, FMX.ActnList, System.Actions, WinUI3.Form, WinUI3.Frame.Inner.InfoBar,
   WinUI3.Frame.Dialog.ColorPicker;
@@ -27,7 +28,6 @@ type
     ImageList: TImageList;
     ImageList24: TImageList;
     PopupMenu1: TPopupMenu;
-    MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
@@ -1106,6 +1106,27 @@ type
     Label114: TLabel;
     SpeedButton5: TSpeedButton;
     SpeedButton6: TSpeedButton;
+    ScrollBox8: TScrollBox;
+    FlowLayoutBasic: TFlowLayout;
+    ButtonDemoGallery: TButton;
+    ButtonDemoMusic: TButton;
+    ButtonDemoIDE: TButton;
+    ImageListDemo: TImageList;
+    MenuItem23: TMenuItem;
+    MenuItem1: TMenuItem;
+    PopupMenuRich: TPopupMenu;
+    MenuItem24: TMenuItem;
+    MenuItem25: TMenuItem;
+    MenuItem45: TMenuItem;
+    MenuItem52: TMenuItem;
+    MenuItem53: TMenuItem;
+    MenuItem26: TMenuItem;
+    LayoutCaption: TLayout;
+    LayoutHead: TLayout;
+    Layout41: TLayout;
+    Layout42: TLayout;
+    Image7: TImage;
+    Label115: TLabel;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1116,7 +1137,6 @@ type
     procedure TrackBarLineSizeChange(Sender: TObject);
     procedure HorzScrollBoxSpinViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
     procedure DropTarget1Dropped(Sender: TObject; const Data: TDragObject; const Point: TPointF);
-    procedure Button4Click(Sender: TObject);
     procedure ButtonNotifyClick(Sender: TObject);
     procedure ActionAddExecute(Sender: TObject);
     procedure EditButton2Click(Sender: TObject);
@@ -1156,9 +1176,13 @@ type
     procedure ButtonMenuActionsClick(Sender: TObject);
     procedure TabControlMainChange(Sender: TObject);
     procedure ButtonMenuActionsMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-    procedure Button7Click(Sender: TObject);
     procedure ColorPanel1Change(Sender: TObject);
     procedure Button223Click(Sender: TObject);
+    procedure ButtonDemoGalleryClick(Sender: TObject);
+    procedure ButtonDemoMusicClick(Sender: TObject);
+    procedure ButtonDemoIDEClick(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure ArcDial2KeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
   private
     {$IFDEF MSWINDOWS}
     FNotifyManager: TNotificationManager;
@@ -1171,6 +1195,8 @@ type
     procedure CreateNotificationCenter;
     procedure FSearchItemClick(Sender: TObject);
     procedure TryOpenTabByName(const Text: string);
+    procedure FOnSubMenuClick(Sender: TObject);
+    procedure FOnButton15SplitClick(Sender: TObject);
   end;
 
 var
@@ -1181,13 +1207,31 @@ implementation
 uses
   DelphiWindowStyle.FMX, FMX.BehaviorManager, System.Math, System.IOUtils,
   System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery, FMX.Platform,
-  WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic;
+  WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic, WinUI3.RADIDE;
 
 {$R *.fmx}
 
 procedure TFormMain.ActionAddExecute(Sender: TObject);
 begin
   ShowUIMessage(Self, 'Add somthing');
+end;
+
+procedure TFormMain.ButtonDemoGalleryClick(Sender: TObject);
+begin
+  ButtonDemoGallery.StylesData['indicator.Visible'] := False;
+  TFormGallery.Create(Application).Show;
+end;
+
+procedure TFormMain.ButtonDemoIDEClick(Sender: TObject);
+begin
+  ButtonDemoIDE.StylesData['indicator.Visible'] := False;
+  TFormIDE.Create(Application).Show;
+end;
+
+procedure TFormMain.ButtonDemoMusicClick(Sender: TObject);
+begin
+  ButtonDemoMusic.StylesData['indicator.Visible'] := False;
+  TFormMusic.Create(Application).Show;
 end;
 
 procedure TFormMain.ButtonDialogColorPickerAlphaClick(Sender: TObject);
@@ -1343,6 +1387,16 @@ begin
   //https://icones.js.org/collection/fluent
 end;
 
+procedure TFormMain.ArcDial2KeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
+begin
+  case Key of
+    vkDown, vkLeft:
+      ArcDial2.Value := ArcDial2.Value - Max(ArcDial2.Frequency, 1);
+    vkUp, vkRight:
+      ArcDial2.Value := ArcDial2.Value + Max(ArcDial2.Frequency, 1);
+  end;
+end;
+
 procedure TFormMain.Button223Click(Sender: TObject);
 begin
   TTask.Run(
@@ -1390,7 +1444,7 @@ procedure TFormMain.Button243Click(Sender: TObject);
 begin
   //none
   SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE);
-  SetExtendFrameIntoClientArea(TRect.Create(0, 0, 0, 0));
+  SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
   SetWindowCaptionColor($1C1C1C);
   Fill.Kind := TBrushKind.Solid;
   Fill.Color := $FF1C1C1C;
@@ -1424,16 +1478,6 @@ begin
     end, nil, Params);
 end;
 
-procedure TFormMain.Button4Click(Sender: TObject);
-begin
-  TFormGallery.Create(Application).Show;
-end;
-
-procedure TFormMain.Button7Click(Sender: TObject);
-begin
-  TFormMusic.Create(Application).Show;
-end;
-
 procedure TFormMain.ButtonShareClick(Sender: TObject);
 begin
   {$IFDEF MSWINDOWS}
@@ -1460,7 +1504,7 @@ begin
 
   var NotifyContent := TToastContentBuilder.Create
     .UseButtonStyle(True)
-    .AddText(TToastText.Create.Text('{title}{'))
+    .AddText(TToastText.Create.Text('{title}'))
     .AddText(TToastText.Create.Text('This is the Windows 10+ notifications engine for Delphi'))
     .AddGroup(TToastGroup.Create.SubGroups([
     TToastSubGroup.Create
@@ -1810,8 +1854,15 @@ begin
       FSearchItemClick(ListBoxSearch.Selected);
 end;
 
+procedure TFormMain.MenuItem1Click(Sender: TObject);
+begin
+  //
+end;
+
 procedure TFormMain.TabControlMainChange(Sender: TObject);
 begin
+  if not Assigned(TabControlMain.ActiveTab) then
+    Exit;
   for var Control in VertScrollBoxMenu.Content.Controls do
     if Control is TButton then
       TButton(Control).IsPressed := Control.Tag = TabControlMain.ActiveTab.Index;
@@ -1871,9 +1922,15 @@ begin
   //
 end;
 
+procedure TFormMain.FOnSubMenuClick(Sender: TObject);
+begin
+  ShowUIMessage(Self, (Sender as TMenuItem).StyleName);
+end;
+
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
-  TAnimation.AniFrameRate := 120;
+  CaptionControls := [LayoutCaption, LayoutHead];
+  HideTitleBar := True;
   ScrollBox1.AniCalculations.Animation := True;
   ScrollBox2.AniCalculations.Animation := True;
   ScrollBox3.AniCalculations.Animation := True;
@@ -1912,6 +1969,23 @@ begin
   ListBoxSearch.AniCalculations.Animation := True;
   HorzScrollBoxFilter.AniCalculations.Animation := True;
 
+  ButtonDemoGallery.StylesData['detail'] := 'Open demo window';
+  ButtonDemoIDE.StylesData['detail'] := 'Open demo window';
+  ButtonDemoMusic.StylesData['detail'] := 'Open demo window';
+
+  ArcDial2.CanFocus := True;
+
+  MenuItem1.DisableDisappear := True;
+  MenuItem1.StylesData['copy.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
+  MenuItem1.StylesData['copy.ClickImmediately'] := True;
+  MenuItem1.StylesData['cut.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
+  MenuItem1.StylesData['paste.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
+  MenuItem1.StylesData['delete.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
+
+  MenuItem24.StylesData['bold.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
+  MenuItem24.StylesData['italic.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
+  MenuItem24.StylesData['underline.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
+
   for var i := 0 to VertScrollBoxCarusel.Content.ControlsCount - 1 do
     if VertScrollBoxCarusel.Content.Controls[i] is TButton then
       (VertScrollBoxCarusel.Content.Controls[i] as TButton).Text := ColorListBox1.ListItems[i].Text;
@@ -1922,6 +1996,11 @@ begin
   TabViewTest;
   CreateNotificationCenter;
 
+  Button15.StylesData['arrow.OnClick'] := TValue.From<TNotifyEvent>(FOnButton15SplitClick);
+
+  TabControlMain.ActiveTab := TabItemButtons;
+  TabControlMain.ActiveTab := TabItemHome;
+
   BeginLauncher(
     procedure
     begin
@@ -1929,6 +2008,13 @@ begin
       LayoutLauncher.Visible := True;
       TimerEndLaunch.Enabled := True;
     end);
+end;
+
+procedure TFormMain.FOnButton15SplitClick(Sender: TObject);
+begin
+  var Pt := Button15.AbsoluteRect.TopLeft;
+  Pt := ClientToScreen(Pt);
+  PopupMenu1.Popup(Pt.X + 8, Pt.Y + Button15.Height + 16);
 end;
 
 procedure TFormMain.CreateNotificationCenter;

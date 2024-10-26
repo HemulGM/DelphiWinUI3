@@ -517,8 +517,12 @@ implementation
 
 uses
   System.SysConst, System.RTLConsts, System.SysUtils, System.Actions, System.Generics.Collections, System.Math,
-  FMX.Consts, FMX.Dialogs, FMX.DialogService, FMX.Platform, FMX.Utils, FMX.AcceleratorKey, DelphiWindowStyle.FMX,
-  FMX.StyledContextMenu, WinUI3.Utils;
+  FMX.Consts, FMX.Dialogs, FMX.DialogService, FMX.Platform, FMX.Utils, FMX.AcceleratorKey, FMX.Styles,
+  DelphiWindowStyle.FMX, FMX.StyledContextMenu, WinUI3.Utils;
+
+const
+  DefaultMenuItemSeparatorHeight = 8;
+  DefaultMenuItemHeight = 23;
 
 var
   GMainMenu: TFmxObject;
@@ -545,7 +549,7 @@ end;
 type
   TClickList = class (TComponent)
   public const
-    TimerInterval: Integer = 40;
+    TimerInterval: Integer = 20;
   private
     FMenuItemList: TList<Pointer>;
     FTimers: TList<TTimer>;
@@ -726,7 +730,7 @@ begin
     FDelay := SystemInfoSrv.GetMenuShowDelay;
   if FDelay <= 0 then
     FDelay := 200;
-  Interval := Max(FDelay div 2, 10);
+  Interval := Max(FDelay div 20, 10);
   OnTimer := ProcTimer;
 end;
 
@@ -1647,12 +1651,25 @@ begin
 end;
 
 function TMenuItem.CalcRenderSize: TPointF;
+
+  function GetBasicItemHeight: Single;
+  var
+    HeightObject: TStyleTag;
+  begin
+    if FindStyleResource<TStyleTag>('height',  HeightObject) then
+      Result := HeightObject.TagFloat
+    else if IsSeparator then
+      Result := DefaultMenuItemSeparatorHeight
+    else
+      Result := DefaultMenuItemHeight;
+  end;
+
 var
   C: TCanvas;
 begin
   if IsSeparator then
   begin
-    Result := TPointF.Create(0, 8);
+    Result := TPointF.Create(0, GetBasicItemHeight);
     Exit;
   end;
   if Canvas = nil then
@@ -1660,9 +1677,8 @@ begin
   else
     C := Canvas;
 
-  //Result := CalcVisibleObjectsItemSize(C, PointF(0, 23));
-  ApplyStyleLookup;
-  Result := CalcVisibleObjectsItemSize(C, PointF(0, Height));
+  Result := TPointF.Create(0, GetBasicItemHeight);
+  Result := CalcVisibleObjectsItemSize(C, Result);
 end;
 
 function TMenuItem.HasOffsetOfGlyph: Boolean;
@@ -1694,7 +1710,7 @@ function TMenuItem.CalcVisibleObjectsItemSize(const ACanvas: TCanvas; APointF: T
 begin
   if IsSeparator then
   begin
-    Result := TPointF.Create(0, 8);
+    Result := TPointF.Create(0, DefaultMenuItemSeparatorHeight);
     FImageOffset := 0;
   end
   else
@@ -1745,6 +1761,13 @@ end;
 
 procedure TMenuItem.Click;
 begin
+  // HGM: hack for menuitems in style of menuitem
+  if StyleName <> '' then
+  begin
+    inherited;
+    Exit;
+  end;
+  // HGM end
   if FClickImmediately then
   begin
     if not (ActionClient and (Action is TCustomAction) and (TCustomAction(Action).AutoCheck)) then
@@ -1847,11 +1870,9 @@ begin
       finally
         Menu.EndUpdate;
       end;
-      // calc size
       if TPopupOfMenu(Popup).FClearBG then
-        Menu.StylesData['bg.Visible'] := False;
-      Menu.ApplyStyleLookup;
-      Menu.RecalcSize;
+        Menu.StylesData['bg.Opacity'] := 0.1;
+      // calc size
       Popup.BoundsRect := TRectF.Create(0, 0, Menu.Width, Menu.Height);
 
       LOffset := Menu.ConvertLocalPointFrom(Menu.FContentLayout, TPointF.Zero);
@@ -2642,7 +2663,6 @@ begin
           LTop := LTop + List[I].Margins.Top;
           List[I].Parent := Menu;
           LocalizeDefMenuItem(List[I]);
-          List[I].ApplyStyleLookup;
           List[I].Position.Y := LTop;
           LTop := LTop + List[I].Margins.Bottom + List[I].Height;
         end;
@@ -2652,11 +2672,9 @@ begin
     finally
       Menu.EndUpdate;
     end;
-    // calc size
     if TPopupOfMenu(Popup).FClearBG then
-      Menu.StylesData['bg.Visible'] := False;
-    Menu.ApplyStyleLookup;
-    Menu.RecalcSize;
+      Menu.StylesData['bg.Opacity'] := 0.1;
+    // calc size
     Popup.BoundsRect := TRectF.Create(0, 0, Menu.Width, Menu.Height);
 
     Popup.PlacementRectangle.Left := X;
