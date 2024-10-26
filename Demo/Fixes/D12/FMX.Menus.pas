@@ -1073,9 +1073,9 @@ end;
 procedure TPopupOfMenu.OnFormShow(Sender: TObject);
 begin
   if not IsWin11OrNewest then
-    TCustomPopupForm(Sender).SetAccentPolicy(TAlphaColorRec.Black)
+    TCustomPopupForm(Sender).SetAccentPolicy(TColorRec.Black)
   else
-    TCustomPopupForm(Sender).SetAccentPolicy(TAlphaColorRec.Null);
+    TCustomPopupForm(Sender).SetAccentPolicy(TColorRec.Null);
   TCustomPopupForm(Sender).MouseCapture;
 end;
 
