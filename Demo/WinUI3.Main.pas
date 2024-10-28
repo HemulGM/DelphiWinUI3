@@ -18,10 +18,12 @@ uses
   Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
   Data.Bind.ObjectScope, Fmx.Bind.Grid, Data.Bind.Grid, FMX.SearchBox,
   {$IFDEF MSWINDOWS}
-  FMX.Win.NotificationManager, 
+  FMX.Win.NotificationManager,
   {$ENDIF}
   FMX.Ani, FMX.ActnList, System.Actions, WinUI3.Form, WinUI3.Frame.Inner.InfoBar,
-  WinUI3.Frame.Dialog.ColorPicker;
+  WinUI3.Frame.Dialog.ColorPicker,
+  //
+  FMX.Styles.Objects, FMX.Styles.Switch;
 
 type
   TFormMain = class(TWinUIForm)
@@ -1059,12 +1061,7 @@ type
     Button26: TButton;
     Button27: TButton;
     Button28: TButton;
-    Panel13: TPanel;
-    ToolBar2: TToolBar;
-    Button296: TButton;
-    Button297: TButton;
-    Button298: TButton;
-    Button299: TButton;
+    Panel13: TPanel; 
     Button240: TButton;
     TabItemHome: TTabItem;
     TabControlView: TTabControl;
@@ -1123,10 +1120,18 @@ type
     MenuItem26: TMenuItem;
     LayoutCaption: TLayout;
     LayoutHead: TLayout;
-    Layout41: TLayout;
     Layout42: TLayout;
     Image7: TImage;
+    LabelTitle: TLabel;
+    ComboColorBox4: TComboColorBox;
+    PopupBoxStyle: TPopupBox;
+    Button292: TButton;
     Label115: TLabel;
+    Button293: TButton;
+    Button294: TButton;
+    Button295: TButton;
+    Label116: TLabel;
+    Layout41: TLayout;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1162,10 +1167,6 @@ type
     procedure EditSearchKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
     procedure EditSearchKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
     procedure ListBoxSearchKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
-    procedure Button240Click(Sender: TObject);
-    procedure Button241Click(Sender: TObject);
-    procedure Button242Click(Sender: TObject);
-    procedure Button243Click(Sender: TObject);
     procedure ButtonInfoBarShowClick(Sender: TObject);
     procedure Button284Click(Sender: TObject);
     procedure EditWrongTestChangeTracking(Sender: TObject);
@@ -1183,6 +1184,8 @@ type
     procedure ButtonDemoIDEClick(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure ArcDial2KeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
+    procedure ComboColorBox2Change(Sender: TObject);
+    procedure PopupBoxStyleChange(Sender: TObject);
   private
     {$IFDEF MSWINDOWS}
     FNotifyManager: TNotificationManager;
@@ -1201,13 +1204,16 @@ type
 
 var
   FormMain: TFormMain;
+  OldColor: TAlphaColor = $FF60CDFF;
+  OldColorAccentText: TAlphaColor = $FF99EBFF;
 
 implementation
 
 uses
   DelphiWindowStyle.FMX, FMX.BehaviorManager, System.Math, System.IOUtils,
-  System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery, FMX.Platform,
-  WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic, WinUI3.RADIDE;
+  HGM.ColorUtils, System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery,
+  FMX.Platform, WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic,
+  WinUI3.RADIDE;
 
 {$R *.fmx}
 
@@ -1410,46 +1416,6 @@ begin
     end);
 end;
 
-procedure TFormMain.Button240Click(Sender: TObject);
-begin
-  //mica
-  SetWindowCaptionColor(TColors.Null);
-  SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW);
-  SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-  Fill.Kind := TBrushKind.Solid;
-  Fill.Color := TAlphaColorRec.Null;
-end;
-
-procedure TFormMain.Button241Click(Sender: TObject);
-begin
-  //tabbed
-  SetWindowCaptionColor(TColors.Null);
-  SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW);
-  SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-  Fill.Kind := TBrushKind.Solid;
-  Fill.Color := TAlphaColorRec.Null;
-end;
-
-procedure TFormMain.Button242Click(Sender: TObject);
-begin
-  //acrilyc
-  SetWindowCaptionColor(TColors.Null);
-  SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW);
-  SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-  Fill.Kind := TBrushKind.Solid;
-  Fill.Color := TAlphaColorRec.Null;
-end;
-
-procedure TFormMain.Button243Click(Sender: TObject);
-begin
-  //none
-  SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE);
-  SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-  SetWindowCaptionColor($1C1C1C);
-  Fill.Kind := TBrushKind.Solid;
-  Fill.Color := $FF1C1C1C;
-end;
-
 procedure TFormMain.Button284Click(Sender: TObject);
 begin
   for var Control in PanelStoreMenu.Controls do
@@ -1587,6 +1553,50 @@ begin
   ShowUIMessage(Self, 'NotifDismissed', Ord(Reason).ToString);
 end;
 
+procedure TFormMain.PopupBoxStyleChange(Sender: TObject);
+begin
+  case PopupBoxStyle.ItemIndex of
+    0:
+      begin
+        //mica
+        SetWindowCaptionColor(TColors.Null);
+        SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW);
+        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        Fill.Kind := TBrushKind.Solid;
+        Fill.Color := TAlphaColorRec.Null;
+      end;
+    1:
+      begin
+  //tabbed
+        SetWindowCaptionColor(TColors.Null);
+        SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW);
+        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        Fill.Kind := TBrushKind.Solid;
+        Fill.Color := TAlphaColorRec.Null;
+      end;
+    2:
+      begin
+       //acrilyc
+        SetWindowCaptionColor(TColors.Null);
+        SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW);
+        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        Fill.Kind := TBrushKind.Solid;
+        Fill.Color := TAlphaColorRec.Null;
+      end;
+    3:
+      begin
+        //none
+        SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE);
+        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        SetWindowCaptionColor(TColors.Null);
+        //SetWindowCaptionColor($1C1C1C);
+        Fill.Kind := TBrushKind.None;
+        Fill.Color := TAlphaColorRec.Null;
+        //Fill.Color := $FF1C1C1C;
+      end;
+  end;
+end;
+
 {$ENDIF}
 
 procedure TFormMain.ColorButton1Click(Sender: TObject);
@@ -1610,6 +1620,147 @@ begin
   Fill.Kind := TBrushKind.Gradient;
   Fill.Gradient.Color := ColorPanel1.Color;
   Fill.Gradient.Color1 := ColorPanel3.Color;
+end;
+
+procedure ChangeStyleBookColor(StyleBook: TStyleBook; OldColor, NewColor: TAlphaColor);
+var
+  OldColorRec: TAlphaColorF;
+  NewColorRec: TAlphaColorF;
+
+  procedure ForAll(Obj: TFmxObject; Proc: TProc<TFmxObject>);
+  begin
+    Proc(Obj);
+    if Assigned(Obj.Children) then
+      for var Child in Obj.Children do
+        ForAll(Child, Proc);
+  end;
+
+begin
+  var Style := StyleBook.Style;
+  OldColorRec := TAlphaColorF.Create(OldColor);
+  NewColorRec := TAlphaColorF.Create(NewColor);
+  ForAll(Style,
+    procedure(Item: TFmxObject)
+    begin
+      Item.TagString := '';
+    end);
+  ForAll(Style,
+    procedure(Item: TFmxObject)
+
+      function UpdateColor(TargetColor: TAlphaColor): TAlphaColor;
+      begin
+        var Rec := TAlphaColorF.Create(TargetColor);
+        if (Rec.R = OldColorRec.R) and (Rec.G = OldColorRec.G) and (Rec.B = OldColorRec.B) then
+        begin
+          Rec.R := NewColorRec.R;
+          Rec.G := NewColorRec.G;
+          Rec.B := NewColorRec.B;
+        end;
+        Result := Rec.ToAlphaColor;
+      end;
+
+
+    begin
+      if not Item.TagString.IsEmpty then
+        Exit;
+      if Item is TShape then
+      begin
+        var Control := TRectangle(Item);
+
+        Control.Fill.Color := UpdateColor(Control.Fill.Color);
+        Control.Stroke.Color := UpdateColor(Control.Stroke.Color);
+
+        Item.TagString := '0';
+      end
+      else if Item is TColorObject then
+      begin
+        var Control := TColorObject(Item);
+        Control.Color := UpdateColor(Control.Color);
+        Item.TagString := '0';
+      end
+      else if Item is TBrushObject then
+      begin
+        var Control := TBrushObject(Item);
+        Control.Brush.Color := UpdateColor(Control.Brush.Color);
+        Item.TagString := '0';
+      end
+      else if Item is TColorAnimation then
+      begin
+        var Control := TColorAnimation(Item);
+        Control.StartValue := UpdateColor(Control.StartValue);
+        Control.StopValue := UpdateColor(Control.StopValue);
+        Item.TagString := '0';
+      end
+      else if Item is TLabel then
+      begin
+        var Control := TLabel(Item);
+        Control.TextSettings.FontColor := UpdateColor(Control.TextSettings.FontColor);
+        Item.TagString := '0';
+      end
+      else if Item is TText then
+      begin
+        if Item is TTabStyleTextObject then
+        begin
+          var Control := TTabStyleTextObject(Item);
+          Control.HotColor := UpdateColor(Control.HotColor);
+          Control.ActiveColor := UpdateColor(Control.ActiveColor);
+          Control.Color := UpdateColor(Control.Color);
+          Item.TagString := '0';
+        end
+        else if Item is TActiveStyleTextObject then
+        begin
+          var Control := TActiveStyleTextObject(Item);
+          Control.ActiveColor := UpdateColor(Control.ActiveColor);
+          Control.Color := UpdateColor(Control.Color);
+          Item.TagString := '0';
+        end
+        else if Item is TButtonStyleTextObject then
+        begin
+          var Control := TButtonStyleTextObject(Item);
+          Control.HotColor := UpdateColor(Control.HotColor);
+          Control.FocusedColor := UpdateColor(Control.FocusedColor);
+          Control.NormalColor := UpdateColor(Control.NormalColor);
+          Control.PressedColor := UpdateColor(Control.PressedColor);
+          Item.TagString := '0';
+        end
+        else
+        begin
+          var Control := TText(Item);
+          Control.TextSettings.FontColor := UpdateColor(Control.TextSettings.FontColor);
+          Item.TagString := '0';
+        end;
+      end
+      else if Item is TSwitchObject then
+      begin
+        var Control := TSwitchObject(Item);
+        Control.Fill.Color := UpdateColor(Control.Fill.Color);
+        Control.FillOn.Color := UpdateColor(Control.FillOn.Color);
+        Control.Stroke.Color := UpdateColor(Control.Stroke.Color);
+        Control.Thumb.Color := UpdateColor(Control.Thumb.Color);
+        Item.TagString := '0';
+      end
+      else if Item is TFillRGBEffect then
+      begin
+        var Control := TFillRGBEffect(Item);
+        Control.Color := UpdateColor(Control.Color);
+        Item.TagString := '0';
+      end;
+    end);
+  ForAll(Style,
+    procedure(Item: TFmxObject)
+    begin
+      Item.TagString := '';
+    end);
+  //
+end;
+
+procedure TFormMain.ComboColorBox2Change(Sender: TObject);
+begin
+  ChangeStyleBookColor(StyleBookWinUI3, OldColor, ComboColorBox2.Color);
+  ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, ComboColorBox4.Color);
+  OldColor := ComboColorBox2.Color;
+  OldColorAccentText := ComboColorBox4.Color;
+  TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBookWinUI3, Self), True);
 end;
 
 procedure TFormMain.DropTarget1Dropped(Sender: TObject; const Data: TDragObject; const Point: TPointF);
@@ -1930,6 +2081,8 @@ end;
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
   CaptionControls := [LayoutCaption, LayoutHead];
+  OffsetControls := [LayoutHead];
+  TitleControls := [LabelTitle];
   HideTitleBar := True;
   ScrollBox1.AniCalculations.Animation := True;
   ScrollBox2.AniCalculations.Animation := True;
@@ -2001,6 +2154,12 @@ begin
   TabControlMain.ActiveTab := TabItemButtons;
   TabControlMain.ActiveTab := TabItemHome;
 
+  var SysAccent := DecreaseBrightness(DecreaseHue(DecreaseSaturation(GetAeroColor, 22), -6), -1);
+
+  ChangeStyleBookColor(StyleBookWinUI3, OldColor, SysAccent);
+  ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, DecreaseSaturation(SysAccent, 10));
+  OldColor := SysAccent;
+  OldColorAccentText := DecreaseSaturation(SysAccent, 10);
   BeginLauncher(
     procedure
     begin

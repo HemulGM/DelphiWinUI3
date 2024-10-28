@@ -57,7 +57,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
       'HSV')
     ItemIndex = 0
     ItemHeight = 32.000000000000000000
-    Placement = Center
+    Placement = BottomCenter
     Position.X = 360.000000000000000000
     Position.Y = 64.000000000000000000
     Size.Width = 120.000000000000000000

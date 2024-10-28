@@ -69,6 +69,7 @@ type
     PanelInnerBG: TPanel;
     procedure LayoutContentMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure ButtonCloseClick(Sender: TObject);
+    procedure LayoutTitleMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
   public
     class var
       MaxHeight: Integer;
@@ -79,6 +80,7 @@ type
     FBody: TFrame;
     FOnStartDrag: TNotifyEvent;
     FOnClose: TNotifyEvent;
+    FFilling: Boolean;
     procedure ButtonClick(Sender: TObject);
     procedure SetModalResult(const Value: TModalResult);
     procedure SetOnStartDrag(const Value: TNotifyEvent);
@@ -87,6 +89,7 @@ type
     procedure FOnBodyResized(Sender: TObject);
     procedure SetOnClose(const Value: TNotifyEvent);
     procedure UpdateSize;
+    class procedure StopPropertyAnimation(const Target: TFmxObject; const APropertyName: string); static;
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
@@ -106,7 +109,7 @@ type
 implementation
 
 uses
-  System.Math, WinUI3.Utils;
+  System.Math, WinUI3.Utils, FMX.Ani;
 
 {$R *.fmx}
 
@@ -233,7 +236,25 @@ begin
   Body.OnResize := FOnBodyResized;
   Body.OnResized := FOnBodyResized;
   Body.AddFreeNotify(Self);
+  FFilling := True;
   UpdateSize;
+  FFilling := False;
+end;
+
+class procedure TFrameDialog.StopPropertyAnimation(const Target: TFmxObject; const APropertyName: string);
+var
+  I: Integer;
+begin
+  I := Target.ChildrenCount - 1;
+  while I >= 0 do
+  begin
+    if (Target.Children[I] is TCustomPropertyAnimation) and
+      (CompareText(TCustomPropertyAnimation(Target.Children[I]).PropertyName, APropertyName) = 0) then
+      TFloatAnimation(Target.Children[I]).StopAtCurrent;
+    if I > Target.ChildrenCount then
+      I := Target.ChildrenCount;
+    Dec(I);
+  end;
 end;
 
 procedure TFrameDialog.UpdateSize;
@@ -245,10 +266,26 @@ begin
   if CheckBoxCheck.IsVisible then
     FHeight := FHeight + CheckBoxCheck.Height + CheckBoxCheck.Margins.Top + CheckBoxCheck.Margins.Bottom;
   FHeight := FHeight + PanelGrid.Height + PanelGrid.Margins.Top + PanelGrid.Margins.Bottom;
-  Height := Min(Round(FHeight), MaxHeight);
+  if FFilling then
+    Height := Min(Round(FHeight), MaxHeight)
+  else
+  begin
+    if Round(FHeight) > MaxHeight then
+      VertScrollBoxBody.ShowScrollBars := True
+    else
+      VertScrollBoxBody.ShowScrollBars := False;
+    StopPropertyAnimation(Self, 'Height');
+    TAnimator.AnimateFloat(Self, 'Height', Min(Round(FHeight), MaxHeight));
+  end;
 end;
 
 procedure TFrameDialog.LayoutContentMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+  if Assigned(FOnStartDrag) then
+    FOnStartDrag(Self);
+end;
+
+procedure TFrameDialog.LayoutTitleMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 begin
   if Assigned(FOnStartDrag) then
     FOnStartDrag(Self);

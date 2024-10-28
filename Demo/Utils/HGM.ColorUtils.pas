@@ -50,10 +50,58 @@ function InvertColor(const Color: TColor): TColor;
 
 function VisibilityColor(const Color: TColor): TColor;
 
+function DecreaseSaturation(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+
+function DecreaseHue(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+
+function DecreaseBrightness(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+
 implementation
 
 uses
   System.Math;
+
+function DecreaseSaturation(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+begin
+  var Src := TAlphaColorF.Create(Color);
+  var H, S, V: Double;
+  RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
+  S := S - Value / 100;
+  var R, G, B: Byte;
+  HSVtoRGB(H, S, V, R, G, B);
+  Src.R := R / 255;
+  Src.G := G / 255;
+  Src.B := B / 255;
+  Result := Src.ToAlphaColor;
+end;
+
+function DecreaseHue(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+begin
+  var Src := TAlphaColorF.Create(Color);
+  var H, S, V: Double;
+  RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
+  H := H - Value / 360;
+  var R, G, B: Byte;
+  HSVtoRGB(H, S, V, R, G, B);
+  Src.R := R / 255;
+  Src.G := G / 255;
+  Src.B := B / 255;
+  Result := Src.ToAlphaColor;
+end;
+
+function DecreaseBrightness(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+begin
+  var Src := TAlphaColorF.Create(Color);
+  var H, S, V: Double;
+  RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
+  V := V - Value / 100;
+  var R, G, B: Byte;
+  HSVtoRGB(H, S, V, R, G, B);
+  Src.R := R / 255;
+  Src.G := G / 255;
+  Src.B := B / 255;
+  Result := Src.ToAlphaColor;
+end;
 
 function RGB(r, g, b: Byte): Cardinal;
 begin

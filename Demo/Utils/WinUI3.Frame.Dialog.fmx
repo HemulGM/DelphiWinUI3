@@ -97,6 +97,7 @@ object FrameDialog: TFrameDialog
           Size.PlatformDefault = False
           TabOrder = 0
           Text = 'Cancel'
+          TextSettings.Trimming = None
         end
         object ButtonDontSave: TButton
           Position.X = 192.000000000000000000
@@ -106,6 +107,7 @@ object FrameDialog: TFrameDialog
           Size.PlatformDefault = False
           TabOrder = 1
           Text = 'Don'#39't save'
+          TextSettings.Trimming = None
         end
         object ButtonSave: TButton
           Position.X = 26.000000000000000000
@@ -116,6 +118,7 @@ object FrameDialog: TFrameDialog
           StyleLookup = 'buttonstyle_accent'
           TabOrder = 2
           Text = 'Save'
+          TextSettings.Trimming = None
         end
       end
       object Panel1: TPanel
@@ -139,10 +142,12 @@ object FrameDialog: TFrameDialog
     TabOrder = 2
     object LayoutTitle: TLayout
       Align = Top
+      HitTest = True
       Size.Width = 540.000000000000000000
       Size.Height = 32.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
+      OnMouseDown = LayoutTitleMouseDown
       object ButtonClose: TButton
         Align = Right
         Position.X = 494.000000000000000000
@@ -152,6 +157,7 @@ object FrameDialog: TFrameDialog
         StyleLookup = 'win_btn_close'
         TabOrder = 0
         Text = 'Close'
+        TextSettings.Trimming = None
         OnClick = ButtonCloseClick
       end
     end

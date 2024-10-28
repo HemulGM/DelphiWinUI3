@@ -267,7 +267,8 @@ end;
 
 procedure TFrameInnerDialog.FOnStartDrag(Sender: TObject);
 begin
-  //FOwner.StartWindowDrag;
+  if Owner is TForm then
+    TForm(Owner).StartWindowDrag;
 end;
 
 function TFrameInnerDialog.GetTabList: ITabList;

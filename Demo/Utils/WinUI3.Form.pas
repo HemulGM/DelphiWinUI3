@@ -34,12 +34,16 @@ type
     FFocusCornerType: TCornerType;
     FFocusCorners: TCorners;
     FFocusInflate: Single;
+    FOffsetControls: TArray<TControl>;
+    FTitleControls: TArray<TControl>;
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
     procedure SetFocusOpacity(const Value: Single);
     procedure SetFocusXRadius(const Value: Single);
     procedure SetFocusYRadius(const Value: Single);
     procedure SetFocusInflate(const Value: Single);
+    procedure SetOffsetControls(const Value: TArray<TControl>);
+    procedure SetTitleControls(const Value: TArray<TControl>);
   protected
     procedure PaintRects(const UpdateRects: array of TRectF); override;
     procedure CreateHandle; override;
@@ -69,6 +73,8 @@ type
     procedure SystemBackdropType(AType: TSystemBackdropType); virtual;
     //
     property CaptionControls: TArray<TControl> read FCaptionControls write SetCaptionControls;
+    property OffsetControls: TArray<TControl> read FOffsetControls write SetOffsetControls;
+    property TitleControls: TArray<TControl> read FTitleControls write SetTitleControls;
     property HideTitleBar: Boolean read FHideTitleBar write SetHideTitleBar;
     property FocusStyle: TStrokeBrush read FFocusStyle;
     property FocusXRadius: Single read FFocusXRadius write SetFocusXRadius;
@@ -82,7 +88,7 @@ type
 implementation
 
 uses
-  FMX.Menus, FMX.Platform;
+  FMX.Menus, FMX.Platform, System.Messaging;
 
 {$REGION 'WinAPI for no TitleBar'}
 {$IFDEF MSWINDOWS}
@@ -105,10 +111,11 @@ begin
   if WindowState <> TWindowState.wsMinimized then
   begin
     var R := GetAdjustWindowRect;
+    var Offset := 0.0;
     if IsZoomed(FormToHWND(Self)) then
-      FCaptionControls[0].Margins.Top := R.Bottom
-    else
-      FCaptionControls[0].Margins.Top := 0;
+      Offset := R.Bottom;
+    for var Item in OffsetControls do
+        Item.Margins.Top := Offset;
 
     Inc(Message.CalcSize_Params.rgrc[0].Top, R.Top);
   end
@@ -126,7 +133,7 @@ begin
   case Message.Result of
     HTNOWHERE:
       begin
-        var P := ScreenToClient(Point(Message.XPos, Message.YPos)).Round;
+        var P := ScreenToClient(Screen.MousePos).Round;
         if P.Y > FCaptionControls[0].Height then
           Exit;
         var R := TRect.Create(0, 0, 20, 20);
@@ -136,7 +143,7 @@ begin
           Message.Result := HTTOP
         else
         begin
-          var Obj := ObjectAtPoint(Point(Message.XPos, Message.YPos));
+          var Obj := ObjectAtPoint(Screen.MousePos);
           if Assigned(Obj) and
             (function: Boolean
             begin
@@ -177,6 +184,34 @@ begin
   FFocusCorners := AllCorners;
   FFocusOpacity := 1;
   FFocusCornerType := TCornerType.Round;
+  TMessageManager.DefaultManager.SubscribeToMessage(TMainCaptionChangedMessage,
+    procedure(const Sender: TObject; const M: TMessage)
+    begin
+      if TMainCaptionChangedMessage(M).Value = Self then
+      begin
+        var TextControl: ICaption;
+        if (Length(TitleControls) > 0) and Supports(TitleControls[0], ICaption, TextControl) then
+          TextControl.Text :=  TMainCaptionChangedMessage(M).Value.Caption;
+      end;
+    end);
+  TMessageManager.DefaultManager.SubscribeToMessage(TFormActivateMessage,
+    procedure(const Sender: TObject; const M: TMessage)
+    begin
+      if TFormActivateMessage(M).Value = Self then
+      begin
+        for var Control in TitleControls do
+          Control.Opacity := 1;
+      end;
+    end);
+  TMessageManager.DefaultManager.SubscribeToMessage(TFormDeactivateMessage,
+    procedure(const Sender: TObject; const M: TMessage)
+    begin
+      if TFormActivateMessage(M).Value = Self then
+      begin
+        for var Control in TitleControls do
+          Control.Opacity := 0.5;
+      end;
+    end);
 
   // Style defaults
   FSystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
@@ -458,6 +493,16 @@ begin
   DwmWinProcProirity := FHideTitleBar;
   InvalidateNonClient;
   {$ENDIF}
+end;
+
+procedure TWinUIForm.SetOffsetControls(const Value: TArray<TControl>);
+begin
+  FOffsetControls := Value;
+end;
+
+procedure TWinUIForm.SetTitleControls(const Value: TArray<TControl>);
+begin
+  FTitleControls := Value;
 end;
 
 procedure TWinUIForm.SystemBackdropType(AType: TSystemBackdropType);

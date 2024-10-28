@@ -6,9 +6,6 @@
         <Projects Include="WinUI3Style.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="C:\Users\HemulGM\Desktop\EditIntoTitle-Source-23-02\EditIntoTitleD23.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -26,23 +23,14 @@
     <Target Name="WinUI3Style:Make">
         <MSBuild Projects="WinUI3Style.dproj" Targets="Make"/>
     </Target>
-    <Target Name="EditIntoTitleD23">
-        <MSBuild Projects="C:\Users\HemulGM\Desktop\EditIntoTitle-Source-23-02\EditIntoTitleD23.dproj"/>
-    </Target>
-    <Target Name="EditIntoTitleD23:Clean">
-        <MSBuild Projects="C:\Users\HemulGM\Desktop\EditIntoTitle-Source-23-02\EditIntoTitleD23.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="EditIntoTitleD23:Make">
-        <MSBuild Projects="C:\Users\HemulGM\Desktop\EditIntoTitle-Source-23-02\EditIntoTitleD23.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="WinUI3Style;EditIntoTitleD23"/>
+        <CallTarget Targets="WinUI3Style"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="WinUI3Style:Clean;EditIntoTitleD23:Clean"/>
+        <CallTarget Targets="WinUI3Style:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="WinUI3Style:Make;EditIntoTitleD23:Make"/>
+        <CallTarget Targets="WinUI3Style:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
