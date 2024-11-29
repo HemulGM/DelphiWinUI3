@@ -1,6 +1,6 @@
 object FrameDialogColorPicker: TFrameDialogColorPicker
   Size.Width = 490.000000000000000000
-  Size.Height = 360.000000000000000000
+  Size.Height = 361.000000000000000000
   Size.PlatformDefault = False
   object RectangleTransparent: TRectangle
     Fill.Bitmap.WrapMode = Tile
@@ -35,6 +35,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
     Size.PlatformDefault = False
     StyleLookup = 'trackbarstyle_color'
     TabOrder = 7
+    Value = 255.000000000000000000
     OnChange = AlphaTrackBarChange
   end
   object BWTrackBar: TBWTrackBar
@@ -48,7 +49,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
     Size.PlatformDefault = False
     StyleLookup = 'trackbarstyle_color'
     TabOrder = 6
-    Value = 0.801000006962567600
+    Value = 1.000000000000000000
     OnChange = BWTrackBarChange
   end
   object ComboBoxType: TComboBox
@@ -200,7 +201,6 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
     YRadius = 4.000000000000000000
     OnMouseDown = RectangleBoxMouseDown
     OnMouseMove = RectangleBoxMouseMove
-    OnMouseUp = RectangleBoxMouseUp
     object CircleBoxPoint: TCircle
       Fill.Kind = None
       HitTest = False

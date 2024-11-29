@@ -45,11 +45,11 @@ type
     class function Show(Owner: TCustomForm; const Title: string; const Body: string; Buttons: TArray<string>; AccentId, DefaultId: Integer; CanClose: Boolean; FrameColor: TColor = TColors.Null): Integer; overload;
   public //inner
     class procedure ShowInline(Owner: TCustomForm; Callback: TProc<Integer>; const Title: string; Body: TFrame; Buttons: TArray<string>; AccentId, DefaultId: Integer; CanClose: Boolean; FrameColor: TColor = TColors.Null); overload;
+    class procedure ShowInline(Owner: TCustomForm; Callback: TProc<Integer>; const Title: string; const Body: string; Buttons: TArray<string>; AccentId, DefaultId: Integer; CanClose: Boolean; FrameColor: TColor = TColors.Null); overload;
     class procedure ShowInline(Owner: TCustomForm; Callback: TProc<TDialogResult>; Params: TDialogFramedParams; Ready: TProc = nil); overload;
     class procedure ShowInline(Owner: TCustomForm; Callback: TProc<TDialogResult>; Params: TDialogTextParams); overload;
     class procedure ShowInline(Owner: TCustomForm; Callback: TProc<TDialogInputResult>; Params: TDialogInputParams); overload;
     class procedure ShowInline(Owner: TCustomForm; Callback: TProc<TDialogColorResult>; Params: TDialogColorParams); overload;
-    class procedure ShowInline(Owner: TCustomForm; Callback: TProc<Integer>; const Title: string; const Body: string; Buttons: TArray<string>; AccentId, DefaultId: Integer; CanClose: Boolean; FrameColor: TColor = TColors.Null); overload;
   public //share
     class procedure ShowShare(Owner: TCustomForm; Params: TProc<TShareContract>);
   public //infobar

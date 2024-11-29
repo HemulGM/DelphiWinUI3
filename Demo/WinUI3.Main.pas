@@ -8,20 +8,21 @@ uses
   Data.Bind.Controls, System.Rtti, FMX.Grid.Style, FMX.ListView.Types,
   FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.Header,
   FMX.MagnifierGlass, FMX.ExtCtrls, FMX.StdCtrls, FMX.ListView, FMX.Colors,
-  FMX.NumberBox, FMX.SpinBox, FMX.Grid, FMX.MultiView, FMX.Objects, FMX.Layouts,
-  Fmx.Bind.Navigator, FMX.TreeView, FMX.ListBox, FMX.Calendar, FMX.DateTimeCtrls,
-  FMX.Edit, FMX.ScrollBox, FMX.Memo, FMX.Memo.Style, FMX.EditBox,
-  FMX.ComboEdit.Style, FMX.ComboTrackBar, FMX.ComboEdit,
-  FMX.Controls.Presentation, FMX.TabControl, FMX.Menus, System.ImageList,
-  FMX.ImgList, FMX.Effects, FMX.Filter.Effects, FMX.Switch.Style,
-  Fmx.Bind.GenData, Data.Bind.GenData, System.Bindings.Outputs, Fmx.Bind.Editors,
-  Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
-  Data.Bind.ObjectScope, Fmx.Bind.Grid, Data.Bind.Grid, FMX.SearchBox,
-  {$IFDEF MSWINDOWS}
-  FMX.Win.NotificationManager,
-  {$ENDIF}
-  FMX.Ani, FMX.ActnList, System.Actions, WinUI3.Form, WinUI3.Frame.Inner.InfoBar,
+  FMX.NumberBox, FMX.SpinBox, FMX.Grid, FMX.MultiView,
+  FMX.MultiView.Presentations, FMX.Objects, FMX.Layouts, Fmx.Bind.Navigator,
+  FMX.TreeView, FMX.ListBox, FMX.Calendar, FMX.DateTimeCtrls, FMX.Edit,
+  FMX.ScrollBox, FMX.Memo, FMX.Memo.Style, FMX.EditBox, FMX.ComboEdit.Style,
+  FMX.ComboTrackBar, FMX.ComboEdit, FMX.Controls.Presentation, FMX.TabControl,
+  FMX.Menus, System.ImageList, FMX.ImgList, FMX.Effects, FMX.Filter.Effects,
+  FMX.Switch.Style, FMX.Bind.GenData, Data.Bind.GenData, System.Bindings.Outputs,
+  Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
+  Data.Bind.ObjectScope, Fmx.Bind.Grid, Data.Bind.Grid, FMX.SearchBox, FMX.Ani,
+  FMX.ActnList, System.Actions, WinUI3.Form, WinUI3.Frame.Inner.InfoBar,
   WinUI3.Frame.Dialog.ColorPicker,
+  {$IFDEF MSWINDOWS}
+  WinUI3.NotifyDemo,
+  {$ENDIF}
+  FMX.Calendar.Style,
   //
   FMX.Styles.Objects, FMX.Styles.Switch;
 
@@ -51,11 +52,90 @@ type
     MenuItem19: TMenuItem;
     MenuItem20: TMenuItem;
     MenuItem21: TMenuItem;
+    PrototypeBindSource1: TPrototypeBindSource;
+    BindingsList1: TBindingsList;
+    MenuBar1: TMenuBar;
+    MenuItem32: TMenuItem;
+    MenuItem33: TMenuItem;
+    MenuItem34: TMenuItem;
+    MenuItem35: TMenuItem;
+    MenuItem36: TMenuItem;
+    MenuItem37: TMenuItem;
+    MenuItem38: TMenuItem;
+    MenuItem39: TMenuItem;
+    MenuItem40: TMenuItem;
+    Button41: TButton;
+    Button46: TButton;
+    EditSearch: TEdit;
+    ClearEditButton4: TClearEditButton;
+    PrototypeBindSource2: TPrototypeBindSource;
+    ActionList: TActionList;
+    ActionAdd: TAction;
+    LayoutContent: TLayout;
+    TimerEndLaunch: TTimer;
+    LayoutLauncher: TLayout;
+    Image6: TImage;
+    AniIndicator7: TAniIndicator;
+    ImageList32: TImageList;
+    PopupSearch: TPopup;
+    ListBoxSearch: TListBox;
+    ListBoxItem125: TListBoxItem;
+    ImageListIcons: TImageList;
+    StyleBookWinUI3: TStyleBook;
+    Layout40: TLayout;
+    ButtonMenuHome: TButton;
+    ButtonMenuButtons: TButton;
+    ButtonMenuStandart: TButton;
+    ButtonMenuLabels: TButton;
+    ButtonMenuDT: TButton;
+    ButtonMenuInput: TButton;
+    ButtonMenuActions: TButton;
+    VertScrollBoxMenu: TVertScrollBox;
+    ButtonMenuLists: TButton;
+    ButtonMenuSplitter: TButton;
+    Panel53: TPanel;
+    ButtonMenuMenus: TButton;
+    ButtonMenuMore: TButton;
+    ButtonMenuGrid: TButton;
+    ButtonMenuIndicators: TButton;
+    ButtonMenuOther: TButton;
+    ButtonMenuMultiView: TButton;
+    ButtonMenuExpander: TButton;
+    ButtonMenuTabControl: TButton;
+    ButtonMenuColors: TButton;
+    ButtonMenuNotify: TButton;
+    ButtonMenuDialogs: TButton;
+    ImageListDemo: TImageList;
+    MenuItem23: TMenuItem;
+    MenuItem1: TMenuItem;
+    PopupMenuRich: TPopupMenu;
+    MenuItem24: TMenuItem;
+    MenuItem25: TMenuItem;
+    MenuItem45: TMenuItem;
+    MenuItem52: TMenuItem;
+    MenuItem53: TMenuItem;
+    MenuItem26: TMenuItem;
+    LayoutCaption: TLayout;
+    LayoutHead: TLayout;
+    Layout42: TLayout;
+    Image7: TImage;
+    LabelTitle: TLabel;
+    PopupBoxStyle: TPopupBox;
+    Layout41: TLayout;
+    MenuItem27: TMenuItem;
     TabControlMain: TTabControl;
+    TabItemHome: TTabItem;
+    ScrollBoxDemos: TScrollBox;
+    FlowLayoutBasic: TFlowLayout;
+    ButtonDemoGallery: TButton;
+    ButtonDemoMusic: TButton;
+    ButtonDemoIDE: TButton;
+    ButtonDemoWebBrowser: TButton;
     TabItemButtons: TTabItem;
     ScrollBox1: TScrollBox;
     Panel1: TPanel;
     Button1: TButton;
+    Label103: TLabel;
     Button2: TButton;
     Label1: TLabel;
     Button3: TButton;
@@ -70,12 +150,63 @@ type
     Button16: TButton;
     Button17: TButton;
     Button18: TButton;
+    Label4: TLabel;
+    Button10: TButton;
+    Button11: TButton;
+    Button12: TButton;
+    Button13: TButton;
+    Label31: TLabel;
+    Button292: TButton;
+    Label115: TLabel;
+    Button293: TButton;
+    Button294: TButton;
+    Button295: TButton;
+    Label116: TLabel;
+    Panel26: TPanel;
+    Button14: TButton;
+    Button15: TButton;
+    Label5: TLabel;
+    Button19: TButton;
+    Button20: TButton;
+    Button21: TButton;
+    Button22: TButton;
+    Label18: TLabel;
+    Label20: TLabel;
+    Label26: TLabel;
+    Button40: TButton;
+    Button23: TButton;
+    Button36: TButton;
+    CheckBox2: TCheckBox;
+    CheckBox10: TCheckBox;
+    SpeedButton4: TSpeedButton;
+    Label114: TLabel;
+    SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
+    Panel27: TPanel;
+    Panel28: TPanel;
+    Button39: TButton;
+    ButtonTaskTest: TButton;
+    Label63: TLabel;
+    Path1: TPath;
+    PanelStoreMenu: TPanel;
+    Button284: TButton;
+    Button285: TButton;
+    Button286: TButton;
+    Button287: TButton;
+    Button288: TButton;
+    Label102: TLabel;
     TabItemStandart: TTabItem;
     ScrollBox2: TScrollBox;
     Panel2: TPanel;
     CheckBox1: TCheckBox;
     CheckBox3: TCheckBox;
     Label8: TLabel;
+    CheckBox4: TCheckBox;
+    CheckBox6: TCheckBox;
+    CheckBox9: TCheckBox;
+    CheckBox5: TCheckBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
     Panel3: TPanel;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
@@ -94,12 +225,18 @@ type
     ProgressBar9: TProgressBar;
     Panel6: TPanel;
     Label9: TLabel;
+    Switch1: TSwitch;
+    Switch2: TSwitch;
+    Switch3: TSwitch;
     Panel7: TPanel;
     TrackBar1: TTrackBar;
     Label10: TLabel;
     TrackBar2: TTrackBar;
     TrackBar4: TTrackBar;
     TrackBar5: TTrackBar;
+    TrackBar3: TTrackBar;
+    TrackBar6: TTrackBar;
+    TrackBar7: TTrackBar;
     Panel10: TPanel;
     ComboColorBox1: TComboColorBox;
     Label19: TLabel;
@@ -109,6 +246,157 @@ type
     Label28: TLabel;
     ComboTrackBar1: TComboTrackBar;
     Label30: TLabel;
+    ComboColorBox2: TComboColorBox;
+    ComboColorBox4: TComboColorBox;
+    VertScrollBoxCarusel: TVertScrollBox;
+    Button29: TButton;
+    Button30: TButton;
+    Button31: TButton;
+    Button32: TButton;
+    Button33: TButton;
+    Button34: TButton;
+    Button35: TButton;
+    Button37: TButton;
+    Button38: TButton;
+    Button48: TButton;
+    Button49: TButton;
+    Button50: TButton;
+    Button51: TButton;
+    Button52: TButton;
+    Button53: TButton;
+    Button54: TButton;
+    Button55: TButton;
+    Button57: TButton;
+    Button58: TButton;
+    Button59: TButton;
+    Button60: TButton;
+    Button61: TButton;
+    Button62: TButton;
+    Button67: TButton;
+    Layout8: TLayout;
+    Layout9: TLayout;
+    HorzScrollBoxSpin: THorzScrollBox;
+    Button130: TButton;
+    Button161: TButton;
+    Button162: TButton;
+    Button163: TButton;
+    Button164: TButton;
+    Button165: TButton;
+    Button167: TButton;
+    Button168: TButton;
+    Button169: TButton;
+    Button170: TButton;
+    Button171: TButton;
+    Button172: TButton;
+    Button173: TButton;
+    Button174: TButton;
+    Button175: TButton;
+    Button176: TButton;
+    Button177: TButton;
+    Button178: TButton;
+    Button179: TButton;
+    Button180: TButton;
+    Button181: TButton;
+    Button182: TButton;
+    Button183: TButton;
+    Button184: TButton;
+    Layout10: TLayout;
+    Layout21: TLayout;
+    Panel49: TPanel;
+    ArcDial2: TArcDial;
+    Label48: TLabel;
+    ArcDial1: TArcDial;
+    ArcDial3: TArcDial;
+    Panel51: TPanel;
+    HorzScrollBoxFilter: THorzScrollBox;
+    RadioButton4: TRadioButton;
+    RadioButton5: TRadioButton;
+    RadioButton6: TRadioButton;
+    RadioButton7: TRadioButton;
+    RadioButton8: TRadioButton;
+    RadioButton9: TRadioButton;
+    RadioButton10: TRadioButton;
+    ButtonScrollFilterLeft: TButton;
+    ButtonScrollFilterRight: TButton;
+    TabItemLabels: TTabItem;
+    VertScrollBox1: TVertScrollBox;
+    Panel30: TPanel;
+    Panel33: TPanel;
+    Label41: TLabel;
+    Label80: TLabel;
+    Label87: TLabel;
+    EditExampleTitle: TEdit;
+    EditButton6: TEditButton;
+    Layout24: TLayout;
+    Label38: TLabel;
+    Label77: TLabel;
+    Label84: TLabel;
+    EditExampleBody: TEdit;
+    EditButton3: TEditButton;
+    Layout25: TLayout;
+    Label42: TLabel;
+    Label81: TLabel;
+    Label88: TLabel;
+    EditExampleTitleL: TEdit;
+    EditButton7: TEditButton;
+    Panel34: TPanel;
+    Label32: TLabel;
+    Label76: TLabel;
+    Label83: TLabel;
+    EditExampleCap: TEdit;
+    EditButton2: TEditButton;
+    Layout26: TLayout;
+    Label40: TLabel;
+    Label79: TLabel;
+    Label86: TLabel;
+    EditExampleSubT: TEdit;
+    EditButton5: TEditButton;
+    Panel35: TPanel;
+    Label39: TLabel;
+    Label78: TLabel;
+    Label85: TLabel;
+    EditExampleBodyS: TEdit;
+    EditButton4: TEditButton;
+    Panel36: TPanel;
+    Label44: TLabel;
+    Label82: TLabel;
+    Label89: TLabel;
+    EditExampleDisplay: TEdit;
+    EditButton8: TEditButton;
+    Layout28: TLayout;
+    Label71: TLabel;
+    Label73: TLabel;
+    Label74: TLabel;
+    Label75: TLabel;
+    Label46: TLabel;
+    Path3: TPath;
+    Label52: TLabel;
+    Label56: TLabel;
+    Label64: TLabel;
+    Button65: TButton;
+    Layout22: TLayout;
+    Panel31: TPanel;
+    Line2: TLine;
+    Label65: TLabel;
+    Label67: TLabel;
+    Path4: TPath;
+    Label66: TLabel;
+    Layout23: TLayout;
+    Panel32: TPanel;
+    Line5: TLine;
+    Label68: TLabel;
+    Label69: TLabel;
+    Button188: TButton;
+    Path5: TPath;
+    Label70: TLabel;
+    Label72: TLabel;
+    Path6: TPath;
+    Button185: TButton;
+    Button189: TButton;
+    Button190: TButton;
+    Button191: TButton;
+    Button192: TButton;
+    Layout27: TLayout;
     TabItemInput: TTabItem;
     ScrollBox3: TScrollBox;
     Panel9: TPanel;
@@ -118,14 +406,29 @@ type
     Panel8: TPanel;
     Label11: TLabel;
     Edit2: TEdit;
+    EditButton1: TEditButton;
     Edit3: TEdit;
     ClearEditButton1: TClearEditButton;
     PasswordEditButton1: TPasswordEditButton;
     EllipsesEditButton1: TEllipsesEditButton;
     DropDownEditButton1: TDropDownEditButton;
     SpinEditButton1: TSpinEditButton;
+    SearchEditButton2: TSearchEditButton;
     Edit4: TEdit;
     ClearEditButton2: TClearEditButton;
+    Edit1: TEdit;
+    ClearEditButton3: TClearEditButton;
+    Label49: TLabel;
+    SpinBox1: TSpinBox;
+    Label25: TLabel;
+    NumberBox1: TNumberBox;
+    SpinBox2: TSpinBox;
+    ColorAnimation1: TColorAnimation;
+    EditWrongTest: TEdit;
+    EditButton9: TEditButton;
+    LabelWrongTest: TLabel;
+    ColorPanel1: TColorPanel;
+    ColorPanel3: TColorPanel;
     TabItemDateTime: TTabItem;
     ScrollBox4: TScrollBox;
     Panel5: TPanel;
@@ -133,8 +436,46 @@ type
     TimeEdit1: TTimeEdit;
     DateEdit1: TDateEdit;
     Calendar1: TCalendar;
+    TabItemMenus: TTabItem;
+    ToolBar1: TToolBar;
+    Button24: TButton;
+    Button25: TButton;
+    Button26: TButton;
+    Button27: TButton;
+    Button28: TButton;
+    Panel13: TPanel;
+    Button240: TButton;
+    ListBox13: TListBox;
+    ListBoxItem131: TListBoxItem;
+    ListBoxItem133: TListBoxItem;
+    ListBoxItem134: TListBoxItem;
+    MetropolisUIListBoxItem6: TMetropolisUIListBoxItem;
+    ListBoxGroupHeader6: TListBoxGroupHeader;
+    ListBoxItem132: TListBoxItem;
+    ListBoxItem135: TListBoxItem;
+    ListBoxItem136: TListBoxItem;
+    ListBoxItem137: TListBoxItem;
+    ListBoxGroupFooter6: TListBoxGroupFooter;
+    ListBoxHeader2: TListBoxHeader;
+    SearchBox4: TSearchBox;
+    Button241: TButton;
+    Button242: TButton;
+    Button243: TButton;
+    Button291: TButton;
+    Label109: TLabel;
+    Label110: TLabel;
+    Label111: TLabel;
+    Label112: TLabel;
+    Label113: TLabel;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    RadioButton11: TRadioButton;
+    RadioButton12: TRadioButton;
+    RadioButton13: TRadioButton;
     TabItemLists: TTabItem;
     ScrollBox5: TScrollBox;
+    Label16: TLabel;
     ListBox1: TListBox;
     ListBoxItem1: TListBoxItem;
     ListBoxItem2: TListBoxItem;
@@ -150,7 +491,6 @@ type
     ListBoxItem12: TListBoxItem;
     ListBoxItem13: TListBoxItem;
     ListBoxItem14: TListBoxItem;
-    Label16: TLabel;
     ListBox2: TListBox;
     ListBoxItem15: TListBoxItem;
     ListBoxItem16: TListBoxItem;
@@ -166,6 +506,7 @@ type
     ListBoxItem26: TListBoxItem;
     ListBoxItem27: TListBoxItem;
     ListBoxItem28: TListBoxItem;
+    SearchBox1: TSearchBox;
     ListBox3: TListBox;
     ListBoxItem29: TListBoxItem;
     ListBoxItem30: TListBoxItem;
@@ -225,20 +566,6 @@ type
     ListBoxItem82: TListBoxItem;
     ListBoxItem83: TListBoxItem;
     ListBoxItem84: TListBoxItem;
-    TreeView1: TTreeView;
-    TreeViewItem1: TTreeViewItem;
-    TreeViewItem2: TTreeViewItem;
-    TreeViewItem6: TTreeViewItem;
-    TreeViewItem7: TTreeViewItem;
-    TreeViewItem12: TTreeViewItem;
-    TreeViewItem13: TTreeViewItem;
-    TreeViewItem8: TTreeViewItem;
-    TreeViewItem9: TTreeViewItem;
-    TreeViewItem3: TTreeViewItem;
-    TreeViewItem10: TTreeViewItem;
-    TreeViewItem11: TTreeViewItem;
-    TreeViewItem4: TTreeViewItem;
-    TreeViewItem5: TTreeViewItem;
     ListBox7: TListBox;
     ListBoxItem85: TListBoxItem;
     ListBoxItem86: TListBoxItem;
@@ -268,6 +595,39 @@ type
     ListBoxItem110: TListBoxItem;
     ListBoxItem111: TListBoxItem;
     ListBoxItem112: TListBoxItem;
+    TreeView1: TTreeView;
+    TreeViewItem1: TTreeViewItem;
+    TreeViewItem2: TTreeViewItem;
+    TreeViewItem6: TTreeViewItem;
+    TreeViewItem7: TTreeViewItem;
+    TreeViewItem12: TTreeViewItem;
+    TreeViewItem13: TTreeViewItem;
+    TreeViewItem8: TTreeViewItem;
+    TreeViewItem9: TTreeViewItem;
+    TreeViewItem3: TTreeViewItem;
+    TreeViewItem10: TTreeViewItem;
+    TreeViewItem11: TTreeViewItem;
+    TreeViewItem4: TTreeViewItem;
+    TreeViewItem5: TTreeViewItem;
+    TreeViewItem14: TTreeViewItem;
+    TreeViewItem15: TTreeViewItem;
+    TreeViewItem16: TTreeViewItem;
+    TreeViewItem17: TTreeViewItem;
+    TreeViewItem18: TTreeViewItem;
+    TreeViewItem19: TTreeViewItem;
+    TreeViewItem21: TTreeViewItem;
+    TreeViewItem22: TTreeViewItem;
+    TreeViewItem23: TTreeViewItem;
+    TreeViewItem24: TTreeViewItem;
+    TreeViewItem25: TTreeViewItem;
+    TreeViewItem26: TTreeViewItem;
+    TreeViewItem27: TTreeViewItem;
+    TreeViewItem20: TTreeViewItem;
+    Label91: TLabel;
+    ListBox9: TListBox;
+    SearchBox2: TSearchBox;
+    ListView1: TListView;
+    Label92: TLabel;
     TabItemActions: TTabItem;
     ScrollBox6: TScrollBox;
     Panel11: TPanel;
@@ -341,458 +701,10 @@ type
     Button157: TButton;
     Button158: TButton;
     Button160: TButton;
-    TabItemSplitter: TTabItem;
-    Layout1: TLayout;
-    Rectangle3: TRectangle;
-    Rectangle4: TRectangle;
-    Splitter1: TSplitter;
-    Splitter2: TSplitter;
-    Splitter3: TSplitter;
-    Rectangle6: TRectangle;
-    Rectangle5: TRectangle;
-    Rectangle7: TRectangle;
-    Splitter4: TSplitter;
-    TabItemGrid: TTabItem;
-    StringGrid1: TStringGrid;
-    Grid1: TGrid;
-    TabItemAniIndicator: TTabItem;
-    AniIndicator1: TAniIndicator;
-    AniIndicator2: TAniIndicator;
-    AniIndicator3: TAniIndicator;
-    AniIndicator4: TAniIndicator;
-    TabItemOther: TTabItem;
-    CalloutPanel1: TCalloutPanel;
-    StatusBar1: TStatusBar;
-    PopupBox1: TPopupBox;
-    Label51: TLabel;
-    Label54: TLabel;
-    GroupBox1: TGroupBox;
-    Label55: TLabel;
-    TabItemMore: TTabItem;
-    DropTarget1: TDropTarget;
-    DropTarget2: TDropTarget;
-    DropTarget3: TDropTarget;
-    Header1: THeader;
-    HeaderItem1: THeaderItem;
-    HeaderItem2: THeaderItem;
-    HeaderItem3: THeaderItem;
-    HeaderItem4: THeaderItem;
-    TabItemMultiView: TTabItem;
-    TabControl3: TTabControl;
-    TabItem16: TTabItem;
-    Rectangle8: TRectangle;
-    Label33: TLabel;
-    MultiView1: TMultiView;
-    Button56: TButton;
-    Button66: TButton;
-    Button70: TButton;
-    Button71: TButton;
-    Button72: TButton;
-    Button73: TButton;
-    Button74: TButton;
-    Panel14: TPanel;
-    Panel15: TPanel;
-    TabItem17: TTabItem;
-    Rectangle9: TRectangle;
-    Label34: TLabel;
-    MultiView3: TMultiView;
-    Button64: TButton;
-    Button75: TButton;
-    Button76: TButton;
-    Button77: TButton;
-    Button78: TButton;
-    Button79: TButton;
-    Button80: TButton;
-    Panel16: TPanel;
-    Panel17: TPanel;
-    TabItem18: TTabItem;
-    Rectangle10: TRectangle;
-    Label35: TLabel;
-    Button68: TButton;
-    MultiView4: TMultiView;
-    Button81: TButton;
-    Button82: TButton;
-    Button83: TButton;
-    Button84: TButton;
-    Button85: TButton;
-    Button86: TButton;
-    Layout11: TLayout;
-    Label43: TLabel;
-    Panel18: TPanel;
-    Panel19: TPanel;
-    TabItem19: TTabItem;
-    Rectangle11: TRectangle;
-    Label36: TLabel;
-    Button69: TButton;
-    MultiView5: TMultiView;
-    Button87: TButton;
-    Button88: TButton;
-    Button89: TButton;
-    Button90: TButton;
-    Button91: TButton;
-    Button92: TButton;
-    Layout12: TLayout;
-    Label45: TLabel;
-    Panel20: TPanel;
-    Panel21: TPanel;
-    TabItem20: TTabItem;
-    Rectangle12: TRectangle;
-    Label37: TLabel;
-    MultiView6: TMultiView;
-    Button93: TButton;
-    Button94: TButton;
-    Button95: TButton;
-    Button96: TButton;
-    Button97: TButton;
-    Button98: TButton;
-    Layout13: TLayout;
-    Label47: TLabel;
-    Panel22: TPanel;
-    Panel23: TPanel;
-    Label4: TLabel;
-    Button10: TButton;
-    Button11: TButton;
-    Button12: TButton;
-    Button13: TButton;
-    Panel26: TPanel;
-    Button14: TButton;
-    Button15: TButton;
-    Label5: TLabel;
-    Button19: TButton;
-    Button20: TButton;
-    Button21: TButton;
-    Button22: TButton;
-    Label18: TLabel;
-    Label20: TLabel;
-    Label26: TLabel;
-    Switch1: TSwitch;
-    CheckBox4: TCheckBox;
-    CheckBox6: TCheckBox;
-    CheckBox9: TCheckBox;
-    CheckBox5: TCheckBox;
-    CheckBox7: TCheckBox;
-    CheckBox8: TCheckBox;
-    Switch2: TSwitch;
-    Switch3: TSwitch;
-    TabItemExpander: TTabItem;
-    Button40: TButton;
-    Button23: TButton;
-    Button36: TButton;
-    CheckBox2: TCheckBox;
-    CheckBox10: TCheckBox;
-    Panel27: TPanel;
-    Panel28: TPanel;
-    Button39: TButton;
-    ComboColorBox2: TComboColorBox;
-    TrackBar3: TTrackBar;
-    TrackBar6: TTrackBar;
-    TrackBar7: TTrackBar;
-    PrototypeBindSource1: TPrototypeBindSource;
-    BindingsList1: TBindingsList;
-    LinkGridToDataSourcePrototypeBindSource1: TLinkGridToDataSource;
-    LinkGridToDataSourcePrototypeBindSource12: TLinkGridToDataSource;
-    VertScrollBoxCarusel: TVertScrollBox;
-    Expander1: TExpander;
-    Layout14: TLayout;
-    Label29: TLabel;
-    Button42: TButton;
-    Label53: TLabel;
-    Line1: TLine;
-    Layout15: TLayout;
-    Label59: TLabel;
-    Button43: TButton;
-    Layout16: TLayout;
-    Line3: TLine;
-    Label60: TLabel;
-    Button44: TButton;
-    Layout17: TLayout;
-    Line4: TLine;
-    Label61: TLabel;
-    Button45: TButton;
-    Layout18: TLayout;
-    Panel29: TPanel;
-    Expander2: TExpander;
-    MenuBar1: TMenuBar;
-    MenuItem32: TMenuItem;
-    MenuItem33: TMenuItem;
-    MenuItem34: TMenuItem;
-    MenuItem35: TMenuItem;
-    MenuItem36: TMenuItem;
-    MenuItem37: TMenuItem;
-    MenuItem38: TMenuItem;
-    MenuItem39: TMenuItem;
-    MenuItem40: TMenuItem;
-    Layout19: TLayout;
-    Label13: TLabel;
-    Label12: TLabel;
-    CalloutPanel2: TCalloutPanel;
-    Layout20: TLayout;
-    Label14: TLabel;
-    Label62: TLabel;
-    ButtonTaskTest: TButton;
-    Label63: TLabel;
-    Path1: TPath;
-    Button41: TButton;
-    Button46: TButton;
-    SearchEditButton2: TSearchEditButton;
-    Edit1: TEdit;
-    ClearEditButton3: TClearEditButton;
-    EditSearch: TEdit;
-    ClearEditButton4: TClearEditButton;
-    EditButton1: TEditButton;
     Button47: TButton;
     Button159: TButton;
     Button166: TButton;
-    Label49: TLabel;
-    SpinBox1: TSpinBox;
-    Label25: TLabel;
-    NumberBox1: TNumberBox;
-    TabItemColors: TTabItem;
-    ColorPanel2: TColorPanel;
-    ColorPicker1: TColorPicker;
-    ColorBox1: TColorBox;
-    ColorQuad1: TColorQuad;
-    HueTrackBar1: THueTrackBar;
-    AlphaTrackBar1: TAlphaTrackBar;
-    BWTrackBar1: TBWTrackBar;
-    GradientEdit1: TGradientEdit;
-    ComboColorBox3: TComboColorBox;
-    ColorButton3: TColorButton;
-    ColorComboBox1: TColorComboBox;
-    ColorListBox1: TColorListBox;
-    Label50: TLabel;
-    AniIndicator5: TAniIndicator;
-    AniIndicator6: TAniIndicator;
-    TreeViewItem14: TTreeViewItem;
-    TreeViewItem15: TTreeViewItem;
-    TreeViewItem16: TTreeViewItem;
-    TreeViewItem17: TTreeViewItem;
-    TreeViewItem18: TTreeViewItem;
-    TreeViewItem19: TTreeViewItem;
-    TreeViewItem20: TTreeViewItem;
-    TreeViewItem21: TTreeViewItem;
-    TreeViewItem22: TTreeViewItem;
-    TreeViewItem23: TTreeViewItem;
-    TreeViewItem24: TTreeViewItem;
-    TreeViewItem25: TTreeViewItem;
-    TreeViewItem26: TTreeViewItem;
-    TreeViewItem27: TTreeViewItem;
-    Selection1: TSelection;
-    SelectionPoint1: TSelectionPoint;
-    SearchBox1: TSearchBox;
-    TabItemTabs: TTabItem;
-    TabControl2: TTabControl;
-    TabItem7: TTabItem;
-    TabItem11: TTabItem;
-    TabItem12: TTabItem;
-    TabItem13: TTabItem;
-    Image1: TImage;
-    Image2: TImage;
-    Image3: TImage;
-    Image4: TImage;
-    Panel25: TPanel;
-    Layout2: TLayout;
-    Label22: TLabel;
-    Layout3: TLayout;
-    ColorButton1: TColorButton;
-    ColorButton2: TColorButton;
-    ColorButton4: TColorButton;
-    ColorButton5: TColorButton;
-    ColorButton6: TColorButton;
-    ColorButton7: TColorButton;
-    Layout4: TLayout;
-    Layout5: TLayout;
-    Label23: TLabel;
-    Layout6: TLayout;
-    PathTestLine: TPath;
-    Layout7: TLayout;
-    TrackBarLineSize: TTrackBar;
-    Button29: TButton;
-    Button30: TButton;
-    Button31: TButton;
-    Button32: TButton;
-    Button33: TButton;
-    Button34: TButton;
-    Button35: TButton;
-    Button37: TButton;
-    Button38: TButton;
-    Button48: TButton;
-    Button49: TButton;
-    Button50: TButton;
-    Button51: TButton;
-    Button52: TButton;
-    Button53: TButton;
-    Button54: TButton;
-    Button55: TButton;
-    Button57: TButton;
-    Button58: TButton;
-    Button59: TButton;
-    Button60: TButton;
-    Button61: TButton;
-    Button62: TButton;
-    Button67: TButton;
-    Layout8: TLayout;
-    Layout9: TLayout;
-    Button130: TButton;
-    Button161: TButton;
-    Button162: TButton;
-    Button163: TButton;
-    Button164: TButton;
-    Button165: TButton;
-    Button167: TButton;
-    Button168: TButton;
-    Button169: TButton;
-    Button170: TButton;
-    Button171: TButton;
-    Button172: TButton;
-    Button173: TButton;
-    Button174: TButton;
-    Button175: TButton;
-    Button176: TButton;
-    Button177: TButton;
-    Button178: TButton;
-    Button179: TButton;
-    Button180: TButton;
-    Button181: TButton;
-    Button182: TButton;
-    Button183: TButton;
-    Button184: TButton;
-    Layout10: TLayout;
-    Layout21: TLayout;
-    HorzScrollBoxSpin: THorzScrollBox;
-    Panel12: TPanel;
-    Button186: TButton;
-    Button187: TButton;
-    Label24: TLabel;
-    Path2: TPath;
-    SpinBox2: TSpinBox;
-    PrototypeBindSource2: TPrototypeBindSource;
-    ListBox9: TListBox;
-    SearchBox2: TSearchBox;
-    LinkListControlToField2: TLinkListControlToField;
-    ListView1: TListView;
-    LinkListControlToField1: TLinkListControlToField;
-    TabItemNotify: TTabItem;
-    ButtonNotify: TButton;
-    Image5: TImage;
-    MagnifierGlass1: TMagnifierGlass;
-    MagnifierGlass2: TMagnifierGlass;
-    MagnifierGlass3: TMagnifierGlass;
-    Label31: TLabel;
-    ActionList: TActionList;
-    ActionAdd: TAction;
-    TabItemLabels: TTabItem;
-    Label32: TLabel;
-    Label38: TLabel;
-    Label39: TLabel;
-    Label40: TLabel;
-    Label41: TLabel;
-    Label42: TLabel;
-    Label44: TLabel;
-    VertScrollBox1: TVertScrollBox;
-    Panel30: TPanel;
-    Label46: TLabel;
-    Path3: TPath;
-    Label52: TLabel;
-    Label56: TLabel;
-    Label64: TLabel;
-    Button65: TButton;
-    Layout22: TLayout;
-    Line2: TLine;
-    Label65: TLabel;
-    Label66: TLabel;
-    Label67: TLabel;
-    Path4: TPath;
-    Panel31: TPanel;
-    Layout23: TLayout;
-    Panel32: TPanel;
-    Line5: TLine;
-    Label68: TLabel;
-    Label69: TLabel;
-    Button188: TButton;
-    Path5: TPath;
-    Label70: TLabel;
-    Label72: TLabel;
-    Path6: TPath;
-    Panel33: TPanel;
-    Layout24: TLayout;
-    Layout25: TLayout;
-    Panel34: TPanel;
-    Layout26: TLayout;
-    Panel35: TPanel;
-    Panel36: TPanel;
-    Button185: TButton;
-    Button189: TButton;
-    Button190: TButton;
-    Button191: TButton;
-    Button192: TButton;
-    Layout27: TLayout;
-    Layout28: TLayout;
-    Label71: TLabel;
-    Label73: TLabel;
-    Label74: TLabel;
-    Label75: TLabel;
-    Label76: TLabel;
-    Label77: TLabel;
-    Label78: TLabel;
-    Label79: TLabel;
-    Label80: TLabel;
-    Label81: TLabel;
-    Label82: TLabel;
-    Label83: TLabel;
-    Label84: TLabel;
-    Label85: TLabel;
-    Label86: TLabel;
-    Label87: TLabel;
-    Label88: TLabel;
-    Label89: TLabel;
-    EditExampleCap: TEdit;
-    EditExampleBody: TEdit;
-    EditExampleBodyS: TEdit;
-    EditExampleSubT: TEdit;
-    EditExampleTitle: TEdit;
-    EditExampleTitleL: TEdit;
-    EditExampleDisplay: TEdit;
-    EditButton2: TEditButton;
-    EditButton3: TEditButton;
-    EditButton4: TEditButton;
-    EditButton5: TEditButton;
-    EditButton6: TEditButton;
-    EditButton7: TEditButton;
-    EditButton8: TEditButton;
-    TabItemDialogs: TTabItem;
-    ButtonShare: TButton;
-    ButtonDialogText1: TButton;
-    ButtonDialogText2: TButton;
-    ButtonDialogSM: TButton;
-    ButtonDialogFrame: TButton;
-    ButtonDialogInput: TButton;
-    ButtonDialogColorPicker: TButton;
-    ButtonDialogSMLarge: TButton;
-    ButtonDialogColorPickerAlpha: TButton;
-    LayoutContent: TLayout;
-    TimerEndLaunch: TTimer;
-    LayoutLauncher: TLayout;
-    Image6: TImage;
-    AniIndicator7: TAniIndicator;
     ButtonMoreFluentIcons: TButton;
-    ListBox10: TListBox;
-    ListBoxItem57: TListBoxItem;
-    ListBoxItem99: TListBoxItem;
-    ImageList32: TImageList;
-    ListBoxItem113: TListBoxItem;
-    ListBoxItem114: TListBoxItem;
-    ListBoxItem115: TListBoxItem;
-    ListBoxItem116: TListBoxItem;
-    ListBoxItem117: TListBoxItem;
-    ListBox11: TListBox;
-    ListBoxItem118: TListBoxItem;
-    ListBoxItem119: TListBoxItem;
-    ListBoxItem120: TListBoxItem;
-    ListBoxItem121: TListBoxItem;
-    ListBoxItem122: TListBoxItem;
-    ListBoxItem123: TListBoxItem;
-    ListBoxItem124: TListBoxItem;
     Button63: TButton;
     Button193: TButton;
     Button194: TButton;
@@ -809,94 +721,20 @@ type
     Button205: TButton;
     Button206: TButton;
     Button207: TButton;
-    PopupSearch: TPopup;
-    ListBoxSearch: TListBox;
-    ListBoxItem125: TListBoxItem;
-    TabItem1: TTabItem;
-    MultiView2: TMultiView;
-    Button208: TButton;
-    Button209: TButton;
-    Button210: TButton;
-    Button211: TButton;
-    Button212: TButton;
-    Button213: TButton;
-    Button214: TButton;
-    Panel37: TPanel;
-    Panel38: TPanel;
-    Rectangle17: TRectangle;
-    Label90: TLabel;
-    Label91: TLabel;
-    Label92: TLabel;
-    TabControl4: TTabControl;
-    TabItem27: TTabItem;
-    Rectangle1: TRectangle;
-    TabItem28: TTabItem;
-    Rectangle2: TRectangle;
-    TabItem29: TTabItem;
-    Rectangle13: TRectangle;
-    TabControl5: TTabControl;
-    TabItem31: TTabItem;
-    Rectangle14: TRectangle;
-    TabItem32: TTabItem;
-    Rectangle15: TRectangle;
-    TabItem33: TTabItem;
-    Rectangle16: TRectangle;
-    TabControl1: TTabControl;
-    TabItem2: TTabItem;
-    TabItem3: TTabItem;
-    TabItem4: TTabItem;
-    Panel40: TPanel;
-    Panel41: TPanel;
-    TabItem5: TTabItem;
-    Panel39: TPanel;
-    Panel42: TPanel;
-    Layout29: TLayout;
-    Label93: TLabel;
-    Button215: TButton;
-    Panel43: TPanel;
-    Layout30: TLayout;
-    Label94: TLabel;
-    Panel44: TPanel;
-    Layout31: TLayout;
-    Label95: TLabel;
-    Button217: TButton;
-    Panel45: TPanel;
-    Layout32: TLayout;
-    Label96: TLabel;
-    Button218: TButton;
-    Panel46: TPanel;
-    Layout33: TLayout;
-    Label97: TLabel;
-    Button219: TButton;
-    Panel47: TPanel;
-    Layout34: TLayout;
-    Label98: TLabel;
-    Panel48: TPanel;
-    Button216: TButton;
-    FlowLayout1: TFlowLayout;
-    Button220: TButton;
-    Button221: TButton;
-    Button222: TButton;
-    FlowLayout2: TFlowLayout;
-    Button223: TButton;
-    Button224: TButton;
-    Button225: TButton;
-    Button226: TButton;
-    ComboBox2: TComboBox;
-    ComboBox3: TComboBox;
-    Button227: TButton;
-    Button228: TButton;
-    Button229: TButton;
-    Button230: TButton;
-    Button231: TButton;
-    Button232: TButton;
-    Button233: TButton;
-    Button234: TButton;
-    Button235: TButton;
-    Button236: TButton;
-    Button237: TButton;
-    Button238: TButton;
-    Button239: TButton;
+    Button289: TButton;
+    Button290: TButton;
+    Button129: TButton;
+    TabItemSplitter: TTabItem;
+    Layout1: TLayout;
+    Rectangle3: TRectangle;
+    Rectangle4: TRectangle;
+    Splitter1: TSplitter;
+    Splitter2: TSplitter;
+    Splitter3: TSplitter;
+    Rectangle6: TRectangle;
+    Rectangle5: TRectangle;
+    Rectangle7: TRectangle;
+    Splitter4: TSplitter;
     Layout35: TLayout;
     Rectangle18: TRectangle;
     Rectangle19: TRectangle;
@@ -907,16 +745,171 @@ type
     Rectangle21: TRectangle;
     Rectangle22: TRectangle;
     Splitter8: TSplitter;
+    TabItemGrid: TTabItem;
+    StringGrid1: TStringGrid;
+    Grid1: TGrid;
+    TabItemAniIndicator: TTabItem;
+    AniIndicator1: TAniIndicator;
+    AniIndicator2: TAniIndicator;
+    AniIndicator3: TAniIndicator;
+    AniIndicator4: TAniIndicator;
+    AniIndicator5: TAniIndicator;
+    AniIndicator6: TAniIndicator;
+    AniIndicator8: TAniIndicator;
+    TabItemOther: TTabItem;
+    CalloutPanel1: TCalloutPanel;
+    Layout19: TLayout;
+    Label13: TLabel;
+    Label12: TLabel;
+    StatusBar1: TStatusBar;
+    PopupBox1: TPopupBox;
+    Label51: TLabel;
+    Label54: TLabel;
+    GroupBox1: TGroupBox;
+    Panel12: TPanel;
+    Button186: TButton;
+    Button187: TButton;
+    Label24: TLabel;
+    Path2: TPath;
+    Label55: TLabel;
+    CalloutPanel2: TCalloutPanel;
+    Layout20: TLayout;
+    Label14: TLabel;
+    Label62: TLabel;
+    ListBox10: TListBox;
+    ListBoxItem57: TListBoxItem;
+    ListBoxItem99: TListBoxItem;
+    ListBoxItem113: TListBoxItem;
+    ListBoxItem114: TListBoxItem;
+    ListBoxItem115: TListBoxItem;
+    ListBoxItem116: TListBoxItem;
+    ListBoxItem117: TListBoxItem;
+    ListBox11: TListBox;
+    ListBoxItem118: TListBoxItem;
+    ListBoxItem119: TListBoxItem;
+    ListBoxItem120: TListBoxItem;
+    ListBoxItem121: TListBoxItem;
+    ListBoxItem122: TListBoxItem;
+    ListBoxItem123: TListBoxItem;
+    ListBoxItem124: TListBoxItem;
+    Label99: TLabel;
+    CalloutPanel3: TCalloutPanel;
+    Layout38: TLayout;
+    Label105: TLabel;
+    Label106: TLabel;
+    CalloutPanel4: TCalloutPanel;
+    Layout39: TLayout;
+    Label107: TLabel;
+    Label108: TLabel;
+    TabItemMore: TTabItem;
+    PlotGrid1: TPlotGrid;
+    DropTarget1: TDropTarget;
+    DropTarget2: TDropTarget;
+    DropTarget3: TDropTarget;
+    Header1: THeader;
+    HeaderItem1: THeaderItem;
+    HeaderItem2: THeaderItem;
+    HeaderItem3: THeaderItem;
+    HeaderItem4: THeaderItem;
+    Selection1: TSelection;
+    SelectionPoint1: TSelectionPoint;
+    Image5: TImage;
+    MagnifierGlass1: TMagnifierGlass;
+    MagnifierGlass2: TMagnifierGlass;
+    MagnifierGlass3: TMagnifierGlass;
+    ImageViewer1: TImageViewer;
+    TabItemMultiView: TTabItem;
+    Rectangle23: TRectangle;
+    TabControl3: TTabControl;
+    TabItem16: TTabItem;
+    Panel24: TPanel;
+    Label33: TLabel;
+    MultiView1: TMultiView;
+    Button66: TButton;
+    Button70: TButton;
+    Button71: TButton;
+    Button72: TButton;
+    Button73: TButton;
+    Button74: TButton;
+    Panel14: TPanel;
+    Panel15: TPanel;
+    Layout43: TLayout;
+    Button56: TButton;
+    TabItem17: TTabItem;
+    Panel54: TPanel;
+    Label34: TLabel;
+    MultiView3: TMultiView;
+    Button64: TButton;
+    Button75: TButton;
+    Button76: TButton;
+    Button77: TButton;
+    Button78: TButton;
+    Button79: TButton;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    Layout45: TLayout;
+    Button80: TButton;
+    TabItem18: TTabItem;
+    Panel55: TPanel;
+    Label117: TLabel;
+    Button68: TButton;
+    MultiView4: TMultiView;
+    Button81: TButton;
+    Button82: TButton;
+    Button83: TButton;
+    Button84: TButton;
+    Button85: TButton;
+    Button86: TButton;
+    Panel18: TPanel;
+    Panel19: TPanel;
+    Image8: TImage;
+    TabItem19: TTabItem;
+    Panel56: TPanel;
+    Label35: TLabel;
+    Button69: TButton;
+    CheckBox11: TCheckBox;
+    MultiView5: TMultiView;
+    Button87: TButton;
+    Button88: TButton;
+    Button89: TButton;
+    Button90: TButton;
+    Button91: TButton;
+    Button92: TButton;
+    Panel20: TPanel;
+    Panel21: TPanel;
+    TabItem20: TTabItem;
+    Panel57: TPanel;
+    Label36: TLabel;
+    Button297: TButton;
+    MultiView6: TMultiView;
+    Button93: TButton;
+    Button94: TButton;
+    Button95: TButton;
+    Button96: TButton;
+    Button97: TButton;
+    Button98: TButton;
+    Panel22: TPanel;
+    Panel23: TPanel;
+    TabItem1: TTabItem;
+    Panel58: TPanel;
+    Label37: TLabel;
+    MultiView2: TMultiView;
+    Button208: TButton;
+    Button209: TButton;
+    Button210: TButton;
+    Button211: TButton;
+    Button212: TButton;
+    Button213: TButton;
+    Panel37: TPanel;
+    Panel38: TPanel;
+    Layout44: TLayout;
+    Button214: TButton;
+    TabItemExpander: TTabItem;
+    Label53: TLabel;
+    Panel29: TPanel;
+    Expander2: TExpander;
     Layout36: TLayout;
-    Expander7: TExpander;
-    ButtonButton: TButton;
-    ButtonCheckBox: TButton;
-    ButtonColorPicker: TButton;
-    ButtonComboBox: TButton;
-    ButtonDropDownButton: TButton;
-    ButtonHyperlinkButton: TButton;
-    ButtonInputValidation: TButton;
-    ButtonRadioButton: TButton;
+    VertScrollBox2: TVertScrollBox;
     Expander3: TExpander;
     Button244: TButton;
     Button245: TButton;
@@ -953,6 +946,15 @@ type
     Button273: TButton;
     Button274: TButton;
     Button275: TButton;
+    Expander7: TExpander;
+    Button296: TButton;
+    Button298: TButton;
+    Button299: TButton;
+    Button300: TButton;
+    Button301: TButton;
+    Button302: TButton;
+    Button303: TButton;
+    Button304: TButton;
     Expander8: TExpander;
     Button276: TButton;
     Button277: TButton;
@@ -962,14 +964,163 @@ type
     Button281: TButton;
     Button282: TButton;
     Button283: TButton;
-    VertScrollBox2: TVertScrollBox;
-    Panel49: TPanel;
-    ArcDial2: TArcDial;
-    Label48: TLabel;
-    ArcDial1: TArcDial;
-    ArcDial3: TArcDial;
-    AniIndicator8: TAniIndicator;
-    Label99: TLabel;
+    Layout37: TLayout;
+    VertScrollBox3: TVertScrollBox;
+    Expander1: TExpander;
+    Layout14: TLayout;
+    Line1: TLine;
+    Label29: TLabel;
+    Button42: TButton;
+    Layout15: TLayout;
+    Label59: TLabel;
+    Button43: TButton;
+    Layout16: TLayout;
+    Line3: TLine;
+    Label60: TLabel;
+    Button44: TButton;
+    Layout17: TLayout;
+    Line4: TLine;
+    Label61: TLabel;
+    Button45: TButton;
+    Layout18: TLayout;
+    Expander9: TExpander;
+    TabControl6: TTabControl;
+    TabItem6: TTabItem;
+    Memo3: TMemo;
+    TabItem8: TTabItem;
+    Memo4: TMemo;
+    Panel52: TPanel;
+    Label104: TLabel;
+    TabItemTabs: TTabItem;
+    ScrollBox7: TScrollBox;
+    Panel48: TPanel;
+    TabControl1: TTabControl;
+    TabItem2: TTabItem;
+    TabItem3: TTabItem;
+    Panel40: TPanel;
+    Panel42: TPanel;
+    Layout29: TLayout;
+    Label93: TLabel;
+    Button215: TButton;
+    Button216: TButton;
+    FlowLayout1: TFlowLayout;
+    Button220: TButton;
+    Button221: TButton;
+    Button222: TButton;
+    Panel43: TPanel;
+    Layout30: TLayout;
+    Label94: TLabel;
+    Button233: TButton;
+    Button234: TButton;
+    Button235: TButton;
+    Button236: TButton;
+    Button237: TButton;
+    Button238: TButton;
+    Panel44: TPanel;
+    Layout31: TLayout;
+    Label95: TLabel;
+    Button217: TButton;
+    Button231: TButton;
+    Button232: TButton;
+    Panel45: TPanel;
+    Layout32: TLayout;
+    Label96: TLabel;
+    Button218: TButton;
+    ComboBox2: TComboBox;
+    ComboBox3: TComboBox;
+    Button227: TButton;
+    Button228: TButton;
+    Button229: TButton;
+    Button230: TButton;
+    Panel46: TPanel;
+    Layout33: TLayout;
+    Label97: TLabel;
+    Button219: TButton;
+    FlowLayout2: TFlowLayout;
+    Button223: TButton;
+    Button224: TButton;
+    Button225: TButton;
+    Button226: TButton;
+    Panel47: TPanel;
+    Layout34: TLayout;
+    Label98: TLabel;
+    Button239: TButton;
+    TabItem4: TTabItem;
+    Panel41: TPanel;
+    TabItem5: TTabItem;
+    Panel39: TPanel;
+    TabControl2: TTabControl;
+    TabItem7: TTabItem;
+    Image1: TImage;
+    TabItem11: TTabItem;
+    Image4: TImage;
+    TabItem12: TTabItem;
+    Image3: TImage;
+    TabItem13: TTabItem;
+    Image2: TImage;
+    TabControl4: TTabControl;
+    TabItem27: TTabItem;
+    Rectangle1: TRectangle;
+    TabItem28: TTabItem;
+    Rectangle2: TRectangle;
+    TabItem29: TTabItem;
+    Rectangle13: TRectangle;
+    TabControl5: TTabControl;
+    TabItem31: TTabItem;
+    Rectangle14: TRectangle;
+    TabItem32: TTabItem;
+    Rectangle15: TRectangle;
+    TabItem33: TTabItem;
+    Rectangle16: TRectangle;
+    TabControlView: TTabControl;
+    TabItem23: TTabItem;
+    TabItem24: TTabItem;
+    TabItem25: TTabItem;
+    TabItem26: TTabItem;
+    TabItemAdd: TTabItem;
+    TabItemColors: TTabItem;
+    ColorPanel2: TColorPanel;
+    ColorPicker1: TColorPicker;
+    ColorBox1: TColorBox;
+    ColorQuad1: TColorQuad;
+    HueTrackBar1: THueTrackBar;
+    AlphaTrackBar1: TAlphaTrackBar;
+    BWTrackBar1: TBWTrackBar;
+    GradientEdit1: TGradientEdit;
+    ComboColorBox3: TComboColorBox;
+    ColorButton3: TColorButton;
+    ColorComboBox1: TColorComboBox;
+    ColorListBox1: TColorListBox;
+    Label50: TLabel;
+    Panel25: TPanel;
+    Layout2: TLayout;
+    Label22: TLabel;
+    Layout3: TLayout;
+    ColorButton1: TColorButton;
+    ColorButton2: TColorButton;
+    ColorButton4: TColorButton;
+    ColorButton5: TColorButton;
+    ColorButton6: TColorButton;
+    ColorButton7: TColorButton;
+    Layout4: TLayout;
+    Layout5: TLayout;
+    Label23: TLabel;
+    Layout6: TLayout;
+    PathTestLine: TPath;
+    Layout7: TLayout;
+    TrackBarLineSize: TTrackBar;
+    TabItemNotify: TTabItem;
+    ButtonNotify: TButton;
+    TabItemDialogs: TTabItem;
+    ButtonShare: TButton;
+    ButtonDialogText1: TButton;
+    ButtonDialogText2: TButton;
+    ButtonDialogSM: TButton;
+    ButtonDialogFrame: TButton;
+    ButtonDialogInput: TButton;
+    ButtonDialogColorPicker: TButton;
+    ButtonDialogSMLarge: TButton;
+    ButtonDialogColorPickerAlpha: TButton;
     Panel50: TPanel;
     Label100: TLabel;
     ButtonInfoBarShow: TButton;
@@ -983,155 +1134,21 @@ type
     CheckBoxInfoBarActionIsClose: TCheckBox;
     SpinBoxInfoBarAC: TSpinBox;
     Label101: TLabel;
-    PanelStoreMenu: TPanel;
-    Button284: TButton;
-    Button285: TButton;
-    Button286: TButton;
-    Button287: TButton;
-    Button288: TButton;
-    ImageListIcons: TImageList;
-    Label102: TLabel;
-    Label103: TLabel;
-    EditWrongTest: TEdit;
-    EditButton9: TEditButton;
-    LabelWrongTest: TLabel;
-    Panel51: TPanel;
-    HorzScrollBoxFilter: THorzScrollBox;
-    RadioButton4: TRadioButton;
-    RadioButton5: TRadioButton;
-    RadioButton6: TRadioButton;
-    RadioButton7: TRadioButton;
-    RadioButton8: TRadioButton;
-    RadioButton9: TRadioButton;
-    RadioButton10: TRadioButton;
-    Button289: TButton;
-    Button290: TButton;
-    ButtonScrollFilterLeft: TButton;
-    ButtonScrollFilterRight: TButton;
-    Layout37: TLayout;
-    Panel52: TPanel;
-    Expander9: TExpander;
-    TabControl6: TTabControl;
-    TabItem6: TTabItem;
-    TabItem8: TTabItem;
-    Memo3: TMemo;
-    Memo4: TMemo;
-    VertScrollBox3: TVertScrollBox;
-    Label104: TLabel;
-    CalloutPanel3: TCalloutPanel;
-    Layout38: TLayout;
-    Label105: TLabel;
-    Label106: TLabel;
-    CalloutPanel4: TCalloutPanel;
-    Layout39: TLayout;
-    Label107: TLabel;
-    Label108: TLabel;
-    ImageViewer1: TImageViewer;
-    PlotGrid1: TPlotGrid;
     CheckBoxInfoBarAsPanel: TCheckBox;
-    ColorAnimation1: TColorAnimation;
-    StyleBookWinUI3: TStyleBook;
-    Layout40: TLayout;
-    ButtonMenuHome: TButton;
-    ButtonMenuButtons: TButton;
-    ButtonMenuStandart: TButton;
-    ButtonMenuLabels: TButton;
-    ButtonMenuDT: TButton;
-    ButtonMenuInput: TButton;
-    ButtonMenuActions: TButton;
-    VertScrollBoxMenu: TVertScrollBox;
-    ButtonMenuLists: TButton;
-    ButtonMenuSplitter: TButton;
-    ButtonMenuMore: TButton;
-    ButtonMenuGrid: TButton;
-    ButtonMenuIndicators: TButton;
-    ButtonMenuOther: TButton;
-    ButtonMenuMultiView: TButton;
-    ButtonMenuExpander: TButton;
-    ButtonMenuTabControl: TButton;
-    ButtonMenuColors: TButton;
-    ButtonMenuNotify: TButton;
-    ButtonMenuDialogs: TButton;
-    Panel53: TPanel;
-    ButtonMenuMenus: TButton;
-    TabItemMenus: TTabItem;
-    ToolBar1: TToolBar;
-    Button24: TButton;
-    Button25: TButton;
-    Button26: TButton;
-    Button27: TButton;
-    Button28: TButton;
-    Panel13: TPanel; 
-    Button240: TButton;
-    TabItemHome: TTabItem;
-    TabControlView: TTabControl;
-    TabItem23: TTabItem;
-    TabItem24: TTabItem;
-    TabItem25: TTabItem;
-    TabItem26: TTabItem;
-    TabItemAdd: TTabItem;
-    ScrollBox7: TScrollBox;
-    ColorPanel1: TColorPanel;
-    ColorPanel3: TColorPanel;
-    Button129: TButton;
-    ListBox13: TListBox;
-    ListBoxItem131: TListBoxItem;
-    ListBoxItem133: TListBoxItem;
-    ListBoxItem134: TListBoxItem;
-    MetropolisUIListBoxItem6: TMetropolisUIListBoxItem;
-    ListBoxHeader2: TListBoxHeader;
-    SearchBox4: TSearchBox;
-    ListBoxGroupHeader6: TListBoxGroupHeader;
-    ListBoxItem132: TListBoxItem;
-    ListBoxItem135: TListBoxItem;
-    ListBoxItem136: TListBoxItem;
-    ListBoxItem137: TListBoxItem;
-    ListBoxGroupFooter6: TListBoxGroupFooter;
-    Button241: TButton;
-    Button242: TButton;
-    Button243: TButton;
-    Button291: TButton;
-    Label109: TLabel;
-    Label110: TLabel;
-    Label111: TLabel;
-    Label112: TLabel;
-    Label113: TLabel;
-    SpeedButton1: TSpeedButton;
-    SpeedButton2: TSpeedButton;
-    SpeedButton3: TSpeedButton;
-    SpeedButton4: TSpeedButton;
-    Label114: TLabel;
-    SpeedButton5: TSpeedButton;
-    SpeedButton6: TSpeedButton;
-    ScrollBox8: TScrollBox;
-    FlowLayoutBasic: TFlowLayout;
-    ButtonDemoGallery: TButton;
-    ButtonDemoMusic: TButton;
-    ButtonDemoIDE: TButton;
-    ImageListDemo: TImageList;
-    MenuItem23: TMenuItem;
-    MenuItem1: TMenuItem;
-    PopupMenuRich: TPopupMenu;
-    MenuItem24: TMenuItem;
-    MenuItem25: TMenuItem;
-    MenuItem45: TMenuItem;
-    MenuItem52: TMenuItem;
-    MenuItem53: TMenuItem;
-    MenuItem26: TMenuItem;
-    LayoutCaption: TLayout;
-    LayoutHead: TLayout;
-    Layout42: TLayout;
-    Image7: TImage;
-    LabelTitle: TLabel;
-    ComboColorBox4: TComboColorBox;
-    PopupBoxStyle: TPopupBox;
-    Button292: TButton;
-    Label115: TLabel;
-    Button293: TButton;
-    Button294: TButton;
-    Button295: TButton;
-    Label116: TLabel;
-    Layout41: TLayout;
+    LinkGridToDataSourcePrototypeBindSource1: TLinkGridToDataSource;
+    LinkGridToDataSourcePrototypeBindSource12: TLinkGridToDataSource;
+    LinkListControlToField1: TLinkListControlToField;
+    LinkListControlToField2: TLinkListControlToField;
+    Label43: TLabel;
+    Label45: TLabel;
+    Label47: TLabel;
+    Panel59: TPanel;
+    Panel60: TPanel;
+    MenuItem28: TMenuItem;
+    MenuItem29: TMenuItem;
+    MenuItem30: TMenuItem;
+    MenuItem31: TMenuItem;
+    MenuItem41: TMenuItem;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1178,7 +1195,6 @@ type
     procedure TabControlMainChange(Sender: TObject);
     procedure ButtonMenuActionsMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure ColorPanel1Change(Sender: TObject);
-    procedure Button223Click(Sender: TObject);
     procedure ButtonDemoGalleryClick(Sender: TObject);
     procedure ButtonDemoMusicClick(Sender: TObject);
     procedure ButtonDemoIDEClick(Sender: TObject);
@@ -1186,20 +1202,37 @@ type
     procedure ArcDial2KeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
     procedure ComboColorBox2Change(Sender: TObject);
     procedure PopupBoxStyleChange(Sender: TObject);
+    procedure ButtonDemoWebBrowserClick(Sender: TObject);
+    procedure ScrollBoxDemosCalcContentBounds(Sender: TObject; var ContentBounds: TRectF);
+    procedure MultiView1StartShowing(Sender: TObject);
+    procedure MultiView1StartHiding(Sender: TObject);
+    procedure MultiView5StartHiding(Sender: TObject);
+    procedure MultiView5StartShowing(Sender: TObject);
+    procedure Button80Click(Sender: TObject);
+    procedure Button56Click(Sender: TObject);
+    procedure MultiView1Hidden(Sender: TObject);
+    procedure MultiView1Shown(Sender: TObject);
+    procedure Button214Click(Sender: TObject);
+    procedure MultiView2Hidden(Sender: TObject);
+    procedure MultiView2Shown(Sender: TObject);
+    procedure MultiView2StartHiding(Sender: TObject);
+    procedure MultiView2StartShowing(Sender: TObject);
+    procedure CheckBox11Change(Sender: TObject);
+    procedure Button305Click(Sender: TObject);
+    procedure HeaderItem1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     {$IFDEF MSWINDOWS}
-    FNotifyManager: TNotificationManager;
-    procedure NotifActivated(Sender: TNotification; Arguments: string; UserInput: TUserInputMap);
-    procedure NotifDismissed(Sender: TNotification; Reason: TToastDismissReason);
+    FNotifyDemo: TNotifyDemo;
     {$ENDIF}
-  private
     procedure FOnTabCloseClick(Sender: TObject);
     procedure TabViewTest;
-    procedure CreateNotificationCenter;
     procedure FSearchItemClick(Sender: TObject);
     procedure TryOpenTabByName(const Text: string);
     procedure FOnSubMenuClick(Sender: TObject);
     procedure FOnButton15SplitClick(Sender: TObject);
+  protected
+    procedure DoOnSettingChange; override;
   end;
 
 var
@@ -1212,8 +1245,8 @@ implementation
 uses
   DelphiWindowStyle.FMX, FMX.BehaviorManager, System.Math, System.IOUtils,
   HGM.ColorUtils, System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery,
-  FMX.Platform, WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic,
-  WinUI3.RADIDE;
+  WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic, WinUI3.RADIDE,
+  WinUI3.Browser, FMX.MultiView.Types, WinUI.MultiView.CustomPresentation;
 
 {$R *.fmx}
 
@@ -1238,6 +1271,12 @@ procedure TFormMain.ButtonDemoMusicClick(Sender: TObject);
 begin
   ButtonDemoMusic.StylesData['indicator.Visible'] := False;
   TFormMusic.Create(Application).Show;
+end;
+
+procedure TFormMain.ButtonDemoWebBrowserClick(Sender: TObject);
+begin
+  ButtonDemoWebBrowser.StylesData['indicator.Visible'] := False;
+  TFormBrowser.Create(Application).Show;
 end;
 
 procedure TFormMain.ButtonDialogColorPickerAlphaClick(Sender: TObject);
@@ -1293,13 +1332,13 @@ begin   {
 
   var Frame := TFrameTestDialog.Create(Self);
   try
-    TWinUIDialog.ShowInline(Self,
+    var Proc: TProc<Integer> :=
       procedure(Res: Integer)
       begin
         if Res <> MR_AUTOCLOSE then
           Frame.Free;
-      end,
-      'Install apps', Frame, ['OK', 'Fine', 'Close'], -1, 1, True);
+      end;
+    TWinUIDialog.ShowInline(Self, Proc, 'Install apps', Frame, ['OK', 'Fine', 'Close'], -1, 1, True);
   except
     Frame.Free; //TFrameTestDialog - self free and auto close dialog
   end;
@@ -1344,7 +1383,7 @@ begin
 end;
 
 procedure TFormMain.ButtonDialogText2Click(Sender: TObject);
-begin                 {
+begin
   var Params: TDialogTextParams;
   Params.Title := 'Lorem substring';
   Params.Body := Memo1.Text.Substring(0, 100);
@@ -1354,28 +1393,20 @@ begin                 {
   Params.AccentId := 0;
   Params.DefaultId := 2;
   Params.CanClose := False;
-
-  var Res := TWinUIDialog.Show(Self, Params);
-  ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString + #13#10 + 'Check is ' + Res.IsChecked.ToString); }
-
-
-  var Params: TDialogTextParams;
-  Params.Title := 'Lorem substring';
-  Params.Body := Memo1.Text.Substring(0, 100);
-  Params.CheckText := 'Save work on disk?';
-  Params.CheckValue := True;
-  Params.Buttons := ['Yes', 'No', 'Cancel'];
-  Params.AccentId := 0;
-  Params.DefaultId := 2;
   Params.FrameColor := TColors.Cornflowerblue;
-  Params.CanClose := False;
 
-  TWinUIDialog.ShowInline(Self,
+  { // external window
+  var Res := TWinUIDialog.Show(Self, Params);
+  ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString + #13#10 + 'Check is ' + Res.IsChecked.ToString);
+  }
+
+  // inline window
+  var Proc: TProc<TDialogResult> :=
     procedure(Res: TDialogResult)
     begin
       ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString + #13#10 + 'Check is ' + Res.IsChecked.ToString);
-    end,
-    Params);
+    end;
+  TWinUIDialog.ShowInline(Self, Proc, Params);
 end;
 
 procedure TFormMain.ButtonMenuActionsClick(Sender: TObject);
@@ -1403,17 +1434,15 @@ begin
   end;
 end;
 
-procedure TFormMain.Button223Click(Sender: TObject);
+procedure TFormMain.Button214Click(Sender: TObject);
 begin
-  TTask.Run(
-    procedure
-    begin
-      Button1.BeginInvoke(
-        procedure
-        begin
-          Button1.Text := 'Test';
-        end, Button1);
-    end);
+  if MultiView2.Tag <> 0 then
+    Exit;
+  MultiView2.Tag := 1;
+  if MultiView2.IsShowed then
+    MultiView2.HideMaster
+  else
+    MultiView2.ShowMaster;
 end;
 
 procedure TFormMain.Button284Click(Sender: TObject);
@@ -1421,6 +1450,30 @@ begin
   for var Control in PanelStoreMenu.Controls do
     if Control is TButton then
       TButton(Control).IsPressed := Control = Sender;
+end;
+
+procedure TFormMain.Button305Click(Sender: TObject);
+begin
+  //StringGrid2.Cells[]
+end;
+
+procedure TFormMain.Button56Click(Sender: TObject);
+begin
+  if MultiView1.Tag <> 0 then
+    Exit;
+  MultiView1.Tag := 1;
+  if MultiView1.IsShowed then
+    MultiView1.HideMaster
+  else
+    MultiView1.ShowMaster;
+end;
+
+procedure TFormMain.Button80Click(Sender: TObject);
+begin
+  if MultiView3.Width = 48 then
+    TAnimator.AnimateFloat(MultiView3, 'Width', 319)
+  else
+    TAnimator.AnimateFloat(MultiView3, 'Width', 48);
 end;
 
 procedure TFormMain.ButtonInfoBarShowClick(Sender: TObject);
@@ -1466,91 +1519,8 @@ end;
 procedure TFormMain.ButtonNotifyClick(Sender: TObject);
 begin
   {$IFDEF MSWINDOWS}
-  const DefImg = 'C:\Windows\System32\@facial-recognition-windows-hello.gif';
-
-  var NotifyContent := TToastContentBuilder.Create
-    .UseButtonStyle(True)
-    .AddText(TToastText.Create.Text('{title}'))
-    .AddText(TToastText.Create.Text('This is the Windows 10+ notifications engine for Delphi'))
-    .AddGroup(TToastGroup.Create.SubGroups([
-    TToastSubGroup.Create
-    .HintWeight(1)
-    .AddText(TToastText.Create.Text('Mon').HintAlign(TToastTextAlign.Center))
-    .AddImage(TToastImage.Create.Src(DefImg).HintRemoveMargin(True))
-    .AddText(TToastText.Create.Text('63°').HintAlign(TToastTextAlign.Center))
-    .AddText(TToastText.Create.Text('42°').HintAlign(TToastTextAlign.Center).HintStyle(TToastTextStyle.CaptionSubtle)),
-    TToastSubGroup.Create
-    .HintWeight(1)
-    .AddText(TToastText.Create.Text('Tue').HintAlign(TToastTextAlign.Center))
-    .AddImage(TToastImage.Create.Src(DefImg).HintRemoveMargin(True))
-    .AddText(TToastText.Create.Text('57°').HintAlign(TToastTextAlign.Center))
-    .AddText(TToastText.Create.Text('38°').HintAlign(TToastTextAlign.Center).HintStyle(TToastTextStyle.CaptionSubtle)),
-    TToastSubGroup.Create
-    .HintWeight(1)
-    .AddText(TToastText.Create.Text('Wed').HintAlign(TToastTextAlign.Center))
-    .AddImage(TToastImage.Create.Src(DefImg).HintRemoveMargin(True))
-    .AddText(TToastText.Create.Text('59°').HintAlign(TToastTextAlign.Center))
-    .AddText(TToastText.Create.Text('43°').HintAlign(TToastTextAlign.Center).HintStyle(TToastTextStyle.CaptionSubtle)),
-    TToastSubGroup.Create
-    .HintWeight(1)
-    .AddText(TToastText.Create.Text('Thu').HintAlign(TToastTextAlign.Center))
-    .AddImage(TToastImage.Create.Src(DefImg).HintRemoveMargin(True))
-    .AddText(TToastText.Create.Text('62°').HintAlign(TToastTextAlign.Center))
-    .AddText(TToastText.Create.Text('42°').HintAlign(TToastTextAlign.Center).HintStyle(TToastTextStyle.CaptionSubtle)),
-    TToastSubGroup.Create
-    .HintWeight(1)
-    .AddText(TToastText.Create.Text('Fri').HintAlign(TToastTextAlign.Center))
-    .AddImage(TToastImage.Create.Src(DefImg).HintRemoveMargin(True))
-    .AddText(TToastText.Create.Text('71°').HintAlign(TToastTextAlign.Center))
-    .AddText(TToastText.Create.Text('66°').HintAlign(TToastTextAlign.Center).HintStyle(TToastTextStyle.CaptionSubtle))
-    ]))
-    .Audio(TToastAudio.Create.Src(TSoundEventValue.NotificationSMS).Loop(False))
-    .AddInputBox(TToastTextBox.Create.Id('editbox-id').Title('Title').PlaceholderContent('Enter name'))
-    .AddSelectionBox(TToastSelectionBox.Create.Id('combo').Title('Choose').Items([
-    TToastSelectionBoxItem.Create('id_1', 'Yes'),
-    TToastSelectionBoxItem.Create('id_2', 'No')
-    ]))
-    .AddButton(TToastAction.Create.Content('Cancel').ActivationType(TActivationType.Foreground).Arguments('cancel').HintButtonStyle(TToastActionButtonStyle.Critical))
-    .AddButton(TToastAction.Create.Content('View more').ActivationType(TActivationType.Foreground).Arguments('view').HintInputId('editbox-id'));
-
-  var Notif: TNotification;
-  Notif := TNotification.Create(FNotifyManager, NotifyContent);
-  Notif.Tag := 'notification1';
-  // Data binded values
-  Notif.Data['title'] := 'Hello world!';
-  Notif.Data['download-pos'] := '0';
-  // Events (must be defined in your form class)
-  Notif.OnActivated := NotifActivated;
-  Notif.OnDismissed := NotifDismissed;
-
-  FNotifyManager.ShowNotification(Notif);
-
-  {
-  // Update
-  const DownloadValue = Notif.Data['download-pos'].ToSingle + 0.1;
-  Notif.Data['download-pos'] := DownloadValue.ToString;
-  if DownloadValue >= 1 then
-    Notif.Data['title'] := 'Download finalised!';
-
-  FNotifyManager.UpdateNotification(Notif);  }
+  FNotifyDemo.ShowDemo;
   {$ENDIF}
-end;
-
-{$IFDEF MSWINDOWS}
-
-procedure TFormMain.NotifActivated(Sender: TNotification; Arguments: string; UserInput: TUserInputMap);
-begin
-  if Arguments = 'view' then
-  begin
-    // Get value of edit box (if there is one with this id)
-    var Value := UserInput.GetStringValue('editbox-id');
-    ShowUIMessage(Self, 'NotifActivated', Value);
-  end;
-end;
-
-procedure TFormMain.NotifDismissed(Sender: TNotification; Reason: TToastDismissReason);
-begin
-  ShowUIMessage(Self, 'NotifDismissed', Ord(Reason).ToString);
 end;
 
 procedure TFormMain.PopupBoxStyleChange(Sender: TObject);
@@ -1564,6 +1534,7 @@ begin
         SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
         Fill.Kind := TBrushKind.Solid;
         Fill.Color := TAlphaColorRec.Null;
+        StyleLookup := 'backgroundstyle';
       end;
     1:
       begin
@@ -1573,6 +1544,7 @@ begin
         SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
         Fill.Kind := TBrushKind.Solid;
         Fill.Color := TAlphaColorRec.Null;
+        StyleLookup := 'backgroundstyle';
       end;
     2:
       begin
@@ -1581,7 +1553,9 @@ begin
         SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW);
         SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
         Fill.Kind := TBrushKind.Solid;
+        //Fill.Kind := TBrushKind.None;
         Fill.Color := TAlphaColorRec.Null;
+        //StyleLookup := 'backgroundstyle_acrilyc_color';
       end;
     3:
       begin
@@ -1592,12 +1566,29 @@ begin
         //SetWindowCaptionColor($1C1C1C);
         Fill.Kind := TBrushKind.None;
         Fill.Color := TAlphaColorRec.Null;
+        //StyleLookup := 'backgroundstyle_blue';
         //Fill.Color := $FF1C1C1C;
+        //Self.SetWindowBorderColor(TColors.Steelblue);
+        //Self.SetWindowCaptionColor(TColors.Steelblue);
       end;
   end;
 end;
 
-{$ENDIF}
+procedure TFormMain.ScrollBoxDemosCalcContentBounds(Sender: TObject; var ContentBounds: TRectF);
+begin
+  var H := 0.0;
+  for var Control in FlowLayoutBasic.Controls do
+    H := Max(H, Control.Position.Y + Control.Height);
+  FlowLayoutBasic.Height := H + FlowLayoutBasic.HorizontalGap;
+end;
+
+procedure TFormMain.CheckBox11Change(Sender: TObject);
+begin
+  if CheckBox11.IsChecked then
+    MultiView5.DrawerOptions.Mode := TSlidingMode.PushingDetailView
+  else
+    MultiView5.DrawerOptions.Mode := TSlidingMode.OverlapDetailView;
+end;
 
 procedure TFormMain.ColorButton1Click(Sender: TObject);
 begin
@@ -1758,8 +1749,37 @@ procedure TFormMain.ComboColorBox2Change(Sender: TObject);
 begin
   ChangeStyleBookColor(StyleBookWinUI3, OldColor, ComboColorBox2.Color);
   ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, ComboColorBox4.Color);
+
+  var PC_Image := StyleBookWinUI3.Style.FindStyleResource('progresscell_bmp', False);
+  if Assigned(PC_Image) and (PC_Image is TImage) then
+  begin
+    var Img := TImage(PC_Image);
+    Img.Bitmap.Clear(ComboColorBox2.Color);
+  end;
+
   OldColor := ComboColorBox2.Color;
   OldColorAccentText := ComboColorBox4.Color;
+  TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBookWinUI3, Self), True);
+end;
+
+procedure TFormMain.DoOnSettingChange;
+begin
+  inherited;
+
+  var SysAccent := ChangeColorSat(SystemAccentColor, 50); // DecreaseSaturation(SystemAccentColor, 0.8);
+
+  ChangeStyleBookColor(StyleBookWinUI3, OldColor, SysAccent);
+  ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, DecreaseSaturation(SysAccent, 10));
+
+  var PC_Image := StyleBookWinUI3.Style.FindStyleResource('progresscell_bmp', False);
+  if Assigned(PC_Image) and (PC_Image is TImage) then
+  begin
+    var Img := TImage(PC_Image);
+    Img.Bitmap.Clear(SysAccent);
+  end;
+
+  OldColor := SysAccent;
+  OldColorAccentText := DecreaseSaturation(SysAccent, 10);
   TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBookWinUI3, Self), True);
 end;
 
@@ -1958,6 +1978,16 @@ begin
   //
 end;
 
+procedure TFormMain.FormShow(Sender: TObject);
+begin
+  //
+end;
+
+procedure TFormMain.HeaderItem1Click(Sender: TObject);
+begin
+  ShowUIMessage(Self, (Sender as THeaderItem).Index.ToString);
+end;
+
 procedure TFormMain.HorzScrollBoxFilterViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
 begin
   ButtonScrollFilterLeft.Visible := NewViewportPosition.X <> 0;
@@ -2008,6 +2038,88 @@ end;
 procedure TFormMain.MenuItem1Click(Sender: TObject);
 begin
   //
+end;
+
+procedure TFormMain.MultiView1Hidden(Sender: TObject);
+begin
+  MultiView1.Tag := 0;
+end;
+
+procedure TFormMain.MultiView1Shown(Sender: TObject);
+begin
+  MultiView1.Tag := 0;
+end;
+
+procedure TFormMain.MultiView1StartHiding(Sender: TObject);
+begin
+  var Ani: TFloatAnimation;
+  if MultiView1.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
+  begin
+    Ani.Inverse := True;
+    Ani.Start;
+  end;
+end;
+
+procedure TFormMain.MultiView1StartShowing(Sender: TObject);
+begin
+  var Ani: TFloatAnimation;
+  if MultiView1.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
+  begin
+    Ani.Inverse := False;
+    Ani.Start;
+  end;
+end;
+
+procedure TFormMain.MultiView2Hidden(Sender: TObject);
+begin
+  MultiView2.Tag := 0;
+end;
+
+procedure TFormMain.MultiView2Shown(Sender: TObject);
+begin
+  MultiView2.Tag := 0;
+end;
+
+procedure TFormMain.MultiView2StartHiding(Sender: TObject);
+begin
+  var Ani: TFloatAnimation;
+  if MultiView2.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
+  begin
+    Ani.Inverse := True;
+    Ani.Start;
+  end;
+end;
+
+procedure TFormMain.MultiView2StartShowing(Sender: TObject);
+begin
+  var Ani: TFloatAnimation;
+  if MultiView2.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
+  begin
+    Ani.Inverse := False;
+    Ani.Start;
+  end;
+end;
+
+procedure TFormMain.MultiView5StartHiding(Sender: TObject);
+begin
+  var Ani: TFloatAnimation;
+  if MultiView5.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
+  begin
+    Ani.Inverse := True;
+    Ani.Start;
+  end;
+end;
+
+procedure TFormMain.MultiView5StartShowing(Sender: TObject);
+begin
+  var Ani: TFloatAnimation;
+  MultiView5.NeedStyleLookup;
+  MultiView5.ApplyStyleLookup;
+  if MultiView5.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
+  begin
+    Ani.Inverse := False;
+    Ani.Start;
+  end;
 end;
 
 procedure TFormMain.TabControlMainChange(Sender: TObject);
@@ -2080,6 +2192,10 @@ end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
+  {$IFDEF MSWINDOWS}
+  FNotifyDemo := TNotifyDemo.Create(Self);
+  {$ENDIF}
+
   CaptionControls := [LayoutCaption, LayoutHead];
   OffsetControls := [LayoutHead];
   TitleControls := [LabelTitle];
@@ -2097,6 +2213,7 @@ begin
   VertScrollBox3.AniCalculations.Animation := True;
   VertScrollBoxMenu.AniCalculations.Animation := True;
   HorzScrollBoxSpin.AniCalculations.Animation := True;
+  ScrollBoxDemos.AniCalculations.Animation := True;
   Grid1.AniCalculations.Animation := True;
   StringGrid1.AniCalculations.Animation := True;
   Memo1.ScrollAnimation := TBehaviorBoolean.True;
@@ -2122,19 +2239,32 @@ begin
   ListBoxSearch.AniCalculations.Animation := True;
   HorzScrollBoxFilter.AniCalculations.Animation := True;
 
+  MultiView1.DisableDisappear := True;
+  MultiView2.DisableDisappear := True;
+  MultiView3.DisableDisappear := True;
+  MultiView4.DisableDisappear := True;
+  MultiView5.DisableDisappear := True;
+  MultiView6.DisableDisappear := True;
+  MultiView6.CustomPresentationClass := TMultiViewWinUIPresentation;
+
   ButtonDemoGallery.StylesData['detail'] := 'Open demo window';
   ButtonDemoIDE.StylesData['detail'] := 'Open demo window';
   ButtonDemoMusic.StylesData['detail'] := 'Open demo window';
+  ButtonDemoWebBrowser.StylesData['detail'] := 'Open demo window';
 
   ArcDial2.CanFocus := True;
+  Memo1.Caret.Pos := TPointF.Create(10, 20);
+
+  for var i := 0 to Grid1.ColumnCount - 1 do
+    Grid1.Columns[i].HeaderSettings.StyleLookup := 'headeritemstyle_sep';
 
   MenuItem1.DisableDisappear := True;
   MenuItem1.StylesData['copy.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
-  MenuItem1.StylesData['copy.ClickImmediately'] := True;
   MenuItem1.StylesData['cut.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
   MenuItem1.StylesData['paste.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
   MenuItem1.StylesData['delete.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
 
+  MenuItem24.DisableDisappear := True;
   MenuItem24.StylesData['bold.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
   MenuItem24.StylesData['italic.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
   MenuItem24.StylesData['underline.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
@@ -2147,19 +2277,12 @@ begin
     if HorzScrollBoxSpin.Content.Controls[i] is TButton then
       (HorzScrollBoxSpin.Content.Controls[i] as TButton).Text := ColorListBox1.ListItems[i].Text;
   TabViewTest;
-  CreateNotificationCenter;
 
   Button15.StylesData['arrow.OnClick'] := TValue.From<TNotifyEvent>(FOnButton15SplitClick);
 
   TabControlMain.ActiveTab := TabItemButtons;
   TabControlMain.ActiveTab := TabItemHome;
-
-  var SysAccent := DecreaseBrightness(DecreaseHue(DecreaseSaturation(GetAeroColor, 22), -6), -1);
-
-  ChangeStyleBookColor(StyleBookWinUI3, OldColor, SysAccent);
-  ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, DecreaseSaturation(SysAccent, 10));
-  OldColor := SysAccent;
-  OldColorAccentText := DecreaseSaturation(SysAccent, 10);
+  DoOnSettingChange;
   BeginLauncher(
     procedure
     begin
@@ -2174,17 +2297,6 @@ begin
   var Pt := Button15.AbsoluteRect.TopLeft;
   Pt := ClientToScreen(Pt);
   PopupMenu1.Popup(Pt.X + 8, Pt.Y + Button15.Height + 16);
-end;
-
-procedure TFormMain.CreateNotificationCenter;
-begin
-  {$IFDEF MSWINDOWS}
-  FNotifyManager := TNotificationManager.Create(Self, 'WinUI3.Delphi.Test');
-
-  FNotifyManager.ApplicationName := 'WinUI 3 Demo Application';
-  FNotifyManager.ShowInSettings := True;
-  FNotifyManager.ApplicationIcon := TPath.Combine(TPath.GetLibraryPath, 'Assets\Header-WinUIGallery.png');
-  {$ENDIF}
 end;
 
 procedure TFormMain.TabViewTest;

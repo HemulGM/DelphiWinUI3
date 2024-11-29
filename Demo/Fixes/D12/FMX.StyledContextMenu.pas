@@ -57,7 +57,6 @@ begin
     MenuItem.StyleLookup := 'menuitemstyle_selectall';
     MenuItem.ShortCut := TextToShortCut('Ctrl+A');
   end;
-  MenuItem.Text := Translate(MenuItem.Text);
 end;
 
 procedure LocalizeDefPopupMenu(PopupMenu: TPopupMenu);

@@ -260,6 +260,8 @@
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
@@ -287,9 +289,10 @@
             <Form>FormGallery</Form>
         </DCCReference>
         <DCCReference Include="Fixes\D12\FMX.StyledContextMenu.pas"/>
-        <DCCReference Include="..\WindowsNotificationManager\FMX.Win.Notification.Helper.pas"/>
-        <DCCReference Include="..\WindowsNotificationManager\FMX.Win.NotificationManager.pas"/>
         <DCCReference Include="..\DelphiWindowStyle\DelphiWindowStyle.Core.Win.pas"/>
+        <DCCReference Include="..\WindowsNotificationManager\FMX.Win.NotificationManager.pas"/>
+        <DCCReference Include="..\WindowsNotificationManager\FMX.Win.Notification.XML.pas"/>
+        <DCCReference Include="..\FMXWindowsDispatch\FMX.Windows.Dispatch.pas"/>
         <DCCReference Include="..\DelphiWindowStyle\DelphiWindowStyle.FMX.pas"/>
         <DCCReference Include="..\DelphiWindowStyle\DelphiWindowStyle.Types.pas"/>
         <DCCReference Include="WinUI3.Frame.Dialog.Test.pas">
@@ -338,13 +341,18 @@
         <DCCReference Include="..\FMXWindowsHint\FMX.Windows.Hints.pas"/>
         <DCCReference Include="WinUI3.RADIDE.pas">
             <Form>FormIDE</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="Utils\FMX.RichEdit.Style.pas"/>
         <DCCReference Include="Utils\Code\ChatGPT.Code.pas"/>
         <DCCReference Include="Utils\Code\ChatGPT.Code.Pascal.pas"/>
         <DCCReference Include="Fixes\D12\FMX.Menus.pas"/>
-        <DCCReference Include="..\FMXWindowsDispatch\FMX.Windows.Dispatch.pas"/>
+        <DCCReference Include="WinUI3.Browser.pas">
+            <Form>FormBrowser</Form>
+        </DCCReference>
+        <DCCReference Include="Utils\WinUI.MultiView.CustomPresentation.pas"/>
+        <DCCReference Include="Fixes\D12\FMX.Calendar.Style.pas"/>
+        <DCCReference Include="Fixes\D12\FMX.MultiView.Presentations.pas"/>
+        <DCCReference Include="WinUI3.NotifyDemo.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -365,6 +373,10 @@
                 <Source>
                     <Source Name="MainSource">WinUI3Style.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k290.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp290.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="5">
                 <DeployFile LocalName="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib" Class="DependencyModule">

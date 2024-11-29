@@ -6,10 +6,27 @@ object FrameInnerDialog: TFrameInnerDialog
     Align = Contents
     Fill.Color = x52000000
     Locked = True
+    HitTest = False
     Size.Width = 708.000000000000000000
     Size.Height = 428.000000000000000000
     Size.PlatformDefault = False
     Stroke.Kind = None
+    object LayoutTitleBar: TLayout
+      Align = Top
+      HitTest = True
+      Size.Width = 708.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+    end
+    object LayoutHitTest: TLayout
+      Align = Client
+      HitTest = True
+      Size.Width = 708.000000000000000000
+      Size.Height = 378.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+    end
   end
   inline FrameDialog: TFrameDialog
     Align = Center

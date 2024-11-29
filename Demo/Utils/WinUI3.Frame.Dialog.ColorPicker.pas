@@ -3,13 +3,9 @@
 interface
 
 uses
-  System.SysUtils,
-  {$IFDEF MSWINDOWS}
-  Winapi.Windows,
-  {$ENDIF}
-  System.Types, System.UITypes, System.Classes, System.Variants, FMX.Types,
-  FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls, FMX.Edit,
-  FMX.ListBox, FMX.Colors, FMX.Controls.Presentation, FMX.Objects;
+  System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
+  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
+  FMX.Edit, FMX.ListBox, FMX.Colors, FMX.Controls.Presentation, FMX.Objects;
 
 type
   TDialogColorParams = record
@@ -83,7 +79,6 @@ type
     LabelB: TLabel;
     LabelA: TLabel;
     procedure RectangleBoxMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-    procedure RectangleBoxMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure RectangleBoxMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
     procedure BWTrackBarChange(Sender: TObject);
     procedure AlphaTrackBarChange(Sender: TObject);
@@ -400,10 +395,6 @@ var
 begin
   TL := RectangleBox.LocalToScreen(TPoint.Create(0, 0)).Truncate;
   BR := RectangleBox.LocalToScreen(TPointF.Create(RectangleBox.Width, RectangleBox.Height)).Truncate;
-  {$IFDEF MSWINDOWS}
-  var RC := TRect.Create(TL, BR);
-  ClipCursor(@RC);
-  {$ENDIF}
   CircleBoxPoint.Visible := True;
   UpdateBoxColor(RectangleBox.ScreenToLocal(Screen.MousePos));
 end;
@@ -411,14 +402,21 @@ end;
 procedure TFrameDialogColorPicker.UpdateBoxColor(Point: TPointF);
 begin
   var Pt := Point;
+  Pt.X := Min(Max(0, Pt.X), RectangleBox.Width - 1);
+  Pt.Y := Min(Max(0, Pt.Y), RectangleBox.Height - 1);
   CircleBoxPoint.Position.Point := Pt - TPointF.Create(8, 8);
-  var Bits: TBitmapData;
-  if FBitmap.Map(TMapAccess.Read, Bits) then
-  try
-    FRawColor := Bits.GetPixel(Round(Pt.X), Round(Pt.Y));
-  finally
-    FBitmap.Unmap(Bits);
-  end;
+  if TRectF.Create(0, 0, FBitmap.Size.Width, FBitmap.Size.Height).Contains(Pt) then
+  begin
+    var Bits: TBitmapData;
+    if FBitmap.Map(TMapAccess.Read, Bits) then
+    try
+      FRawColor := Bits.GetPixel(Trunc(Pt.X), Trunc(Pt.Y));
+    finally
+      FBitmap.Unmap(Bits);
+    end;
+  end
+  else
+    FRawColor := TAlphaColors.Null;
   UpdateResultColor;
 end;
 
@@ -428,13 +426,6 @@ begin
     Exit;
   if Root.Captured.GetObject = RectangleBox then
     UpdateBoxColor(RectangleBox.ScreenToLocal(Screen.MousePos));
-end;
-
-procedure TFrameDialogColorPicker.RectangleBoxMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-begin
-  {$IFDEF MSWINDOWS}
-  ClipCursor(nil);
-  {$ENDIF}
 end;
 
 procedure TFrameDialogColorPicker.SetColor(const Value: TAlphaColor);

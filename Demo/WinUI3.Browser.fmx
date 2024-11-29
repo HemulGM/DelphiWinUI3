@@ -1,0 +1,273 @@
+object FormBrowser: TFormBrowser
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 672
+  ClientWidth = 1147
+  StyleBook = FormMain.StyleBookWinUI3
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnClose = FormClose
+  DesignerMasterStyle = 0
+  object LayoutTitleContent: TLayout
+    Align = Contents
+    Locked = True
+    Size.Width = 1147.000000000000000000
+    Size.Height = 672.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object LayoutTitle: TLayout
+      Align = Top
+      Locked = True
+      HitTest = True
+      Size.Width = 1147.000000000000000000
+      Size.Height = 42.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+    end
+  end
+  object LayoutClient: TLayout
+    Align = Client
+    Size.Width = 1147.000000000000000000
+    Size.Height = 672.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object LayoutTabs: TLayout
+      Align = Top
+      Size.Width = 1147.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnResize = LayoutTabsResize
+      OnResized = LayoutTabsResize
+      object HorzScrollBoxTabs: THorzScrollBox
+        Align = Left
+        Margins.Top = 9.000000000000000000
+        Position.X = 40.000000000000000000
+        Position.Y = 9.000000000000000000
+        Size.Width = 761.000000000000000000
+        Size.Height = 31.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        ShowScrollBars = False
+        Viewport.Width = 761.000000000000000000
+        Viewport.Height = 31.000000000000000000
+        object RadioButton1: TRadioButton
+          Align = Left
+          GroupName = 'tabs'
+          IsChecked = True
+          Size.Width = 145.000000000000000000
+          Size.Height = 31.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'radiobuttonstyle_tab'
+          TabOrder = 4
+          Text = 'google.com'
+        end
+        object RadioButton5: TRadioButton
+          Align = Left
+          GroupName = 'tabs'
+          Position.X = 435.000000000000000000
+          Size.Width = 145.000000000000000000
+          Size.Height = 31.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'radiobuttonstyle_tab'
+          TabOrder = 3
+          Text = 'HEMULGM.RU'
+        end
+        object RadioButton6: TRadioButton
+          Align = Left
+          GroupName = 'tabs'
+          Position.X = 580.000000000000000000
+          Size.Width = 145.000000000000000000
+          Size.Height = 31.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'radiobuttonstyle_tab'
+          TabOrder = 2
+          Text = 'embarcadero.com'
+        end
+        object RadioButton7: TRadioButton
+          Align = Left
+          GroupName = 'tabs'
+          Position.X = 290.000000000000000000
+          Size.Width = 145.000000000000000000
+          Size.Height = 31.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'radiobuttonstyle_tab'
+          TabOrder = 1
+          Text = 'Delphi forever'
+        end
+        object RadioButton8: TRadioButton
+          Align = Left
+          GroupName = 'tabs'
+          Position.X = 145.000000000000000000
+          Size.Width = 145.000000000000000000
+          Size.Height = 31.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'radiobuttonstyle_tab'
+          TabOrder = 0
+          Text = 'Figma App'
+        end
+      end
+      object LayoutIcon: TLayout
+        Align = MostLeft
+        Size.Width = 40.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+      object LayoutAdd: TLayout
+        Align = Left
+        Margins.Top = 9.000000000000000000
+        Position.X = 801.000000000000000000
+        Position.Y = 9.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 31.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        object Button8: TButton
+          Align = Center
+          Size.Width = 31.000000000000000000
+          Size.Height = 31.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'tabItemstyle_view_add'
+          TabOrder = 0
+          TextSettings.Trimming = None
+        end
+      end
+    end
+    object LayoutContent: TLayout
+      Align = Client
+      Size.Width = 1147.000000000000000000
+      Size.Height = 632.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object Panel1: TPanel
+        Align = Contents
+        Margins.Top = -1.000000000000000000
+        Size.Width = 1147.000000000000000000
+        Size.Height = 633.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+      object LayoutNavigation: TLayout
+        Align = Top
+        Padding.Left = 4.000000000000000000
+        Padding.Top = 4.000000000000000000
+        Padding.Right = 4.000000000000000000
+        Padding.Bottom = 4.000000000000000000
+        Size.Width = 1147.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object EditURL: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          Align = Client
+          StyleLookup = 'editstyle_searchbar'
+          TabOrder = 0
+          Size.Width = 1031.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = #1042#1074#1077#1076#1080#1090#1077' '#1087#1086#1080#1089#1082#1086#1074#1099#1081' '#1079#1072#1087#1088#1086#1089' '#1080#1083#1080' '#1074#1077#1073'-'#1072#1076#1088#1077#1089
+          OnKeyUp = EditURLKeyUp
+          object EditButton1: TEditButton
+            Touch.InteractiveGestures = [LongTap]
+            CanFocus = False
+            Cursor = crArrow
+            TextSettings.Trimming = None
+            Size.Width = 28.000000000000000000
+            Size.Height = 24.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'infotoolbutton'
+            TabOrder = 0
+            Text = 'actiontoolbutton'
+          end
+        end
+        object ButtonBack: TButton
+          Align = Left
+          Margins.Right = 4.000000000000000000
+          Position.X = 4.000000000000000000
+          Position.Y = 4.000000000000000000
+          Size.Width = 32.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'backtoolbutton'
+          TabOrder = 3
+          Text = 'ButtonBack'
+          TextSettings.Trimming = None
+          OnClick = ButtonBackClick
+        end
+        object ButtonRefresh: TButton
+          Align = Left
+          Margins.Right = 4.000000000000000000
+          Position.X = 40.000000000000000000
+          Position.Y = 4.000000000000000000
+          Size.Width = 32.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'refreshtoolbutton'
+          TabOrder = 2
+          Text = 'Button9'
+          TextSettings.Trimming = None
+          OnClick = ButtonRefreshClick
+        end
+        object Button11: TButton
+          Align = Right
+          Margins.Left = 4.000000000000000000
+          Position.X = 1111.000000000000000000
+          Position.Y = 4.000000000000000000
+          Size.Width = 32.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'ellipseseditbutton'
+          TabOrder = 1
+          Text = 'Button9'
+          TextSettings.Trimming = None
+        end
+      end
+      object TabControlView: TTabControl
+        Align = Client
+        FullSize = False
+        Size.Width = 1147.000000000000000000
+        Size.Height = 592.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'tabcontrolstyle_view'
+        TabHeight = 32.000000000000000000
+        TabIndex = 0
+        TabOrder = 0
+        TabPosition = None
+        Sizes = (
+          1147s
+          592s)
+        object TabItem23: TTabItem
+          AutoSize = False
+          CustomIcon = <
+            item
+            end>
+          TextSettings.Trimming = None
+          IsSelected = True
+          Size.Width = 16.000000000000000000
+          Size.Height = 16.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'tabItemstyle_view'
+          TabOrder = 0
+          Text = 'TabItem23'
+          ExplicitSize.cx = 180.000000000000000000
+          ExplicitSize.cy = 32.000000000000000000
+          object WebBrowser1: TWebBrowser
+            Align = Client
+            Size.Width = 1147.000000000000000000
+            Size.Height = 592.000000000000000000
+            Size.PlatformDefault = False
+            WindowsEngine = EdgeIfAvailable
+            URL = 'https://google.com'
+            OnDidStartLoad = WebBrowser1DidStartLoad
+            OnDidFinishLoad = WebBrowser1DidFinishLoad
+            OnShouldStartLoadWithRequest = WebBrowser1ShouldStartLoadWithRequest
+          end
+        end
+      end
+    end
+  end
+end

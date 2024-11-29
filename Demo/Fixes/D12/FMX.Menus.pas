@@ -518,7 +518,7 @@ implementation
 uses
   System.SysConst, System.RTLConsts, System.SysUtils, System.Actions, System.Generics.Collections, System.Math,
   FMX.Consts, FMX.Dialogs, FMX.DialogService, FMX.Platform, FMX.Utils, FMX.AcceleratorKey, FMX.Styles,
-  DelphiWindowStyle.FMX, FMX.StyledContextMenu, WinUI3.Utils;
+  DelphiWindowStyle.FMX, FMX.StyledContextMenu, WinUI3.Utils, FMX.Ani;
 
 const
   DefaultMenuItemSeparatorHeight = 8;
@@ -1064,18 +1064,45 @@ begin
 end;
 
 function TPopupOfMenu.CreatePopupForm: TFmxObject;
+var
+  NewStyle: TStyleBook;
+  NewForm: TCustomPopupForm;
 begin
-  Result := inherited;
-  if Result is TCustomPopupForm then
-    TCustomPopupForm(Result).OnShow := OnFormShow;
+  NewForm := nil;
+  try
+    if (StyleBook = nil) and (Scene <> nil) then
+      NewStyle := Scene.GetStyleBook
+    else
+      NewStyle := StyleBook;
+    NewForm := TCustomPopupForm.Create(Self, NewStyle, PlacementTarget, True);
+  except
+    FreeAndNil(NewForm);
+    Raise;
+  end;
+  NewForm.OnShow := OnFormShow;
+  Result := NewForm;
 end;
 
 procedure TPopupOfMenu.OnFormShow(Sender: TObject);
 begin
-  if not IsWin11OrNewest then
+  if not FClearBG then
+  begin
     //TCustomPopupForm(Sender).SetAccentPolicy(TColorRec.Black)
+    TCustomPopupForm(Sender).Padding.Rect := TRectF.Create(12, 12, 12, 12);
+  end
   else
-    TCustomPopupForm(Sender).SetAccentPolicy(TColorRec.Null);
+  begin
+    //TCustomPopupForm(Sender).SetWindowColorMode(True);
+    //TCustomPopupForm(Sender).SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW);
+    //TCustomPopupForm(Sender).Fill.Kind := TBrushKind.Solid;
+    //TCustomPopupForm(Sender).Fill.Color := TAlphaColors.Null;
+    //TCustomPopupForm(Sender).SetExtendFrameIntoClientArea(TRect.Create(0, 0, 0, 0));
+    //TCustomPopupForm(Sender).SetWindowCorner(TWindowCornerPreference.DWMWCP_ROUND);
+    FClearBG := TCustomPopupForm(Sender).SetAccentPolicy(TColorRec.Null);
+    if not FClearBG then
+      TCustomPopupForm(Sender).Padding.Rect := TRectF.Create(12, 12, 12, 12);
+  end;
+  TCustomPopupForm(Sender).BringToFront;
   TCustomPopupForm(Sender).MouseCapture;
 end;
 
@@ -1874,12 +1901,16 @@ begin
         Menu.StylesData['bg.Opacity'] := 0.1;
       // calc size
       Popup.BoundsRect := TRectF.Create(0, 0, Menu.Width, Menu.Height);
-
       LOffset := Menu.ConvertLocalPointFrom(Menu.FContentLayout, TPointF.Zero);
       if not IsMenuBarItem then
       begin
         Popup.HorizontalOffset := -LOffset.X;
         Popup.VerticalOffset := -LOffset.Y;
+      end
+      else
+      begin
+        Popup.HorizontalOffset := LOffset.X + 7;
+        Popup.VerticalOffset := LOffset.Y + 10;
       end;
       Menu.Align := TAlignLayout.Client;
       // show
@@ -2675,8 +2706,7 @@ begin
     if TPopupOfMenu(Popup).FClearBG then
       Menu.StylesData['bg.Opacity'] := 0.1;
     // calc size
-    Popup.BoundsRect := TRectF.Create(0, 0, Menu.Width, Menu.Height);
-
+    Popup.BoundsRect := TRectF.Create(0, 0, Menu.Width, Menu.Height + 10);
     Popup.PlacementRectangle.Left := X;
     Popup.PlacementRectangle.Top := Y;
     Popup.Placement := TPlacement.Absolute;

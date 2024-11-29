@@ -17,6 +17,7 @@ object FormDialogs: TFormDialogs
   OnShow = FormShow
   DesignerMasterStyle = 0
   object TimerBF: TTimer
+    Enabled = False
     OnTimer = TimerBFTimer
     Left = 312
     Top = 128

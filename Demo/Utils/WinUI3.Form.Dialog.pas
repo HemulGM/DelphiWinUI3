@@ -93,7 +93,9 @@ end;
 constructor TFormDialogs.Create(AOwner: TComponent; Proc: TProc<TFormDialogs>);
 begin
   inherited Create(AOwner);
+  FrameDialog.ParamsBeginUpdate;
   Proc(Self);
+  FrameDialog.ParamsEndUpdate;
   HandleNeeded;
 end;
 
@@ -199,7 +201,9 @@ begin
     Result := TFormDialogs.Execute(Owner, Data,
       procedure
       begin
+        BodyFrame.BeginUpdate;
         BodyFrame.LabelBody.RecalcSize;
+        BodyFrame.EndUpdate;
       end);
   finally
     BodyFrame.Free;
@@ -226,8 +230,13 @@ begin
           Form.BorderIcons := [TBorderIcon.biSystemMenu];
       end;
     end);
-  if Assigned(Ready) then
-    Ready;
+  Form.FrameDialog.ParamsBeginUpdate;
+  try
+    if Assigned(Ready) then
+      Ready;
+  finally
+    Form.FrameDialog.ParamsEndUpdate;
+  end;
   {$IF DEFINED(ANDROID) or DEFINED(IOS)}
   Form.Show;
   {$ELSE}

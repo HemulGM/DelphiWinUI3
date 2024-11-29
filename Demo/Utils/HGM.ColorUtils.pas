@@ -50,23 +50,46 @@ function InvertColor(const Color: TColor): TColor;
 
 function VisibilityColor(const Color: TColor): TColor;
 
-function DecreaseSaturation(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+function DecreaseSaturation(const Color: TAlphaColor; Value: Double): TAlphaColor;
 
 function DecreaseHue(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
 
 function DecreaseBrightness(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+function ChangeColorSat(Color: TAlphaColor; ByValue: integer): TAlphaColor;
+
+
+(*
+inline bool IsColorLight(Windows::UI::Color& clr)
+{
+    return (((5 * clr.G) + (2 * clr.R) + clr.B) > (8 * 128));
+}
+
+*)
 
 implementation
 
 uses
   System.Math;
 
-function DecreaseSaturation(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
+function ChangeColorSat(Color: TAlphaColor; ByValue: integer): TAlphaColor;
+var
+  RBGval: TAlphaColorRec;
+begin
+  RBGval := TAlphaColorRec.Create(Color);
+
+  RBGval.R := Min(Max(0, RBGval.R + ByValue), 255);
+  RBGval.G := Min(Max(0, RBGval.G + ByValue), 255);
+  RBGval.B := Min(Max(0, RBGval.B + ByValue), 255);
+
+  Result := RBGval.Color;
+end;
+
+function DecreaseSaturation(const Color: TAlphaColor; Value: Double): TAlphaColor;
 begin
   var Src := TAlphaColorF.Create(Color);
   var H, S, V: Double;
   RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
-  S := S - Value / 100;
+  S := Max(0, Min(1, S * Value));
   var R, G, B: Byte;
   HSVtoRGB(H, S, V, R, G, B);
   Src.R := R / 255;
@@ -80,7 +103,7 @@ begin
   var Src := TAlphaColorF.Create(Color);
   var H, S, V: Double;
   RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
-  H := H - Value / 360;
+  H := Max(0, Min(1, H - H * (Value / 360)));
   var R, G, B: Byte;
   HSVtoRGB(H, S, V, R, G, B);
   Src.R := R / 255;
@@ -94,7 +117,7 @@ begin
   var Src := TAlphaColorF.Create(Color);
   var H, S, V: Double;
   RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
-  V := V - Value / 100;
+  V := Max(0, Min(1, V - V * (Value / 100)));
   var R, G, B: Byte;
   HSVtoRGB(H, S, V, R, G, B);
   Src.R := R / 255;

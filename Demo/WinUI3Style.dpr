@@ -7,9 +7,10 @@ uses
   WinUI3.Gallery in 'WinUI3.Gallery.pas' {FormGallery},
   FMX.StyledContextMenu in 'Fixes\D12\FMX.StyledContextMenu.pas',
   {$IFDEF MSWINDOWS}
-  FMX.Win.Notification.Helper in '..\WindowsNotificationManager\FMX.Win.Notification.Helper.pas',
-  FMX.Win.NotificationManager in '..\WindowsNotificationManager\FMX.Win.NotificationManager.pas',
   DelphiWindowStyle.Core.Win in '..\DelphiWindowStyle\DelphiWindowStyle.Core.Win.pas',
+  FMX.Win.NotificationManager in '..\WindowsNotificationManager\FMX.Win.NotificationManager.pas',
+  FMX.Win.Notification.XML in '..\WindowsNotificationManager\FMX.Win.Notification.XML.pas',
+  FMX.Windows.Dispatch in '..\FMXWindowsDispatch\FMX.Windows.Dispatch.pas',
   {$ENDIF }
   DelphiWindowStyle.FMX in '..\DelphiWindowStyle\DelphiWindowStyle.FMX.pas',
   DelphiWindowStyle.Types in '..\DelphiWindowStyle\DelphiWindowStyle.Types.pas',
@@ -34,7 +35,11 @@ uses
   ChatGPT.Code in 'Utils\Code\ChatGPT.Code.pas',
   ChatGPT.Code.Pascal in 'Utils\Code\ChatGPT.Code.Pascal.pas',
   FMX.Menus in 'Fixes\D12\FMX.Menus.pas',
-  FMX.Windows.Dispatch in '..\FMXWindowsDispatch\FMX.Windows.Dispatch.pas';
+  WinUI3.Browser in 'WinUI3.Browser.pas' {FormBrowser},
+  WinUI.MultiView.CustomPresentation in 'Utils\WinUI.MultiView.CustomPresentation.pas',
+  FMX.Calendar.Style in 'Fixes\D12\FMX.Calendar.Style.pas',
+  FMX.MultiView.Presentations in 'Fixes\D12\FMX.MultiView.Presentations.pas',
+  WinUI3.NotifyDemo in 'WinUI3.NotifyDemo.pas';
 
 {$R *.res}
 

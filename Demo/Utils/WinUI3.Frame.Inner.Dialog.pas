@@ -7,7 +7,8 @@ uses
   System.Generics.Collections, FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms,
   FMX.Dialogs, FMX.StdCtrls, FMX.Objects, WinUI3.Frame.Dialog, System.Actions,
   FMX.ActnList, WinUI3.Frame.Dialog.Text, WinUI3.Frame.Dialog.Input,
-  WinUI3.Frame.Dialog.ColorPicker, WinUI3.Dialogs, FMX.Effects, WinUI3.Utils;
+  WinUI3.Frame.Dialog.ColorPicker, WinUI3.Dialogs, FMX.Effects, WinUI3.Utils,
+  FMX.Layouts;
 
 type
   TFrameInnerDialog = class(TFrame, ITabStopController)
@@ -17,6 +18,8 @@ type
     ActionCopy: TAction;
     FrameDialog: TFrameDialog;
     ShadowEffect1: TShadowEffect;
+    LayoutTitleBar: TLayout;
+    LayoutHitTest: TLayout;
     procedure ActionCloseExecute(Sender: TObject);
     procedure ActionCopyExecute(Sender: TObject);
   private
@@ -52,7 +55,7 @@ type
 implementation
 
 uses
-  System.Math;
+  System.Math, WinUI3.Form;
 
 {$R *.fmx}
 
@@ -68,6 +71,17 @@ end;
 
 destructor TFrameInnerDialog.Destroy;
 begin
+  if Owner is TWinUIForm then
+  begin
+    for var i := Low(TWinUIForm(Owner).CaptionControls) to High(TWinUIForm(Owner).CaptionControls) do
+      if TWinUIForm(Owner).CaptionControls[i] = LayoutTitleBar then
+      begin
+        var Items := TWinUIForm(Owner).CaptionControls;
+        Delete(Items, i, 1);
+        TWinUIForm(Owner).CaptionControls := Items;
+        Break;
+      end;
+  end;
   FrameDialog.OnClose := nil;
   FrameDialog.OnStartDrag := nil;
   FreeAndNil(FTabList);
@@ -289,6 +303,12 @@ end;
 constructor TFrameInnerDialog.Create(AOwner: TCustomForm);
 begin
   inherited Create(AOwner);
+  if AOwner is TWinUIForm then
+  begin
+    TWinUIForm(AOwner).CaptionControls := TWinUIForm(AOwner).CaptionControls + [LayoutTitleBar];
+    if Length(TWinUIForm(AOwner).CaptionControls) > 0 then
+      LayoutTitleBar.Height := TWinUIForm(AOwner).CaptionControls[0].Height;
+  end;
   FOwner := AOwner;
   Name := '';
   FResult := -1;

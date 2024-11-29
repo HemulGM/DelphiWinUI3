@@ -80,7 +80,7 @@ type
     FBody: TFrame;
     FOnStartDrag: TNotifyEvent;
     FOnClose: TNotifyEvent;
-    FFilling: Boolean;
+    FFilling: Integer;
     procedure ButtonClick(Sender: TObject);
     procedure SetModalResult(const Value: TModalResult);
     procedure SetOnStartDrag(const Value: TNotifyEvent);
@@ -90,6 +90,7 @@ type
     procedure SetOnClose(const Value: TNotifyEvent);
     procedure UpdateSize;
     class procedure StopPropertyAnimation(const Target: TFmxObject; const APropertyName: string); static;
+    function GetIsParamsUpdating: Boolean;
   protected
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
@@ -104,6 +105,9 @@ type
     procedure Close;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure ParamsBeginUpdate;
+    procedure ParamsEndUpdate;
+    property IsParamsUpdating: Boolean read GetIsParamsUpdating;
   end;
 
 implementation
@@ -158,6 +162,7 @@ end;
 
 procedure TFrameDialog.FillData(Data: TDialogFramedParams);
 begin
+  ParamsBeginUpdate;
   FCanClose := Data.CanClose;
   var ColorRec: TColorRec;
   ColorRec.Color := Data.FrameColor;
@@ -169,6 +174,7 @@ begin
   Clear;
   FillContent(Data.Title, Data.Body, Data.CheckText, Data.CheckValue);
   FillButtons(Data.Buttons, Data.AccentId, Data.DefaultId);
+  ParamsEndUpdate;
 end;
 
 procedure TFrameDialog.Notification(AComponent: TComponent; Operation: TOperation);
@@ -180,6 +186,16 @@ begin
     FResult := MR_AUTOCLOSE;
     Close;
   end;
+end;
+
+procedure TFrameDialog.ParamsBeginUpdate;
+begin
+  Inc(FFilling);
+end;
+
+procedure TFrameDialog.ParamsEndUpdate;
+begin
+  Dec(FFilling);
 end;
 
 procedure TFrameDialog.FillButtons(Buttons: TArray<string>; AccentId, DefaultId: Integer);
@@ -217,6 +233,11 @@ begin
   UpdateSize;
 end;
 
+function TFrameDialog.GetIsParamsUpdating: Boolean;
+begin
+  Result := FFilling > 0;
+end;
+
 procedure TFrameDialog.FillContent(const Title: string; Body: TFrame; const CheckText: string; CheckValue: Boolean);
 begin
   if not Assigned(Body) then
@@ -236,9 +257,7 @@ begin
   Body.OnResize := FOnBodyResized;
   Body.OnResized := FOnBodyResized;
   Body.AddFreeNotify(Self);
-  FFilling := True;
   UpdateSize;
-  FFilling := False;
 end;
 
 class procedure TFrameDialog.StopPropertyAnimation(const Target: TFmxObject; const APropertyName: string);
@@ -266,7 +285,7 @@ begin
   if CheckBoxCheck.IsVisible then
     FHeight := FHeight + CheckBoxCheck.Height + CheckBoxCheck.Margins.Top + CheckBoxCheck.Margins.Bottom;
   FHeight := FHeight + PanelGrid.Height + PanelGrid.Margins.Top + PanelGrid.Margins.Bottom;
-  if FFilling then
+  if IsParamsUpdating or IsUpdating then
     Height := Min(Round(FHeight), MaxHeight)
   else
   begin

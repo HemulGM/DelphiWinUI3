@@ -8,7 +8,7 @@ uses
   {$IFDEF MSWINDOWS}
   Winapi.Windows, Winapi.Messages, FMX.Windows.Dispatch, FMX.Platform.Win,
   {$ENDIF}
-  FMX.Ani, FMX.Filter.Effects, FMX.ActnList, DelphiWindowStyle.FMX;
+  FMX.PLatform, FMX.Ani, FMX.Filter.Effects, FMX.ActnList, DelphiWindowStyle.FMX;
 
 type
   TPopup = class(FMX.Controls.TPopup)
@@ -36,6 +36,8 @@ type
     FFocusInflate: Single;
     FOffsetControls: TArray<TControl>;
     FTitleControls: TArray<TControl>;
+    FSystemThemeKind: TSystemThemeKind;
+    FSystemAccentColor: TAlphaColor;
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
     procedure SetFocusOpacity(const Value: Single);
@@ -60,6 +62,7 @@ type
     procedure WMNCCalcSize(var Message: TWMNCCalcSize); message WM_NCCALCSIZE;
     procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
     {$ENDIF}
+    procedure DoOnSettingChange; virtual;
   public
     procedure AfterConstruction; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; AFormX, AFormY: Single); override;
@@ -71,9 +74,20 @@ type
     procedure BeginLauncher(Proc: TProc = nil); virtual;
     procedure EndLauncher(Proc: TProc = nil); virtual;
     procedure SystemBackdropType(AType: TSystemBackdropType); virtual;
+    property SystemAccentColor: TAlphaColor read FSystemAccentColor;
+    property SystemThemeKind: TSystemThemeKind read FSystemThemeKind;
     //
+    /// <summary>
+    /// Controls for drag form
+    /// </summary>
     property CaptionControls: TArray<TControl> read FCaptionControls write SetCaptionControls;
+    /// <summary>
+    /// Controls for apply top offset for maximized
+    /// </summary>
     property OffsetControls: TArray<TControl> read FOffsetControls write SetOffsetControls;
+    /// <summary>
+    /// Control for form catpion text
+    /// </summary>
     property TitleControls: TArray<TControl> read FTitleControls write SetTitleControls;
     property HideTitleBar: Boolean read FHideTitleBar write SetHideTitleBar;
     property FocusStyle: TStrokeBrush read FFocusStyle;
@@ -88,7 +102,7 @@ type
 implementation
 
 uses
-  FMX.Menus, FMX.Platform, System.Messaging;
+  FMX.Menus, FMX.DateTimeCtrls, System.Messaging;
 
 {$REGION 'WinAPI for no TitleBar'}
 {$IFDEF MSWINDOWS}
@@ -115,7 +129,7 @@ begin
     if IsZoomed(FormToHWND(Self)) then
       Offset := R.Bottom;
     for var Item in OffsetControls do
-        Item.Margins.Top := Offset;
+      Item.Margins.Top := Offset;
 
     Inc(Message.CalcSize_Params.rgrc[0].Top, R.Top);
   end
@@ -144,16 +158,14 @@ begin
         else
         begin
           var Obj := ObjectAtPoint(Screen.MousePos);
-          if Assigned(Obj) and
-            (function: Boolean
+          if not Assigned(Obj) then
+            Exit;
+          for var Item in FCaptionControls do
+            if Item = Obj.GetObject then
             begin
-              for var Item in FCaptionControls do
-                if Item = Obj.GetObject then
-                  Exit(True);
-              Result := False;
-            end)()
-           then
-            Message.Result := HTCAPTION;
+              Message.Result := HTCAPTION;
+              Exit;
+            end;
         end;
       end;
     HTMINBUTTON, HTMAXBUTTON, HTCLOSE:
@@ -164,6 +176,7 @@ begin
   end;
   inherited;
 end;
+
 {$ENDIF}
 {$ENDREGION}
 
@@ -184,6 +197,14 @@ begin
   FFocusCorners := AllCorners;
   FFocusOpacity := 1;
   FFocusCornerType := TCornerType.Round;
+
+  var SystemAppearanceService: IFMXSystemAppearanceService;
+  if TPlatformServices.Current.SupportsPlatformService(IFMXSystemAppearanceService, SystemAppearanceService) then
+  begin
+    FSystemAccentColor := SystemAppearanceService.GetSystemColor(TSystemColorType.Accent);
+    FSystemThemeKind := SystemAppearanceService.ThemeKind;
+  end;
+
   TMessageManager.DefaultManager.SubscribeToMessage(TMainCaptionChangedMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
@@ -191,7 +212,7 @@ begin
       begin
         var TextControl: ICaption;
         if (Length(TitleControls) > 0) and Supports(TitleControls[0], ICaption, TextControl) then
-          TextControl.Text :=  TMainCaptionChangedMessage(M).Value.Caption;
+          TextControl.Text := TMainCaptionChangedMessage(M).Value.Caption;
       end;
     end);
   TMessageManager.DefaultManager.SubscribeToMessage(TFormActivateMessage,
@@ -211,6 +232,13 @@ begin
         for var Control in TitleControls do
           Control.Opacity := 0.5;
       end;
+    end);
+  TMessageManager.DefaultManager.SubscribeToMessage(TSystemAppearanceChangedMessage,
+    procedure(const Sender: TObject; const M: TMessage)
+    begin
+      FSystemAccentColor := TSystemAppearanceChangedMessage(M).Value.AccentColor;
+      FSystemThemeKind := TSystemAppearanceChangedMessage(M).Value.ThemeKind;
+      DoOnSettingChange;
     end);
 
   // Style defaults
@@ -245,6 +273,11 @@ destructor TWinUIForm.Destroy;
 begin
   inherited;
   FFocusStyle.Free;
+end;
+
+procedure TWinUIForm.DoOnSettingChange;
+begin
+  //pass
 end;
 
 procedure TWinUIForm.BeginLauncher(Proc: TProc);
@@ -428,6 +461,18 @@ begin
 end;
 
 procedure TWinUIForm.PaintRects(const UpdateRects: array of TRectF);
+
+  function IsControlInput(Control: IControl): Boolean;
+  begin
+    if Control is TCustomEdit then
+      Exit(True);
+    if Control is TCustomMemo then
+      Exit(True);
+    if Control is TCustomDateTimeEdit then
+      Exit(True);
+    Result := False;
+  end;
+
 begin
   // draw all form if focus mode is on
   if FModeFocus then
@@ -436,7 +481,7 @@ begin
     inherited;
   if FModeFocus and Assigned(Focused) then
   begin
-    if (Focused is TControl) and not (Focused is TCustomEdit) and not (Focused is TCustomMemo) then
+    if (Focused is TControl) and not IsControlInput(Focused) then
     begin
       Canvas.BeginScene;
       try
