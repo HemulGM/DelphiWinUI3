@@ -102,7 +102,7 @@ type
 implementation
 
 uses
-  FMX.Menus, FMX.DateTimeCtrls, System.Messaging;
+  FMX.Menus, FMX.DateTimeCtrls, System.Messaging, System.Threading;
 
 {$REGION 'WinAPI for no TitleBar'}
 {$IFDEF MSWINDOWS}
@@ -150,7 +150,7 @@ begin
         var P := ScreenToClient(Screen.MousePos).Round;
         if P.Y > FCaptionControls[0].Height then
           Exit;
-        var R := TRect.Create(0, 0, 20, 20);
+        var R := TRect.Create(0, 0, 0, 0);
         if (P.X < R.Right) and ((WindowState = TWindowState.wsMaximized) or ((P.Y >= R.Top) and (P.Y < R.Bottom))) then
           Message.Result := HTSYSMENU
         else if (P.Y < 4) and (BorderStyle in [TFmxFormBorderStyle.Sizeable, TFmxFormBorderStyle.SizeToolWin]) then
@@ -483,10 +483,16 @@ begin
   begin
     if (Focused is TControl) and not IsControlInput(Focused) then
     begin
+      var R := TRectF.Empty;
+      if Focused <> nil then
+      try
+        R := TControl(Focused).AbsoluteRect;
+      except
+        Exit;
+      end;
       Canvas.BeginScene;
       try
         Canvas.Stroke.Assign(FFocusStyle);
-        var R := TControl(Focused).AbsoluteRect;
         R.Inflate(FFocusInflate, FFocusInflate);
         Canvas.DrawRect(R, FFocusXRadius, FFocusYRadius, FFocusCorners, FFocusOpacity, FFocusCornerType);
       finally
