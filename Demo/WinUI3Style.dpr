@@ -3,6 +3,7 @@
 uses
   System.StartUpCopy,
   FMX.Forms,
+  FMX.Types,
   WinUI3.Main in 'WinUI3.Main.pas' {FormMain},
   WinUI3.Gallery in 'WinUI3.Gallery.pas' {FormGallery},
   FMX.StyledContextMenu in 'Fixes\D12\FMX.StyledContextMenu.pas',
@@ -44,6 +45,7 @@ uses
 {$R *.res}
 
 begin
+  //GlobalUseVulkan := True;
   Application.Initialize;
   Application.CreateForm(TFormMain, FormMain);
   Application.Run;

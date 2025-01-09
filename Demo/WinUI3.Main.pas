@@ -22,9 +22,10 @@ uses
   {$IFDEF MSWINDOWS}
   WinUI3.NotifyDemo,
   {$ENDIF}
-  FMX.Calendar.Style,
+  FMX.Calendar.Style, FMX.Edit.Style.New,
   //
-  FMX.Styles.Objects, FMX.Styles.Switch;
+  FMX.Styles.Objects, FMX.Styles.Switch, FMX.Viewport3D, System.Math.Vectors,
+  FMX.Controls3D, FMX.Objects3D, FMX.Types3D, FMX.MaterialSources;
 
 type
   TFormMain = class(TWinUIForm)
@@ -470,9 +471,6 @@ type
     SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
-    RadioButton11: TRadioButton;
-    RadioButton12: TRadioButton;
-    RadioButton13: TRadioButton;
     TabItemLists: TTabItem;
     ScrollBox5: TScrollBox;
     Label16: TLabel;
@@ -1149,6 +1147,28 @@ type
     MenuItem30: TMenuItem;
     MenuItem31: TMenuItem;
     MenuItem41: TMenuItem;
+    Label90: TLabel;
+    SpinEditButton2: TSpinEditButton;
+    Button305: TButton;
+    Label118: TLabel;
+    RadioButton11: TRadioButton;
+    RadioButton12: TRadioButton;
+    RadioButton13: TRadioButton;
+    Label119: TLabel;
+    ButtonMenu3D: TButton;
+    TabItem3D: TTabItem;
+    Viewport3D1: TViewport3D;
+    Model3D1: TModel3D;
+    Light1: TLight;
+    Grid3D1: TGrid3D;
+    Camera1: TCamera;
+    Dummy1: TDummy;
+    Model3D1Mat01: TLightMaterialSource;
+    Model3D1Mat21: TLightMaterialSource;
+    Model3D1Mat11: TLightMaterialSource;
+    Button306: TButton;
+    Button307: TButton;
+    Button308: TButton;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1221,6 +1241,9 @@ type
     procedure Button305Click(Sender: TObject);
     procedure HeaderItem1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure Viewport3D1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+    procedure Viewport3D1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+    procedure Viewport3D1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
   private
     {$IFDEF MSWINDOWS}
     FNotifyDemo: TNotifyDemo;
@@ -1294,9 +1317,9 @@ begin
 
   var Res := TWinUIDialog.Show(Self, Params);
   ShowUIMessage(Self, 'Info',
-    'Selected button is ' + Res.Result.ToString + #13#10 +
-    'Check is ' + Res.IsChecked.ToString + #13#10 +
-    'Color: "#' + IntToHex(Res.Color, 8) + '"');
+      'Selected button is ' + Res.Result.ToString + #13#10 +
+      'Check is ' + Res.IsChecked.ToString + #13#10 +
+      'Color: "#' + IntToHex(Res.Color, 8) + '"');
 end;
 
 procedure TFormMain.ButtonDialogColorPickerClick(Sender: TObject);
@@ -1314,9 +1337,9 @@ begin
 
   var Res := TWinUIDialog.Show(Self, Params);
   ShowUIMessage(Self, 'Info',
-    'Selected button is ' + Res.Result.ToString + #13#10 +
-    'Check is ' + Res.IsChecked.ToString + #13#10 +
-    'Color: "#' + IntToHex(Res.Color, 8) + '"');
+      'Selected button is ' + Res.Result.ToString + #13#10 +
+      'Check is ' + Res.IsChecked.ToString + #13#10 +
+      'Color: "#' + IntToHex(Res.Color, 8) + '"');
 end;
 
 procedure TFormMain.ButtonDialogFrameClick(Sender: TObject);
@@ -1360,9 +1383,9 @@ begin
 
   var Res := TWinUIDialog.Show(Self, Params);
   ShowUIMessage(Self, 'Info',
-    'Selected button is ' + Res.Result.ToString + #13#10 +
-    'Check is ' + Res.IsChecked.ToString + #13#10 +
-    'Input: "' + Res.Input + '"');
+      'Selected button is ' + Res.Result.ToString + #13#10 +
+      'Check is ' + Res.IsChecked.ToString + #13#10 +
+      'Input: "' + Res.Input + '"');
 end;
 
 procedure TFormMain.ButtonDialogSMClick(Sender: TObject);
@@ -1378,7 +1401,7 @@ end;
 procedure TFormMain.ButtonDialogText1Click(Sender: TObject);
 begin
   var Res := TWinUIDialog.Show(Self, 'Title', Memo1.Text,
-    ['Yes', 'No'], 0, 1, False, TColors.Red);
+      ['Yes', 'No'], 0, 1, False, TColors.Red);
   ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.ToString);
 end;
 
@@ -2178,6 +2201,26 @@ begin
       (Control as TButton).Opacity := Max(0.4, ((MaxOffset - Offset) / MaxOffset));
     end;
   end;
+end;
+
+procedure TFormMain.Viewport3D1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+  Viewport3D1.Tag := -20;
+  Viewport3D1.TagFloat := X;
+end;
+
+procedure TFormMain.Viewport3D1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
+begin
+  if Viewport3D1.Tag = -20 then
+  begin
+    Dummy1.RotationAngle.Y := Dummy1.RotationAngle.Y + (Viewport3D1.TagFloat - X) / 10;
+    Viewport3D1.TagFloat := X;
+  end;
+end;
+
+procedure TFormMain.Viewport3D1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+begin
+  Viewport3D1.Tag := 0;
 end;
 
 procedure TFormMain.FormClose(Sender: TObject; var Action: TCloseAction);
