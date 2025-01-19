@@ -73,7 +73,6 @@ type
     procedure HookHints; virtual;
     procedure BeginLauncher(Proc: TProc = nil); virtual;
     procedure EndLauncher(Proc: TProc = nil); virtual;
-    procedure SystemBackdropType(AType: TSystemBackdropType); virtual;
     property SystemAccentColor: TAlphaColor read FSystemAccentColor;
     property SystemThemeKind: TSystemThemeKind read FSystemThemeKind;
     //
@@ -106,12 +105,12 @@ uses
 
 {$REGION 'WinAPI for no TitleBar'}
 {$IFDEF MSWINDOWS}
+
 procedure TWinUIForm.InvalidateNonClient;
 begin
   var Handle := FormToHWND(Self);
   LockWindowUpdate(Handle);
-  SetWindowPos(Handle, 0, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE or
-    SWP_NOZORDER or SWP_NOACTIVATE or SWP_NOSENDCHANGING or SWP_FRAMECHANGED);
+  SetWindowPos(Handle, 0, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE or SWP_NOZORDER or SWP_NOACTIVATE or SWP_NOSENDCHANGING or SWP_FRAMECHANGED);
   LockWindowUpdate(0);
 end;
 
@@ -185,6 +184,9 @@ begin
   inherited;
   if @Application.OnHint = nil then
     HookHints;
+
+  // Override for set own style
+  DoOnSettingChange;
 end;
 
 constructor TWinUIForm.Create(AOwner: TComponent);
@@ -198,6 +200,7 @@ begin
   FFocusOpacity := 1;
   FFocusCornerType := TCornerType.Round;
 
+  // Read system style kind
   var SystemAppearanceService: IFMXSystemAppearanceService;
   if TPlatformServices.Current.SupportsPlatformService(IFMXSystemAppearanceService, SystemAppearanceService) then
   begin
@@ -205,6 +208,7 @@ begin
     FSystemThemeKind := SystemAppearanceService.ThemeKind;
   end;
 
+  // Subscribe to change caption
   TMessageManager.DefaultManager.SubscribeToMessage(TMainCaptionChangedMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
@@ -215,6 +219,8 @@ begin
           TextControl.Text := TMainCaptionChangedMessage(M).Value.Caption;
       end;
     end);
+
+  // Subscribe to activate form
   TMessageManager.DefaultManager.SubscribeToMessage(TFormActivateMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
@@ -224,6 +230,8 @@ begin
           Control.Opacity := 1;
       end;
     end);
+
+  // Subscribe to deactivate form
   TMessageManager.DefaultManager.SubscribeToMessage(TFormDeactivateMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
@@ -233,6 +241,8 @@ begin
           Control.Opacity := 0.5;
       end;
     end);
+
+  // Subscribe to change system theme
   TMessageManager.DefaultManager.SubscribeToMessage(TSystemAppearanceChangedMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
@@ -245,20 +255,6 @@ begin
   FSystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
   inherited;
   TAnimation.AniFrameRate := 120;
-
-  // Override method if skip step
-  if not NotInitStyle then
-  begin
-    SetWindowColorMode(True);
-    if SetSystemBackdropType(FSystemBackdropType) then
-    begin
-      Fill.Kind := TBrushKind.Solid;
-      Fill.Color := TAlphaColorRec.Null;
-      SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-    end
-    else
-      Fill.Kind := TBrushKind.None;
-  end;
 end;
 
 procedure TWinUIForm.CreateHandle;
@@ -277,27 +273,7 @@ end;
 
 procedure TWinUIForm.DoOnSettingChange;
 begin
-  //pass
-end;
-
-procedure TWinUIForm.BeginLauncher(Proc: TProc);
-begin
-  if Assigned(Proc) then
-    Proc;
-  if SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE) then
-  begin
-    Fill.Kind := TBrushKind.Solid;
-    Fill.Color := TAlphaColorRec.Null;
-    SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-  end
-  else
-    Fill.Kind := TBrushKind.None;
-end;
-
-procedure TWinUIForm.EndLauncher(Proc: TProc);
-begin
-  if Assigned(Proc) then
-    Proc;
+  SetWindowColorMode(FSystemThemeKind = TSystemThemeKind.Dark);
   if SetSystemBackdropType(FSystemBackdropType) then
   begin
     Fill.Kind := TBrushKind.Solid;
@@ -306,6 +282,18 @@ begin
   end
   else
     Fill.Kind := TBrushKind.None;
+end;
+
+procedure TWinUIForm.BeginLauncher(Proc: TProc);
+begin
+  if Assigned(Proc) then
+    Proc;             
+end;
+
+procedure TWinUIForm.EndLauncher(Proc: TProc);
+begin
+  if Assigned(Proc) then
+    Proc;
 end;
 
 procedure TWinUIForm.HookHints;
@@ -554,12 +542,6 @@ end;
 procedure TWinUIForm.SetTitleControls(const Value: TArray<TControl>);
 begin
   FTitleControls := Value;
-end;
-
-procedure TWinUIForm.SystemBackdropType(AType: TSystemBackdropType);
-begin
-  FSystemBackdropType := AType;
-  SetSystemBackdropType(FSystemBackdropType);
 end;
 
 end.

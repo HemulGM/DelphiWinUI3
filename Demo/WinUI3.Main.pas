@@ -1169,6 +1169,7 @@ type
     Button306: TButton;
     Button307: TButton;
     Button308: TButton;
+    StyleBookWinUI3Light: TStyleBook;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1262,6 +1263,8 @@ var
   FormMain: TFormMain;
   OldColor: TAlphaColor = $FF60CDFF;
   OldColorAccentText: TAlphaColor = $FF99EBFF;
+  OldColorL: TAlphaColor = $FF60CDFF;
+  OldColorAccentTextL: TAlphaColor = $FF99EBFF;
 
 implementation
 
@@ -1269,7 +1272,8 @@ uses
   DelphiWindowStyle.FMX, FMX.BehaviorManager, System.Math, System.IOUtils,
   HGM.ColorUtils, System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery,
   WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic, WinUI3.RADIDE,
-  WinUI3.Browser, FMX.MultiView.Types, WinUI.MultiView.CustomPresentation;
+  WinUI3.Browser, FMX.MultiView.Types, WinUI.MultiView.CustomPresentation,
+  FMX.Platform;
 
 {$R *.fmx}
 
@@ -1548,53 +1552,7 @@ end;
 
 procedure TFormMain.PopupBoxStyleChange(Sender: TObject);
 begin
-  case PopupBoxStyle.ItemIndex of
-    0:
-      begin
-        //mica
-        SetWindowCaptionColor(TColors.Null);
-        SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW);
-        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        Fill.Kind := TBrushKind.Solid;
-        Fill.Color := TAlphaColorRec.Null;
-        StyleLookup := 'backgroundstyle';
-      end;
-    1:
-      begin
-  //tabbed
-        SetWindowCaptionColor(TColors.Null);
-        SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW);
-        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        Fill.Kind := TBrushKind.Solid;
-        Fill.Color := TAlphaColorRec.Null;
-        StyleLookup := 'backgroundstyle';
-      end;
-    2:
-      begin
-       //acrilyc
-        SetWindowCaptionColor(TColors.Null);
-        SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW);
-        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        Fill.Kind := TBrushKind.Solid;
-        //Fill.Kind := TBrushKind.None;
-        Fill.Color := TAlphaColorRec.Null;
-        //StyleLookup := 'backgroundstyle_acrilyc_color';
-      end;
-    3:
-      begin
-        //none
-        SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE);
-        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        SetWindowCaptionColor(TColors.Null);
-        //SetWindowCaptionColor($1C1C1C);
-        Fill.Kind := TBrushKind.None;
-        Fill.Color := TAlphaColorRec.Null;
-        //StyleLookup := 'backgroundstyle_blue';
-        //Fill.Color := $FF1C1C1C;
-        //Self.SetWindowBorderColor(TColors.Steelblue);
-        //Self.SetWindowCaptionColor(TColors.Steelblue);
-      end;
-  end;
+  DoOnSettingChange;
 end;
 
 procedure TFormMain.ScrollBoxDemosCalcContentBounds(Sender: TObject; var ContentBounds: TRectF);
@@ -1787,23 +1745,111 @@ end;
 
 procedure TFormMain.DoOnSettingChange;
 begin
-  inherited;
-
   var SysAccent := ChangeColorSat(SystemAccentColor, 50); // DecreaseSaturation(SystemAccentColor, 0.8);
 
-  ChangeStyleBookColor(StyleBookWinUI3, OldColor, SysAccent);
-  ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, DecreaseSaturation(SysAccent, 10));
-
-  var PC_Image := StyleBookWinUI3.Style.FindStyleResource('progresscell_bmp', False);
-  if Assigned(PC_Image) and (PC_Image is TImage) then
+  if SystemThemeKind = TSystemThemeKind.Dark then
   begin
-    var Img := TImage(PC_Image);
-    Img.Bitmap.Clear(SysAccent);
+    SetWindowColorMode(True);
+    if OldColor <> SysAccent then
+    begin
+      ChangeStyleBookColor(StyleBookWinUI3, OldColor, SysAccent);
+      ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, DecreaseSaturation(SysAccent, 10));
+      OldColor := SysAccent;
+      OldColorAccentText := DecreaseSaturation(SysAccent, 10);
+
+      // Fix for progresscell style
+      var PC_Image := StyleBookWinUI3.Style.FindStyleResource('progresscell_bmp', False);
+      if Assigned(PC_Image) and (PC_Image is TImage) then
+      begin
+        var Img := TImage(PC_Image);
+        Img.Bitmap.Clear(SysAccent);
+      end;
+    end;
+
+    StyleBook := StyleBookWinUI3;
+  end
+  else
+  begin
+    SetWindowColorMode(False);
+
+    if OldColorL <> SysAccent then
+    begin
+      ChangeStyleBookColor(StyleBookWinUI3Light, OldColorL, SysAccent);
+      ChangeStyleBookColor(StyleBookWinUI3Light, OldColorAccentTextL, DecreaseSaturation(SysAccent, 10));
+      OldColorL := SysAccent;
+      OldColorAccentTextL := DecreaseSaturation(SysAccent, 10);
+
+    // Fix for progresscell style
+      var PC_Image := StyleBookWinUI3.Style.FindStyleResource('progresscell_bmp', False);
+      if Assigned(PC_Image) and (PC_Image is TImage) then
+      begin
+        var Img := TImage(PC_Image);
+        Img.Bitmap.Clear(SysAccent);
+      end;
+    end;
+
+    StyleBook := StyleBookWinUI3Light;
   end;
 
-  OldColor := SysAccent;
-  OldColorAccentText := DecreaseSaturation(SysAccent, 10);
-  TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBookWinUI3, Self), True);
+  case PopupBoxStyle.ItemIndex of
+    0:
+      begin
+        //mica
+        SetWindowCaptionColor(TColors.Null);
+        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
+        begin
+          Fill.Kind := TBrushKind.Solid;
+          Fill.Color := TAlphaColorRec.Null;
+          SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        end
+        else
+          Fill.Kind := TBrushKind.None;
+        StyleLookup := 'backgroundstyle';
+      end;
+    1:
+      begin
+        //tabbed
+        SetWindowCaptionColor(TColors.Null);
+        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW) then
+        begin
+          Fill.Kind := TBrushKind.Solid;
+          Fill.Color := TAlphaColorRec.Null;
+          SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        end
+        else
+          Fill.Kind := TBrushKind.None;
+        StyleLookup := 'backgroundstyle';
+      end;
+    2:
+      begin
+       //acrilyc
+        SetWindowCaptionColor(TColors.Null);
+        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW) then
+        begin
+          Fill.Kind := TBrushKind.Solid;
+          Fill.Color := TAlphaColorRec.Null;
+          SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        end
+        else
+          Fill.Kind := TBrushKind.None;
+        StyleLookup := 'backgroundstyle';
+      end;
+    3:
+      begin
+        //none
+        SetWindowCaptionColor(TColors.Null);
+        SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE);
+        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        Fill.Kind := TBrushKind.Solid;
+        Fill.Color := TAlphaColorRec.Null;
+        //StyleLookup := 'backgroundstyle_blue';
+        //Fill.Color := $FF1C1C1C;
+        //Self.SetWindowBorderColor(TColors.Steelblue);
+        //Self.SetWindowCaptionColor(TColors.Steelblue);
+      end;
+  end;
+
+  TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBook, Self), True);
 end;
 
 procedure TFormMain.DropTarget1Dropped(Sender: TObject; const Data: TDragObject; const Point: TPointF);
@@ -2243,6 +2289,7 @@ begin
   OffsetControls := [LayoutHead];
   TitleControls := [LabelTitle];
   HideTitleBar := True;
+
   ScrollBox1.AniCalculations.Animation := True;
   ScrollBox2.AniCalculations.Animation := True;
   ScrollBox3.AniCalculations.Animation := True;
@@ -2325,7 +2372,6 @@ begin
 
   TabControlMain.ActiveTab := TabItemButtons;
   TabControlMain.ActiveTab := TabItemHome;
-  DoOnSettingChange;
   BeginLauncher(
     procedure
     begin

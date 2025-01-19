@@ -80,7 +80,7 @@ var
 implementation
 
 uses
-  WinUI3.Main, System.Math;
+  WinUI3.Main, System.Math, DelphiWindowStyle.FMX;
 
 {$R *.fmx}
 
@@ -101,7 +101,7 @@ end;
 
 procedure TFormMusic.FormCreate(Sender: TObject);
 begin
-  SystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW);
+  SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW);
   FLayoutMode := TLayoutMode.Full;
   UpdateLayoutMode;
 end;
