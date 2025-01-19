@@ -8,3 +8,4 @@
 *.dsk
 /Demo/Win32/*
 /Demo/Android/Debug/*
+/ResizeDemo/Win32/*
