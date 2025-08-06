@@ -3,7 +3,7 @@ unit FMX.RichEdit.Style;
 interface
 
 uses
-  FMX.Text.TextEditor, FMX.Text.LinesLayout, FMX.TextLayout, ChatGPT.Code, FMX.Memo.Style.New,
+  FMX.Text.TextEditor, FMX.Text.LinesLayout, FMX.TextLayout, FMX.RichEdit.Code, FMX.Memo.Style.New,
   FMX.Controls.Presentation, FMX.Text, FMX.ScrollBox.Style, FMX.Controls,
   FMX.Graphics, System.UITypes;
 

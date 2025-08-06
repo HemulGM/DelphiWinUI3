@@ -15,6 +15,7 @@
         android:persistent="%persistent%"
         android:restoreAnyVersion="%restoreAnyVersion%"
         android:label="%label%"
+        android:resizeMode="horizontal|vertical"
         android:debuggable="%debuggable%"
         android:largeHeap="%largeHeap%"
         android:icon="%icon%"
@@ -31,6 +32,7 @@
         <activity
             android:name="com.embarcadero.firemonkey.FMXNativeActivity"
             android:exported="true"
+            android:resizeMode="horizontal|vertical"
             android:label="%activityLabel%"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
             android:launchMode="singleTask">

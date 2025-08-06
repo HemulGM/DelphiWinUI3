@@ -1,0 +1,66 @@
+object FrameInnerDialog: TFrameInnerDialog
+  Size.Width = 708.000000000000000000
+  Size.Height = 428.000000000000000000
+  Size.PlatformDefault = False
+  object RectangleShadow: TRectangle
+    Align = Contents
+    Fill.Color = x52000000
+    Locked = True
+    HitTest = False
+    Size.Width = 708.000000000000000000
+    Size.Height = 428.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object LayoutTitleBar: TLayout
+      Align = Top
+      HitTest = True
+      Size.Width = 708.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+    end
+    object LayoutHitTest: TLayout
+      Align = Client
+      HitTest = True
+      Size.Width = 708.000000000000000000
+      Size.Height = 378.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+    end
+  end
+  inline FrameDialog: TFrameDialog
+    Align = Center
+    Size.Width = 540.000000000000000000
+    Size.Height = 290.000000000000000000
+    Size.PlatformDefault = False
+    inherited LayoutClient: TLayout
+      inherited LayoutContent: TLayout
+        inherited VertScrollBoxBody: TVertScrollBox
+          Viewport.Width = 492.000000000000000000
+          Viewport.Height = 90.000000000000000000
+        end
+      end
+    end
+    object ShadowEffect1: TShadowEffect
+      Distance = 0.000099999997473788
+      Direction = 90.000000000000000000
+      Softness = 0.699999988079071000
+      Opacity = 0.500000000000000000
+      ShadowColor = claBlack
+    end
+  end
+  object ActionList: TActionList
+    Left = 256
+    Top = 128
+    object ActionClose: TAction
+      Text = 'ActionClose'
+      ShortCut = 27
+      OnExecute = ActionCloseExecute
+    end
+    object ActionCopy: TAction
+      Text = 'ActionCopy'
+      ShortCut = 16451
+      OnExecute = ActionCopyExecute
+    end
+  end
+end

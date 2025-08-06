@@ -1,0 +1,165 @@
+object FrameDialog: TFrameDialog
+  Size.Width = 540.000000000000000000
+  Size.Height = 290.000000000000000000
+  Size.PlatformDefault = False
+  object PanelInnerBG: TPanel
+    Align = Contents
+    HitTest = False
+    Size.Width = 540.000000000000000000
+    Size.Height = 290.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'panelstyle_dialog'
+    Visible = False
+    TabOrder = 3
+  end
+  object LayoutClient: TLayout
+    Align = Contents
+    Size.Width = 540.000000000000000000
+    Size.Height = 290.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object LayoutContent: TLayout
+      Align = Client
+      HitTest = True
+      Padding.Left = 24.000000000000000000
+      Padding.Top = 24.000000000000000000
+      Padding.Right = 24.000000000000000000
+      Padding.Bottom = 24.000000000000000000
+      Size.Width = 540.000000000000000000
+      Size.Height = 210.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      OnMouseDown = LayoutContentMouseDown
+      object LabelTitle: TLabel
+        Align = Top
+        Margins.Bottom = 12.000000000000000000
+        Position.X = 24.000000000000000000
+        Position.Y = 24.000000000000000000
+        Size.Width = 492.000000000000000000
+        Size.Height = 28.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'labelstyle_subtitle'
+        Text = 'Title'
+        TabOrder = 0
+      end
+      object VertScrollBoxBody: TVertScrollBox
+        Align = Client
+        Size.Width = 492.000000000000000000
+        Size.Height = 90.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        TabStop = False
+        Viewport.Width = 492.000000000000000000
+        Viewport.Height = 90.000000000000000000
+      end
+      object CheckBoxCheck: TCheckBox
+        Align = Bottom
+        Margins.Left = -3.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Margins.Bottom = -10.000000000000000000
+        Position.X = 21.000000000000000000
+        Position.Y = 164.000000000000000000
+        Size.Width = 495.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Accept check box'
+      end
+    end
+    object PanelGrid: TPanel
+      Align = Bottom
+      Position.Y = 210.000000000000000000
+      Size.Width = 540.000000000000000000
+      Size.Height = 80.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'panelstyle_fill_strong'
+      TabOrder = 0
+      object FlowLayoutButtons: TFlowLayout
+        Align = Client
+        Padding.Left = 24.000000000000000000
+        Padding.Top = 24.000000000000000000
+        Padding.Right = 24.000000000000000000
+        Padding.Bottom = 24.000000000000000000
+        Size.Width = 540.000000000000000000
+        Size.Height = 79.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Justify = Right
+        JustifyLastLine = Right
+        FlowDirection = RightToLeft
+        HorizontalGap = 8.000000000000000000
+        VerticalGap = 8.000000000000000000
+        object ButtonCancel: TButton
+          Position.X = 358.000000000000000000
+          Position.Y = 24.000000000000000000
+          Size.Width = 158.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'Cancel'
+          TextSettings.Trimming = None
+        end
+        object ButtonDontSave: TButton
+          Position.X = 192.000000000000000000
+          Position.Y = 24.000000000000000000
+          Size.Width = 158.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'Don'#39't save'
+          TextSettings.Trimming = None
+        end
+        object ButtonSave: TButton
+          Position.X = 26.000000000000000000
+          Position.Y = 24.000000000000000000
+          Size.Width = 158.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'buttonstyle_accent'
+          TabOrder = 2
+          Text = 'Save'
+          TextSettings.Trimming = None
+        end
+      end
+      object Panel1: TPanel
+        Align = Top
+        HitTest = False
+        Size.Width = 540.000000000000000000
+        Size.Height = 1.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'panelstyle_divider'
+        TabOrder = 1
+        TabStop = False
+      end
+    end
+  end
+  object LayoutOver: TLayout
+    Align = Contents
+    Locked = True
+    Size.Width = 540.000000000000000000
+    Size.Height = 290.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object LayoutTitle: TLayout
+      Align = Top
+      HitTest = True
+      Size.Width = 540.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      OnMouseDown = LayoutTitleMouseDown
+      object ButtonClose: TButton
+        Align = Right
+        Position.X = 494.000000000000000000
+        Size.Width = 46.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'win_btn_close'
+        TabOrder = 0
+        Text = 'Close'
+        TextSettings.Trimming = None
+        OnClick = ButtonCloseClick
+      end
+    end
+  end
+end

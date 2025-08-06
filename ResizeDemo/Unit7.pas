@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.StdCtrls,
-  FMX.Layouts;
+  FMX.Layouts, FMX.Controls.Presentation, FMX.Menus, FMX.Filter.Effects;
 
 {$SCOPEDENUMS ON}
 type
@@ -20,6 +20,22 @@ type
     LayoutBR: TLayout;
     LayoutTL: TLayout;
     LayoutTR: TLayout;
+    PopupMenu1: TPopupMenu;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
+    MenuItem10: TMenuItem;
+    MenuItem11: TMenuItem;
+    MenuItem12: TMenuItem;
+    Button1: TButton;
+    StyleBookWinUI3: TStyleBook;
+    StyleBook1: TStyleBook;
     procedure FormMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure LayoutLeftMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure LayoutLeftMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);

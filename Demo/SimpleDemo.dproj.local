@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.836,=D:\Projects\#Default\Unit7.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.146,D:\Projects\#Styles\WinUI3\Demo\SimpleDemo.dproj=D:\Projects\#Default\Project73.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.706,D:\Projects\#Styles\WinUI3\Demo\SimpleDemo.Main.fmx=D:\Projects\#Default\Unit7.fmx</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.706,D:\Projects\#Styles\WinUI3\Demo\SimpleDemo.Main.pas=D:\Projects\#Default\Unit7.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile Android64="" Android=""/>
+	</ActiveMobileDevice>
+</BorlandProject>

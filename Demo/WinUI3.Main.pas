@@ -9,14 +9,14 @@ uses
   FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.Header,
   FMX.MagnifierGlass, FMX.ExtCtrls, FMX.StdCtrls, FMX.ListView, FMX.Colors,
   FMX.NumberBox, FMX.SpinBox, FMX.Grid, FMX.MultiView,
-  FMX.MultiView.Presentations, FMX.Objects, FMX.Layouts, Fmx.Bind.Navigator,
+  FMX.MultiView.Presentations, FMX.Objects, FMX.Layouts, FMX.Bind.Navigator,
   FMX.TreeView, FMX.ListBox, FMX.Calendar, FMX.DateTimeCtrls, FMX.Edit,
   FMX.ScrollBox, FMX.Memo, FMX.Memo.Style, FMX.EditBox, FMX.ComboEdit.Style,
   FMX.ComboTrackBar, FMX.ComboEdit, FMX.Controls.Presentation, FMX.TabControl,
   FMX.Menus, System.ImageList, FMX.ImgList, FMX.Effects, FMX.Filter.Effects,
   FMX.Switch.Style, FMX.Bind.GenData, Data.Bind.GenData, System.Bindings.Outputs,
-  Fmx.Bind.Editors, Data.Bind.EngExt, Fmx.Bind.DBEngExt, Data.Bind.Components,
-  Data.Bind.ObjectScope, Fmx.Bind.Grid, Data.Bind.Grid, FMX.SearchBox, FMX.Ani,
+  FMX.Bind.Editors, Data.Bind.EngExt, FMX.Bind.DBEngExt, Data.Bind.Components,
+  Data.Bind.ObjectScope, FMX.Bind.Grid, Data.Bind.Grid, FMX.SearchBox, FMX.Ani,
   FMX.ActnList, System.Actions, WinUI3.Form, WinUI3.Frame.Inner.InfoBar,
   WinUI3.Frame.Dialog.ColorPicker,
   {$IFDEF MSWINDOWS}
@@ -1170,6 +1170,8 @@ type
     Button307: TButton;
     Button308: TButton;
     StyleBookWinUI3Light: TStyleBook;
+    ButtonDialogFont: TButton;
+    Button309: TButton;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1239,16 +1241,19 @@ type
     procedure MultiView2StartHiding(Sender: TObject);
     procedure MultiView2StartShowing(Sender: TObject);
     procedure CheckBox11Change(Sender: TObject);
-    procedure Button305Click(Sender: TObject);
     procedure HeaderItem1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Viewport3D1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
+    procedure TrackBar1Change(Sender: TObject);
+    procedure ButtonDialogFontClick(Sender: TObject);
+    procedure Button309Click(Sender: TObject);
   private
-    {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
     FNotifyDemo: TNotifyDemo;
-    {$ENDIF}
+    OverTheme: integer;
+{$ENDIF}
     procedure FOnTabCloseClick(Sender: TObject);
     procedure TabViewTest;
     procedure FSearchItemClick(Sender: TObject);
@@ -1261,10 +1266,12 @@ type
 
 var
   FormMain: TFormMain;
+  //
   OldColor: TAlphaColor = $FF60CDFF;
   OldColorAccentText: TAlphaColor = $FF99EBFF;
-  OldColorL: TAlphaColor = $FF60CDFF;
-  OldColorAccentTextL: TAlphaColor = $FF99EBFF;
+  //
+  OldColorL: TAlphaColor = $FF005FB8;
+  OldColorAccentTextL: TAlphaColor = $FF003E92;
 
 implementation
 
@@ -1272,8 +1279,11 @@ uses
   DelphiWindowStyle.FMX, FMX.BehaviorManager, System.Math, System.IOUtils,
   HGM.ColorUtils, System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery,
   WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic, WinUI3.RADIDE,
-  WinUI3.Browser, FMX.MultiView.Types, WinUI.MultiView.CustomPresentation,
-  FMX.Platform;
+  WinUI3.Browser, FMX.MultiView.Types, WinUI3.MultiView.CustomPresentation,
+{$IFDEF MSWINDOWS}
+  FMX.Platform.Win,
+{$ENDIF}
+  FMX.Platform, Winapi.D2D1;
 
 {$R *.fmx}
 
@@ -1308,72 +1318,101 @@ end;
 
 procedure TFormMain.ButtonDialogColorPickerAlphaClick(Sender: TObject);
 begin
-  var Params: TDialogColorParams;
+  var
+    Params: TDialogColorParams;
   Params.Title := 'Change color';
   Params.Color := TAlphaColors.Alpha;
   Params.Alpha := True;
-  //Params.CheckText := 'Accept?';
-  //Params.CheckValue := True;
+  // Params.CheckText := 'Accept?';
+  // Params.CheckValue := True;
   Params.Buttons := ['Ok', 'Cancel'];
   Params.AccentId := 0;
   Params.DefaultId := 1;
   Params.CanClose := True;
 
-  var Res := TWinUIDialog.Show(Self, Params);
-  ShowUIMessage(Self, 'Info',
-      'Selected button is ' + Res.Result.ToString + #13#10 +
-      'Check is ' + Res.IsChecked.ToString + #13#10 +
-      'Color: "#' + IntToHex(Res.Color, 8) + '"');
+  var
+    Res := TWinUIDialog.Show(Self, Params);
+  ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString +
+      #13#10 + 'Check is ' + Res.IsChecked.ToString + #13#10 + 'Color: "#' +
+      IntToHex(Res.Color, 8) + '"');
 end;
 
 procedure TFormMain.ButtonDialogColorPickerClick(Sender: TObject);
 begin
-  var Params: TDialogColorParams;
+  var
+    Params: TDialogColorParams;
   Params.Title := 'Change color';
   Params.Color := TAlphaColors.Coral;
   Params.Alpha := False;
-  //Params.CheckText := 'Accept?';
-  //Params.CheckValue := True;
+  // Params.CheckText := 'Accept?';
+  // Params.CheckValue := True;
   Params.Buttons := ['Ok', 'Cancel'];
   Params.AccentId := 0;
   Params.DefaultId := 1;
   Params.CanClose := True;
 
-  var Res := TWinUIDialog.Show(Self, Params);
-  ShowUIMessage(Self, 'Info',
-      'Selected button is ' + Res.Result.ToString + #13#10 +
-      'Check is ' + Res.IsChecked.ToString + #13#10 +
-      'Color: "#' + IntToHex(Res.Color, 8) + '"');
+  var
+    Res := TWinUIDialog.Show(Self, Params);
+  ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString +
+      #13#10 + 'Check is ' + Res.IsChecked.ToString + #13#10 + 'Color: "#' +
+      IntToHex(Res.Color, 8) + '"');
+end;
+
+procedure TFormMain.ButtonDialogFontClick(Sender: TObject);
+begin
+  var
+    Params: TDialogFontParams;
+  Params.Title := 'Change font';
+  Params.Family := 'Segoe UI';
+  Params.Size := 20;
+  Params.StyleExt := TFontStyleExt.Create([TFontStyle.fsBold]);
+  // Params.CheckText := 'Accept?';
+  // Params.CheckValue := True;
+  Params.Buttons := ['Ok', 'Cancel'];
+  Params.AccentId := 0;
+  Params.DefaultId := 1;
+  Params.CanClose := True;
+
+  var
+    Res := TWinUIDialog.Show(Self, Params);
+  ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString +
+      #13#10 + 'Check is ' + Res.IsChecked.ToString + #13#10 + 'Family: "' +
+      Res.Family + '"');
 end;
 
 procedure TFormMain.ButtonDialogFrameClick(Sender: TObject);
-begin   {
-  var Frame := TFrameTestDialog.Create(Self);
-  try
+begin {
+    var Frame := TFrameTestDialog.Create(Self);
+    try
     var Res := TWinUIDialog.Show(Self, 'Install apps', Frame, ['OK', 'Fine', 'Close'], -1, 1, True);
     if Res <> MR_AUTOCLOSE then
-      Frame.Free;
-  except
+    Frame.Free;
+    except
     Frame.Free; //TFrameTestDialog - self free and auto close dialog
-  end;   }
+    end; }
 
-  var Frame := TFrameTestDialog.Create(Self);
+  var
+    Frame := TFrameTestDialog.Create(Self);
   try
-    var Proc: TProc<Integer> :=
+    var
+      Proc:
+      TProc<Integer> :=
       procedure(Res: Integer)
       begin
         if Res <> MR_AUTOCLOSE then
           Frame.Free;
       end;
-    TWinUIDialog.ShowInline(Self, Proc, 'Install apps', Frame, ['OK', 'Fine', 'Close'], -1, 1, True);
+    TWinUIDialog.ShowInline(Self, Proc, 'Install apps', Frame,
+        ['OK', 'Fine', 'Close'], -1, 1, True);
   except
-    Frame.Free; //TFrameTestDialog - self free and auto close dialog
+    Frame.Free; // TFrameTestDialog - self free and auto close dialog
   end;
 end;
 
 procedure TFormMain.ButtonDialogInputClick(Sender: TObject);
 begin
-  var Params: TDialogInputParams;
+  var
+    Params: TDialogInputParams;
   Params.Title := 'Lorem substring';
   Params.InputTitle := 'Enter your name';
   Params.InputPrompt := 'Mark';
@@ -1385,11 +1424,11 @@ begin
   Params.DefaultId := 1;
   Params.CanClose := True;
 
-  var Res := TWinUIDialog.Show(Self, Params);
-  ShowUIMessage(Self, 'Info',
-      'Selected button is ' + Res.Result.ToString + #13#10 +
-      'Check is ' + Res.IsChecked.ToString + #13#10 +
-      'Input: "' + Res.Input + '"');
+  var
+    Res := TWinUIDialog.Show(Self, Params);
+  ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString +
+      #13#10 + 'Check is ' + Res.IsChecked.ToString + #13#10 + 'Input: "' +
+      Res.Input + '"');
 end;
 
 procedure TFormMain.ButtonDialogSMClick(Sender: TObject);
@@ -1404,14 +1443,16 @@ end;
 
 procedure TFormMain.ButtonDialogText1Click(Sender: TObject);
 begin
-  var Res := TWinUIDialog.Show(Self, 'Title', Memo1.Text,
-      ['Yes', 'No'], 0, 1, False, TColors.Red);
+  var
+    Res := TWinUIDialog.Show(Self, 'Title', Memo1.Text, ['Yes', 'No'], 0, 1,
+      False, TColors.Red);
   ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.ToString);
 end;
 
 procedure TFormMain.ButtonDialogText2Click(Sender: TObject);
 begin
-  var Params: TDialogTextParams;
+  var
+    Params: TDialogTextParams;
   Params.Title := 'Lorem substring';
   Params.Body := Memo1.Text.Substring(0, 100);
   Params.CheckText := 'Save work on disk?';
@@ -1423,15 +1464,18 @@ begin
   Params.FrameColor := TColors.Cornflowerblue;
 
   { // external window
-  var Res := TWinUIDialog.Show(Self, Params);
-  ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString + #13#10 + 'Check is ' + Res.IsChecked.ToString);
+    var Res := TWinUIDialog.Show(Self, Params);
+    ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString + #13#10 + 'Check is ' + Res.IsChecked.ToString);
   }
 
   // inline window
-  var Proc: TProc<TDialogResult> :=
+  var
+    Proc:
+    TProc<TDialogResult> :=
     procedure(Res: TDialogResult)
     begin
-      ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString + #13#10 + 'Check is ' + Res.IsChecked.ToString);
+      ShowUIMessage(Self, 'Info', 'Selected button is ' + Res.Result.ToString +
+          #13#10 + 'Check is ' + Res.IsChecked.ToString);
     end;
   TWinUIDialog.ShowInline(Self, Proc, Params);
 end;
@@ -1448,7 +1492,7 @@ end;
 
 procedure TFormMain.ButtonMoreFluentIconsClick(Sender: TObject);
 begin
-  //https://icones.js.org/collection/fluent
+  // https://icones.js.org/collection/fluent
 end;
 
 procedure TFormMain.ArcDial2KeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
@@ -1479,9 +1523,12 @@ begin
       TButton(Control).IsPressed := Control = Sender;
 end;
 
-procedure TFormMain.Button305Click(Sender: TObject);
+procedure TFormMain.Button309Click(Sender: TObject);
 begin
-  //StringGrid2.Cells[]
+  Inc(OverTheme);
+  if OverTheme > 2 then
+    OverTheme := 0;
+  DoOnSettingChange;
 end;
 
 procedure TFormMain.Button56Click(Sender: TObject);
@@ -1505,7 +1552,8 @@ end;
 
 procedure TFormMain.ButtonInfoBarShowClick(Sender: TObject);
 begin
-  var Params: TInfoBarParams;
+  var
+    Params: TInfoBarParams;
   Params.Title := EditInfoBarTitle.Text;
   Params.Body := MemoInfoBarBody.Text;
   Params.ActionText := EditInfoBarAction.Text;
@@ -1526,28 +1574,28 @@ end;
 
 procedure TFormMain.ButtonShareClick(Sender: TObject);
 begin
-  {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
   TWinUIDialog.ShowShare(Self,
     procedure(Share: TShareContract)
     begin
-      //Share.DataText := '...display WinRT UI objects that depend on CoreWindow.';
-      //Share.FileList.Add('D:\Downloads\8521_christmas_ornament_icon.png');
+      // Share.DataText := '...display WinRT UI objects that depend on CoreWindow.';
+      // Share.FileList.Add('D:\Downloads\8521_christmas_ornament_icon.png');
       Share.FileList.Add('D:\Downloads\55.txt');
       Share.FileList.Add('D:\Downloads\9785977532891.zip');
       Share.DataTitle := 'In a desktop app...';
       Share.ApplicationName := 'WinUI 3 Test';
-      //Share.ImageFile := 'D:\Downloads\75614.jpg';
-      //Share.IconFile := 'D:\Downloads\75614.jpg';
-      //Share.LogoFile := 'D:\Downloads\75614.jpg';
+      // Share.ImageFile := 'D:\Downloads\75614.jpg';
+      // Share.IconFile := 'D:\Downloads\75614.jpg';
+      // Share.LogoFile := 'D:\Downloads\75614.jpg';
     end);
-  {$ENDIF}
+{$ENDIF}
 end;
 
 procedure TFormMain.ButtonNotifyClick(Sender: TObject);
 begin
-  {$IFDEF MSWINDOWS}
+{$IFDEF MSWINDOWS}
   FNotifyDemo.ShowDemo;
-  {$ENDIF}
+{$ENDIF}
 end;
 
 procedure TFormMain.PopupBoxStyleChange(Sender: TObject);
@@ -1557,7 +1605,8 @@ end;
 
 procedure TFormMain.ScrollBoxDemosCalcContentBounds(Sender: TObject; var ContentBounds: TRectF);
 begin
-  var H := 0.0;
+  var
+    H := 0.0;
   for var Control in FlowLayoutBasic.Controls do
     H := Max(H, Control.Position.Y + Control.Height);
   FlowLayoutBasic.Height := H + FlowLayoutBasic.HorizontalGap;
@@ -1608,7 +1657,8 @@ var
   end;
 
 begin
-  var Style := StyleBook.Style;
+  var
+    Style := StyleBook.Style;
   OldColorRec := TAlphaColorF.Create(OldColor);
   NewColorRec := TAlphaColorF.Create(NewColor);
   ForAll(Style,
@@ -1621,8 +1671,10 @@ begin
 
       function UpdateColor(TargetColor: TAlphaColor): TAlphaColor;
       begin
-        var Rec := TAlphaColorF.Create(TargetColor);
-        if (Rec.R = OldColorRec.R) and (Rec.G = OldColorRec.G) and (Rec.B = OldColorRec.B) then
+        var
+          Rec := TAlphaColorF.Create(TargetColor);
+        if (Rec.R = OldColorRec.R) and (Rec.G = OldColorRec.G) and
+          (Rec.B = OldColorRec.B) then
         begin
           Rec.R := NewColorRec.R;
           Rec.G := NewColorRec.G;
@@ -1637,7 +1689,8 @@ begin
         Exit;
       if Item is TShape then
       begin
-        var Control := TRectangle(Item);
+        var
+          Control := TRectangle(Item);
 
         Control.Fill.Color := UpdateColor(Control.Fill.Color);
         Control.Stroke.Color := UpdateColor(Control.Stroke.Color);
@@ -1646,34 +1699,40 @@ begin
       end
       else if Item is TColorObject then
       begin
-        var Control := TColorObject(Item);
+        var
+          Control := TColorObject(Item);
         Control.Color := UpdateColor(Control.Color);
         Item.TagString := '0';
       end
       else if Item is TBrushObject then
       begin
-        var Control := TBrushObject(Item);
+        var
+          Control := TBrushObject(Item);
         Control.Brush.Color := UpdateColor(Control.Brush.Color);
         Item.TagString := '0';
       end
       else if Item is TColorAnimation then
       begin
-        var Control := TColorAnimation(Item);
+        var
+          Control := TColorAnimation(Item);
         Control.StartValue := UpdateColor(Control.StartValue);
         Control.StopValue := UpdateColor(Control.StopValue);
         Item.TagString := '0';
       end
       else if Item is TLabel then
       begin
-        var Control := TLabel(Item);
-        Control.TextSettings.FontColor := UpdateColor(Control.TextSettings.FontColor);
+        var
+          Control := TLabel(Item);
+        Control.TextSettings.FontColor :=
+          UpdateColor(Control.TextSettings.FontColor);
         Item.TagString := '0';
       end
       else if Item is TText then
       begin
         if Item is TTabStyleTextObject then
         begin
-          var Control := TTabStyleTextObject(Item);
+          var
+            Control := TTabStyleTextObject(Item);
           Control.HotColor := UpdateColor(Control.HotColor);
           Control.ActiveColor := UpdateColor(Control.ActiveColor);
           Control.Color := UpdateColor(Control.Color);
@@ -1681,14 +1740,16 @@ begin
         end
         else if Item is TActiveStyleTextObject then
         begin
-          var Control := TActiveStyleTextObject(Item);
+          var
+            Control := TActiveStyleTextObject(Item);
           Control.ActiveColor := UpdateColor(Control.ActiveColor);
           Control.Color := UpdateColor(Control.Color);
           Item.TagString := '0';
         end
         else if Item is TButtonStyleTextObject then
         begin
-          var Control := TButtonStyleTextObject(Item);
+          var
+            Control := TButtonStyleTextObject(Item);
           Control.HotColor := UpdateColor(Control.HotColor);
           Control.FocusedColor := UpdateColor(Control.FocusedColor);
           Control.NormalColor := UpdateColor(Control.NormalColor);
@@ -1697,14 +1758,17 @@ begin
         end
         else
         begin
-          var Control := TText(Item);
-          Control.TextSettings.FontColor := UpdateColor(Control.TextSettings.FontColor);
+          var
+            Control := TText(Item);
+          Control.TextSettings.FontColor :=
+            UpdateColor(Control.TextSettings.FontColor);
           Item.TagString := '0';
         end;
       end
       else if Item is TSwitchObject then
       begin
-        var Control := TSwitchObject(Item);
+        var
+          Control := TSwitchObject(Item);
         Control.Fill.Color := UpdateColor(Control.Fill.Color);
         Control.FillOn.Color := UpdateColor(Control.FillOn.Color);
         Control.Stroke.Color := UpdateColor(Control.Stroke.Color);
@@ -1713,7 +1777,8 @@ begin
       end
       else if Item is TFillRGBEffect then
       begin
-        var Control := TFillRGBEffect(Item);
+        var
+          Control := TFillRGBEffect(Item);
         Control.Color := UpdateColor(Control.Color);
         Item.TagString := '0';
       end;
@@ -1729,39 +1794,59 @@ end;
 procedure TFormMain.ComboColorBox2Change(Sender: TObject);
 begin
   ChangeStyleBookColor(StyleBookWinUI3, OldColor, ComboColorBox2.Color);
-  ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, ComboColorBox4.Color);
+  ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText,
+      ComboColorBox4.Color);
 
-  var PC_Image := StyleBookWinUI3.Style.FindStyleResource('progresscell_bmp', False);
+  var
+    PC_Image := StyleBookWinUI3.Style.FindStyleResource
+    ('progresscell_bmp', False);
   if Assigned(PC_Image) and (PC_Image is TImage) then
   begin
-    var Img := TImage(PC_Image);
+    var
+      Img := TImage(PC_Image);
     Img.Bitmap.Clear(ComboColorBox2.Color);
   end;
 
   OldColor := ComboColorBox2.Color;
   OldColorAccentText := ComboColorBox4.Color;
-  TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBookWinUI3, Self), True);
+  TMessageManager.DefaultManager.SendMessage(Self,
+      TStyleChangedMessage.Create(StyleBookWinUI3, Self), True);
 end;
 
 procedure TFormMain.DoOnSettingChange;
 begin
-  var SysAccent := ChangeColorSat(SystemAccentColor, 50); // DecreaseSaturation(SystemAccentColor, 0.8);
+  var
+    SysAccent := ChangeColorSat(SystemAccentColor, 50);
+  // DecreaseSaturation(SystemAccentColor, 0.8);
+  var IsDark: Boolean := True;
+  case OverTheme of
+    0:
+      IsDark := SystemThemeKind = TSystemThemeKind.Dark;
+    1:
+      IsDark := True;
+    2:
+      IsDark := False;
+  end;
 
-  if SystemThemeKind = TSystemThemeKind.Dark then
+  if IsDark then
   begin
     SetWindowColorMode(True);
     if OldColor <> SysAccent then
     begin
       ChangeStyleBookColor(StyleBookWinUI3, OldColor, SysAccent);
-      ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, DecreaseSaturation(SysAccent, 10));
+      ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText,
+          DecreaseSaturation(SysAccent, 10));
       OldColor := SysAccent;
       OldColorAccentText := DecreaseSaturation(SysAccent, 10);
 
       // Fix for progresscell style
-      var PC_Image := StyleBookWinUI3.Style.FindStyleResource('progresscell_bmp', False);
+      var
+        PC_Image := StyleBookWinUI3.Style.FindStyleResource
+        ('progresscell_bmp', False);
       if Assigned(PC_Image) and (PC_Image is TImage) then
       begin
-        var Img := TImage(PC_Image);
+        var
+          Img := TImage(PC_Image);
         Img.Bitmap.Clear(SysAccent);
       end;
     end;
@@ -1775,15 +1860,19 @@ begin
     if OldColorL <> SysAccent then
     begin
       ChangeStyleBookColor(StyleBookWinUI3Light, OldColorL, SysAccent);
-      ChangeStyleBookColor(StyleBookWinUI3Light, OldColorAccentTextL, DecreaseSaturation(SysAccent, 10));
+      ChangeStyleBookColor(StyleBookWinUI3Light, OldColorAccentTextL,
+          DecreaseSaturation(SysAccent, 10));
       OldColorL := SysAccent;
       OldColorAccentTextL := DecreaseSaturation(SysAccent, 10);
 
-    // Fix for progresscell style
-      var PC_Image := StyleBookWinUI3.Style.FindStyleResource('progresscell_bmp', False);
+      // Fix for progresscell style
+      var
+        PC_Image := StyleBookWinUI3.Style.FindStyleResource
+        ('progresscell_bmp', False);
       if Assigned(PC_Image) and (PC_Image is TImage) then
       begin
-        var Img := TImage(PC_Image);
+        var
+          Img := TImage(PC_Image);
         Img.Bitmap.Clear(SysAccent);
       end;
     end;
@@ -1794,7 +1883,7 @@ begin
   case PopupBoxStyle.ItemIndex of
     0:
       begin
-        //mica
+        // mica
         SetWindowCaptionColor(TColors.Null);
         if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
         begin
@@ -1808,7 +1897,7 @@ begin
       end;
     1:
       begin
-        //tabbed
+        // tabbed
         SetWindowCaptionColor(TColors.Null);
         if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW) then
         begin
@@ -1822,9 +1911,10 @@ begin
       end;
     2:
       begin
-       //acrilyc
+        // acrilyc
         SetWindowCaptionColor(TColors.Null);
-        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW) then
+        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW)
+          then
         begin
           Fill.Kind := TBrushKind.Solid;
           Fill.Color := TAlphaColorRec.Null;
@@ -1836,20 +1926,21 @@ begin
       end;
     3:
       begin
-        //none
+        // none
         SetWindowCaptionColor(TColors.Null);
         SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE);
         SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        Fill.Kind := TBrushKind.Solid;
+        Fill.Kind := TBrushKind.None;
         Fill.Color := TAlphaColorRec.Null;
-        //StyleLookup := 'backgroundstyle_blue';
-        //Fill.Color := $FF1C1C1C;
-        //Self.SetWindowBorderColor(TColors.Steelblue);
-        //Self.SetWindowCaptionColor(TColors.Steelblue);
+        StyleLookup := 'backgroundstyle';
+        // Fill.Color := $FF1C1C1C;
+        // Self.SetWindowBorderColor(TColors.Steelblue);
+        // Self.SetWindowCaptionColor(TColors.Steelblue);
       end;
   end;
 
-  TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBook, Self), True);
+  TMessageManager.DefaultManager.SendMessage(Self,
+      TStyleChangedMessage.Create(StyleBook, Self), True);
 end;
 
 procedure TFormMain.DropTarget1Dropped(Sender: TObject; const Data: TDragObject; const Point: TPointF);
@@ -1921,11 +2012,13 @@ begin
     Exit;
   if not EditSearch.Text.IsEmpty then
   begin
-    var SearchText := EditSearch.Text;
+    var
+      SearchText := EditSearch.Text;
     if (EditSearch.SelLength > 0) and (EditSearch.SelStart = 0) then
       SearchText := EditSearch.Text.Substring(0, EditSearch.SelLength);
     SearchText := SearchText.ToLower;
-    var SameItem := '';
+    var
+      SameItem := '';
     ListBoxSearch.BeginUpdate;
     try
       ListBoxSearch.Clear;
@@ -1937,7 +2030,8 @@ begin
           if SameItem.IsEmpty then
             if TabControlMain.Tabs[i].Text.ToLower.StartsWith(SearchText) then
               SameItem := TabControlMain.Tabs[i].Text;
-          var Item := TListBoxItem.Create(ListBoxSearch);
+          var
+            Item := TListBoxItem.Create(ListBoxSearch);
           Item.Text := TabControlMain.Tabs[i].Text;
           Item.HitTest := True;
           Item.OnClick := FSearchItemClick;
@@ -1949,14 +2043,16 @@ begin
     end;
     if not SameItem.IsEmpty then
     begin
-      var AutoFill := SameItem.Remove(0, EditSearch.Text.Length);
+      var
+        AutoFill := SameItem.Remove(0, EditSearch.Text.Length);
       if EditSearch.TagString.Length >= EditSearch.Text.Length then
         AutoFill := '';
       EditSearch.TagString := EditSearch.Text;
       if not AutoFill.IsEmpty then
       begin
         EditSearch.Tag := 100;
-        var L := EditSearch.Text.Length;
+        var
+          L := EditSearch.Text.Length;
         EditSearch.Text := EditSearch.Text + AutoFill;
         EditSearch.SelStart := L;
         EditSearch.SelLength := AutoFill.Length;
@@ -1969,7 +2065,8 @@ begin
     begin
       if PopupSearch.IsOpen then
       begin
-        var Item := TListBoxItem.Create(ListBoxSearch);
+        var
+          Item := TListBoxItem.Create(ListBoxSearch);
         Item.Text := 'Not found';
         Item.Enabled := False;
         Item.HitTest := True;
@@ -1978,7 +2075,9 @@ begin
         ListBoxSearch.AddObject(Item);
       end;
     end;
-    PopupSearch.Height := Min(ListBoxSearch.Count * ListBoxSearch.ItemHeight, ListBoxSearch.ItemHeight * 6) + ListBoxSearch.Margins.Top + ListBoxSearch.Margins.Bottom;
+    PopupSearch.Height := Min(ListBoxSearch.Count * ListBoxSearch.ItemHeight,
+        ListBoxSearch.ItemHeight * 6) + ListBoxSearch.Margins.Top +
+      ListBoxSearch.Margins.Bottom;
     if not PopupSearch.IsOpen then
     begin
       PopupSearch.VerticalOffset := -1;
@@ -1996,15 +2095,18 @@ procedure TFormMain.EditSearchKeyDown(Sender: TObject; var Key: Word; var KeyCha
 begin
   if Key = vkEscape then
     PopupSearch.IsOpen := False;
-  if PopupSearch.IsOpen and ListBoxSearch.Enabled and (Key in [vkUp, vkDown, vkReturn]) then
+  if PopupSearch.IsOpen and ListBoxSearch.Enabled and
+    (Key in [vkUp, vkDown, vkReturn]) then
     (ListBoxSearch as IControl).KeyDown(Key, KeyChar, Shift);
 end;
 
 procedure TFormMain.EditSearchKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char; Shift: TShiftState);
 begin
-  if PopupSearch.IsOpen and ListBoxSearch.Enabled and (Key in [vkUp, vkDown]) then
+  if PopupSearch.IsOpen and ListBoxSearch.Enabled and (Key in [vkUp, vkDown])
+    then
     (ListBoxSearch as IControl).KeyUp(Key, KeyChar, Shift)
-  else if PopupSearch.IsOpen and ListBoxSearch.Enabled and (Key in [vkReturn]) and Assigned(ListBoxSearch.Selected) then
+  else if PopupSearch.IsOpen and ListBoxSearch.Enabled and (Key in [vkReturn])
+    and Assigned(ListBoxSearch.Selected) then
     (ListBoxSearch as IControl).KeyUp(Key, KeyChar, Shift)
   else if Key = vkReturn then
     TryOpenTabByName(EditSearch.Text);
@@ -2034,12 +2136,12 @@ end;
 
 procedure TFormMain.FormActivate(Sender: TObject);
 begin
-  //Fill.Kind := TBrushKind.Gradient;
+  // Fill.Kind := TBrushKind.Gradient;
 end;
 
 procedure TFormMain.FormDeactivate(Sender: TObject);
 begin
-  //Fill.Kind := TBrushKind.None;
+  // Fill.Kind := TBrushKind.None;
 end;
 
 procedure TFormMain.FormDestroy(Sender: TObject);
@@ -2060,39 +2162,51 @@ end;
 procedure TFormMain.HorzScrollBoxFilterViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
 begin
   ButtonScrollFilterLeft.Visible := NewViewportPosition.X <> 0;
-  ButtonScrollFilterRight.Visible := NewViewportPosition.X + HorzScrollBoxFilter.Width < HorzScrollBoxFilter.ContentBounds.Width;
+  ButtonScrollFilterRight.Visible := NewViewportPosition.X +
+    HorzScrollBoxFilter.Width < HorzScrollBoxFilter.ContentBounds.Width;
 end;
 
 procedure TFormMain.ButtonScrollFilterLeftClick(Sender: TObject);
 begin
-  HorzScrollBoxFilter.AniCalculations.MouseWheel(-HorzScrollBoxFilter.Width / 3, 0);
+  HorzScrollBoxFilter.AniCalculations.MouseWheel
+    (-HorzScrollBoxFilter.Width / 3, 0);
 end;
 
 procedure TFormMain.ButtonScrollFilterRightClick(Sender: TObject);
 begin
-  HorzScrollBoxFilter.AniCalculations.MouseWheel(+HorzScrollBoxFilter.Width / 3, 0);
+  HorzScrollBoxFilter.AniCalculations.MouseWheel
+    (+HorzScrollBoxFilter.Width / 3, 0);
 end;
 
 procedure TFormMain.HorzScrollBoxSpinViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
 begin
-  var VH := HorzScrollBoxSpin.Width / 2;
-  var MaxOffset := 30;
+  var
+    VH := HorzScrollBoxSpin.Width / 2;
+  var
+    MaxOffset := 30;
   for var Control in HorzScrollBoxSpin.Content.Controls do
   begin
     if Control.Position.X + Control.Width < NewViewportPosition.X then
       Continue;
     if Control.Position.X > NewViewportPosition.X + HorzScrollBoxSpin.Width then
       Continue;
-    var Offset: Single;
-    var OffPos := (Control.Position.X + Control.Width / 2) - NewViewportPosition.X;
-    var Distance := Abs(OffPos - VH);
+    var
+      Offset: Single;
+    var
+      OffPos := (Control.Position.X + Control.Width / 2) - NewViewportPosition.X;
+    var
+      Distance := Abs(OffPos - VH);
     Offset := Min(Control.Width - 10, (Distance / VH) * MaxOffset);
-    Control.Margins.Rect := TRectF.Create(Control.Margins.Left, Offset, Control.Margins.Right, Offset);
+    Control.Margins.Rect := TRectF.Create(Control.Margins.Left, Offset,
+        Control.Margins.Right, Offset);
     if Control is TButton then
     begin
-      (Control as TButton).StyledSettings := (Control as TButton).StyledSettings - [TStyledSetting.Size];
-      (Control as TButton).TextSettings.Font.Size := 14 * Max(0.6, ((MaxOffset - Offset) / MaxOffset));
-      (Control as TButton).Opacity := Max(0.4, ((MaxOffset - Offset) / MaxOffset));
+      (Control as TButton).StyledSettings := (Control as TButton).StyledSettings
+        - [TStyledSetting.Size];
+      (Control as TButton).TextSettings.Font.Size :=
+        14 * Max(0.6, ((MaxOffset - Offset) / MaxOffset));
+      (Control as TButton).Opacity :=
+        Max(0.4, ((MaxOffset - Offset) / MaxOffset));
     end;
   end;
 end;
@@ -2121,7 +2235,8 @@ end;
 
 procedure TFormMain.MultiView1StartHiding(Sender: TObject);
 begin
-  var Ani: TFloatAnimation;
+  var
+    Ani: TFloatAnimation;
   if MultiView1.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
   begin
     Ani.Inverse := True;
@@ -2131,7 +2246,8 @@ end;
 
 procedure TFormMain.MultiView1StartShowing(Sender: TObject);
 begin
-  var Ani: TFloatAnimation;
+  var
+    Ani: TFloatAnimation;
   if MultiView1.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
   begin
     Ani.Inverse := False;
@@ -2151,7 +2267,8 @@ end;
 
 procedure TFormMain.MultiView2StartHiding(Sender: TObject);
 begin
-  var Ani: TFloatAnimation;
+  var
+    Ani: TFloatAnimation;
   if MultiView2.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
   begin
     Ani.Inverse := True;
@@ -2161,7 +2278,8 @@ end;
 
 procedure TFormMain.MultiView2StartShowing(Sender: TObject);
 begin
-  var Ani: TFloatAnimation;
+  var
+    Ani: TFloatAnimation;
   if MultiView2.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
   begin
     Ani.Inverse := False;
@@ -2171,7 +2289,8 @@ end;
 
 procedure TFormMain.MultiView5StartHiding(Sender: TObject);
 begin
-  var Ani: TFloatAnimation;
+  var
+    Ani: TFloatAnimation;
   if MultiView5.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
   begin
     Ani.Inverse := True;
@@ -2181,7 +2300,8 @@ end;
 
 procedure TFormMain.MultiView5StartShowing(Sender: TObject);
 begin
-  var Ani: TFloatAnimation;
+  var
+    Ani: TFloatAnimation;
   MultiView5.NeedStyleLookup;
   MultiView5.ApplyStyleLookup;
   if MultiView5.FindStyleResource<TFloatAnimation>('bg_ani', Ani) then
@@ -2197,19 +2317,22 @@ begin
     Exit;
   for var Control in VertScrollBoxMenu.Content.Controls do
     if Control is TButton then
-      TButton(Control).IsPressed := Control.Tag = TabControlMain.ActiveTab.Index;
+      TButton(Control).IsPressed :=
+        Control.Tag = TabControlMain.ActiveTab.Index;
 end;
 
 procedure TFormMain.TabItemAddClick(Sender: TObject);
 begin
   if TabControlView.ActiveTab = TabItemAdd then
   begin
-    var Tab := TabControlView.Add;
+    var
+      Tab := TabControlView.Add;
     Tab.AutoSize := False;
     Tab.Width := 180;
     Tab.StyleLookup := 'tabitemstyle_view';
     Tab.IsSelected := True;
-    Tab.StylesData['close.OnClick'] := TValue.From<TNotifyEvent>(FOnTabCloseClick);
+    Tab.StylesData['close.OnClick'] := TValue.From<TNotifyEvent>
+      (FOnTabCloseClick);
     Tab.Text := 'Tab name ' + TabControlView.Tag.ToString;
     TabControlView.Tag := TabControlView.Tag + 1;
     TabItemAdd.Index := TabControlView.TabCount - 1;
@@ -2218,33 +2341,45 @@ end;
 
 procedure TFormMain.FOnTabCloseClick(Sender: TObject);
 begin
-  var Btn := Sender as TControl;
+  var
+    Btn := Sender as TControl;
   //
-  var Tab := TFMXObjectHelper.GetNearestParentOfClass<TTabItem>(Btn);
+  var
+    Tab := TFMXObjectHelper.GetNearestParentOfClass<TTabItem>(Btn);
   if Assigned(Tab) then
     Tab.Release;
 end;
 
 procedure TFormMain.VertScrollBoxCaruselViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
 begin
-  var VH := VertScrollBoxCarusel.Height / 2;
-  var MaxOffset := 40;
+  var
+    VH := VertScrollBoxCarusel.Height / 2;
+  var
+    MaxOffset := 40;
   for var Control in VertScrollBoxCarusel.Content.Controls do
   begin
     if Control.Position.Y + Control.Height < NewViewportPosition.Y then
       Continue;
-    if Control.Position.Y > NewViewportPosition.Y + VertScrollBoxCarusel.Height then
+    if Control.Position.Y > NewViewportPosition.Y + VertScrollBoxCarusel.Height
+      then
       Continue;
-    var Offset: Single;
-    var OffPos := (Control.Position.Y + Control.Height / 2) - NewViewportPosition.Y;
-    var Distance := Abs(OffPos - VH);
+    var
+      Offset: Single;
+    var
+      OffPos := (Control.Position.Y + Control.Height / 2) - NewViewportPosition.Y;
+    var
+      Distance := Abs(OffPos - VH);
     Offset := Min(Control.Width - 10, (Distance / VH) * MaxOffset);
-    Control.Margins.Rect := TRectF.Create(Offset, Control.Margins.Top, Offset, Control.Margins.Bottom);
+    Control.Margins.Rect := TRectF.Create(Offset, Control.Margins.Top, Offset,
+        Control.Margins.Bottom);
     if Control is TButton then
     begin
-      (Control as TButton).StyledSettings := (Control as TButton).StyledSettings - [TStyledSetting.Size];
-      (Control as TButton).TextSettings.Font.Size := 14 * Max(0.6, ((MaxOffset - Offset) / MaxOffset));
-      (Control as TButton).Opacity := Max(0.4, ((MaxOffset - Offset) / MaxOffset));
+      (Control as TButton).StyledSettings := (Control as TButton).StyledSettings
+        - [TStyledSetting.Size];
+      (Control as TButton).TextSettings.Font.Size :=
+        14 * Max(0.6, ((MaxOffset - Offset) / MaxOffset));
+      (Control as TButton).Opacity :=
+        Max(0.4, ((MaxOffset - Offset) / MaxOffset));
     end;
   end;
 end;
@@ -2259,7 +2394,8 @@ procedure TFormMain.Viewport3D1MouseMove(Sender: TObject; Shift: TShiftState; X,
 begin
   if Viewport3D1.Tag = -20 then
   begin
-    Dummy1.RotationAngle.Y := Dummy1.RotationAngle.Y + (Viewport3D1.TagFloat - X) / 10;
+    Dummy1.RotationAngle.Y := Dummy1.RotationAngle.Y +
+      (Viewport3D1.TagFloat - X) / 10;
     Viewport3D1.TagFloat := X;
   end;
 end;
@@ -2281,10 +2417,10 @@ end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
-  {$IFDEF MSWINDOWS}
+  OverTheme := 0;
+{$IFDEF MSWINDOWS}
   FNotifyDemo := TNotifyDemo.Create(Self);
-  {$ENDIF}
-
+{$ENDIF}
   CaptionControls := [LayoutCaption, LayoutHead];
   OffsetControls := [LayoutHead];
   TitleControls := [LabelTitle];
@@ -2349,26 +2485,36 @@ begin
     Grid1.Columns[i].HeaderSettings.StyleLookup := 'headeritemstyle_sep';
 
   MenuItem1.DisableDisappear := True;
-  MenuItem1.StylesData['copy.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
-  MenuItem1.StylesData['cut.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
-  MenuItem1.StylesData['paste.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
-  MenuItem1.StylesData['delete.OnClick'] := TValue.From<TNotifyEvent>(FOnSubMenuClick);
+  MenuItem1.StylesData['copy.OnClick'] := TValue.From<TNotifyEvent>
+    (FOnSubMenuClick);
+  MenuItem1.StylesData['cut.OnClick'] := TValue.From<TNotifyEvent>
+    (FOnSubMenuClick);
+  MenuItem1.StylesData['paste.OnClick'] := TValue.From<TNotifyEvent>
+    (FOnSubMenuClick);
+  MenuItem1.StylesData['delete.OnClick'] := TValue.From<TNotifyEvent>
+    (FOnSubMenuClick);
 
   MenuItem24.DisableDisappear := True;
-  MenuItem24.StylesData['bold.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
-  MenuItem24.StylesData['italic.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
-  MenuItem24.StylesData['underline.TextSettings.HorzAlign'] := TValue.From<TTextAlign>(TTextAlign.Center);
+  MenuItem24.StylesData['bold.TextSettings.HorzAlign'] :=
+    TValue.From<TTextAlign>(TTextAlign.Center);
+  MenuItem24.StylesData['italic.TextSettings.HorzAlign'] :=
+    TValue.From<TTextAlign>(TTextAlign.Center);
+  MenuItem24.StylesData['underline.TextSettings.HorzAlign'] :=
+    TValue.From<TTextAlign>(TTextAlign.Center);
 
   for var i := 0 to VertScrollBoxCarusel.Content.ControlsCount - 1 do
     if VertScrollBoxCarusel.Content.Controls[i] is TButton then
-      (VertScrollBoxCarusel.Content.Controls[i] as TButton).Text := ColorListBox1.ListItems[i].Text;
+      (VertScrollBoxCarusel.Content.Controls[i] as TButton).Text :=
+        ColorListBox1.ListItems[i].Text;
 
   for var i := 0 to HorzScrollBoxSpin.Content.ControlsCount - 1 do
     if HorzScrollBoxSpin.Content.Controls[i] is TButton then
-      (HorzScrollBoxSpin.Content.Controls[i] as TButton).Text := ColorListBox1.ListItems[i].Text;
+      (HorzScrollBoxSpin.Content.Controls[i] as TButton).Text :=
+        ColorListBox1.ListItems[i].Text;
   TabViewTest;
 
-  Button15.StylesData['arrow.OnClick'] := TValue.From<TNotifyEvent>(FOnButton15SplitClick);
+  Button15.StylesData['arrow.OnClick'] := TValue.From<TNotifyEvent>
+    (FOnButton15SplitClick);
 
   TabControlMain.ActiveTab := TabItemButtons;
   TabControlMain.ActiveTab := TabItemHome;
@@ -2383,7 +2529,8 @@ end;
 
 procedure TFormMain.FOnButton15SplitClick(Sender: TObject);
 begin
-  var Pt := Button15.AbsoluteRect.TopLeft;
+  var
+    Pt := Button15.AbsoluteRect.TopLeft;
   Pt := ClientToScreen(Pt);
   PopupMenu1.Popup(Pt.X + 8, Pt.Y + Button15.Height + 16);
 end;
@@ -2404,6 +2551,16 @@ begin
       LayoutContent.Visible := True;
       LayoutLauncher.Visible := False;
     end);
+end;
+
+procedure TFormMain.TrackBar1Change(Sender: TObject);
+begin
+{$IFDEF MSWINDOWS}
+  TWinWindowHandle(Handle).SetForcedScale(TrackBar1.Value);
+
+  RecreateResources;
+  Realign;
+{$ENDIF}
 end;
 
 procedure TFormMain.TrackBarLineSizeChange(Sender: TObject);

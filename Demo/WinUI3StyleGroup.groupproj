@@ -6,7 +6,7 @@
         <Projects Include="WinUI3Style.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\ResizeDemo\Project64.dproj">
+        <Projects Include="SimpleDemo.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -26,23 +26,23 @@
     <Target Name="WinUI3Style:Make">
         <MSBuild Projects="WinUI3Style.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Project64">
-        <MSBuild Projects="..\ResizeDemo\Project64.dproj"/>
+    <Target Name="SimpleDemo">
+        <MSBuild Projects="SimpleDemo.dproj"/>
     </Target>
-    <Target Name="Project64:Clean">
-        <MSBuild Projects="..\ResizeDemo\Project64.dproj" Targets="Clean"/>
+    <Target Name="SimpleDemo:Clean">
+        <MSBuild Projects="SimpleDemo.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="Project64:Make">
-        <MSBuild Projects="..\ResizeDemo\Project64.dproj" Targets="Make"/>
+    <Target Name="SimpleDemo:Make">
+        <MSBuild Projects="SimpleDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="WinUI3Style;Project64"/>
+        <CallTarget Targets="WinUI3Style;SimpleDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="WinUI3Style:Clean;Project64:Clean"/>
+        <CallTarget Targets="WinUI3Style:Clean;SimpleDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="WinUI3Style:Make;Project64:Make"/>
+        <CallTarget Targets="WinUI3Style:Make;SimpleDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

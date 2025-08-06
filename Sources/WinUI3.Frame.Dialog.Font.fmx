@@ -1,0 +1,132 @@
+object FrameDialogFont: TFrameDialogFont
+  Size.Width = 480.000000000000000000
+  Size.Height = 330.000000000000000000
+  Size.PlatformDefault = False
+  object ListBoxFonts: TListBox
+    Position.X = 8.000000000000000000
+    Position.Y = 35.000000000000000000
+    Size.Width = 225.000000000000000000
+    Size.Height = 287.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    OnApplyStyleLookup = ListBoxFontsApplyStyleLookup
+    DisableFocusEffect = True
+    ItemHeight = 30.000000000000000000
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    Sorted = True
+    OnChange = ListBoxFontsChange
+    Viewport.Width = 221.000000000000000000
+    Viewport.Height = 261.000000000000000000
+    object SearchBoxFont: TSearchBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Top
+      TabOrder = 0
+      Size.Width = 221.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object CheckBoxBold: TCheckBox
+    Position.X = 241.000000000000000000
+    Position.Y = 35.000000000000000000
+    TabOrder = 4
+    Text = 'Bold'
+    OnChange = CheckBoxBoldChange
+  end
+  object CheckBoxItalic: TCheckBox
+    Position.X = 241.000000000000000000
+    Position.Y = 62.000000000000000000
+    TabOrder = 3
+    Text = 'Italic'
+    OnChange = CheckBoxBoldChange
+  end
+  object CheckBoxUnderline: TCheckBox
+    Position.X = 241.000000000000000000
+    Position.Y = 89.000000000000000000
+    TabOrder = 2
+    Text = 'Underline'
+    OnChange = CheckBoxBoldChange
+  end
+  object CheckBoxStrikeout: TCheckBox
+    Position.X = 241.000000000000000000
+    Position.Y = 116.000000000000000000
+    TabOrder = 1
+    Text = 'Strikeout'
+    OnChange = CheckBoxBoldChange
+  end
+  object SpinBoxFontSize: TSpinBox
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 5
+    Cursor = crIBeam
+    Min = 1.000000000000000000
+    Max = 1000.000000000000000000
+    Value = 8.000000000000000000
+    Position.X = 369.000000000000000000
+    Position.Y = 35.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object LabelFontSize: TLabel
+    Position.X = 369.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Size'
+    TabOrder = 9
+  end
+  object Label1: TLabel
+    Position.X = 241.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Style'
+    TabOrder = 8
+  end
+  object Label2: TLabel
+    Position.X = 8.000000000000000000
+    Position.Y = 10.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Family'
+    TabOrder = 6
+  end
+  object Panel1: TPanel
+    Padding.Left = 10.000000000000000000
+    Padding.Top = 10.000000000000000000
+    Padding.Right = 10.000000000000000000
+    Padding.Bottom = 10.000000000000000000
+    Position.X = 241.000000000000000000
+    Position.Y = 168.000000000000000000
+    Size.Width = 228.000000000000000000
+    Size.Height = 154.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 10
+    object LabelSample: TLabel
+      Align = Client
+      StyledSettings = [Size, FontColor]
+      Size.Width = 208.000000000000000000
+      Size.Height = 134.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.HorzAlign = Center
+      Text = 
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'#13#10#13#10'1,' +
+        ' 2, 3, 4, 5, 6, 7, 8, 9, 0'#13#10'!@#$%^&*()"'#8470';:?'
+      TabOrder = 0
+    end
+  end
+  object Label4: TLabel
+    Position.X = 241.000000000000000000
+    Position.Y = 143.000000000000000000
+    Size.Width = 100.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Sample'
+    TabOrder = 7
+  end
+end

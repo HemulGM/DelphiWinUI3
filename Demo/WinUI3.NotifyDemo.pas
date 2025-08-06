@@ -28,11 +28,15 @@ uses
 constructor TNotifyDemo.Create(AOwner: TComponent);
 begin
   inherited;
-  FNotifyManager := TNotificationManager.Create(Self, 'WinUI3.Delphi.Test');
+  try
+    FNotifyManager := TNotificationManager.Create(Self, 'WinUI3.Delphi.Test');
 
-  FNotifyManager.ApplicationName := 'WinUI 3 Demo Application';
-  FNotifyManager.ShowInSettings := True;
-  FNotifyManager.ApplicationIcon := TPath.Combine(TPath.GetLibraryPath, 'Assets\Header-WinUIGallery.png');
+    FNotifyManager.ApplicationName := 'WinUI 3 Demo Application';
+    FNotifyManager.ShowInSettings := True;
+    FNotifyManager.ApplicationIcon := TPath.Combine(TPath.GetLibraryPath, 'Assets\Header-WinUIGallery.png');
+  except
+    FNotifyManager := nil;
+  end;
 end;
 
 procedure TNotifyDemo.NotifActivated(Sender: TNotification; Arguments: string; UserInput: TUserInputMap);

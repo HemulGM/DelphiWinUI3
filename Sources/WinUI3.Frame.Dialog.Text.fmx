@@ -1,0 +1,24 @@
+object FrameDialogText: TFrameDialogText
+  Size.Width = 320.000000000000000000
+  Size.Height = 139.000000000000000000
+  Size.PlatformDefault = False
+  object LabelBody: TLabel
+    Align = MostTop
+    AutoSize = True
+    Size.Width = 320.000000000000000000
+    Size.Height = 128.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.VertAlign = Leading
+    Text = 
+      'This is body text. Windows 11 marks a visual evolution of the op' +
+      'erating system. We have evolved our design language alongside wi' +
+      'th Fluent to create a design which is human, universal and truly' +
+      ' feels like Windows. '#10#10'The design principles below have guided u' +
+      's throughout the journey of making Windows the best-in-class imp' +
+      'lementation of Fluent.'
+    TabOrder = 0
+    TabStop = False
+    OnResize = LabelBodyResize
+    OnResized = LabelBodyResize
+  end
+end

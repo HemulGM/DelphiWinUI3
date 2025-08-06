@@ -86,6 +86,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 108.000000000000000000
             Size.Height = 48.000000000000000000
@@ -100,6 +101,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 113.000000000000000000
             Size.Height = 48.000000000000000000
@@ -114,6 +116,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 86.000000000000000000
             Size.Height = 48.000000000000000000
@@ -128,6 +131,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = True
             Size.Width = 101.000000000000000000
             Size.Height = 48.000000000000000000
@@ -174,6 +178,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button2: TButton
                   StyledSettings = [FontColor]
@@ -190,6 +195,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button3: TButton
                   StyledSettings = [FontColor]
@@ -206,6 +212,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button4: TButton
                   StyledSettings = [FontColor]
@@ -222,6 +229,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button5: TButton
                   StyledSettings = [FontColor]
@@ -238,6 +246,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button6: TButton
                   StyledSettings = [FontColor]
@@ -254,6 +263,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button7: TButton
                   Enabled = False
@@ -271,6 +281,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button8: TButton
                   StyledSettings = [FontColor]
@@ -287,6 +298,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button9: TButton
                   StyledSettings = [FontColor]
@@ -303,6 +315,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button10: TButton
                   StyledSettings = [FontColor]
@@ -319,6 +332,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button11: TButton
                   StyledSettings = [FontColor]
@@ -335,6 +349,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button12: TButton
                   StyledSettings = [FontColor]
@@ -351,6 +366,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button13: TButton
                   StyledSettings = [FontColor]
@@ -367,6 +383,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button14: TButton
                   StyledSettings = [FontColor]
@@ -383,6 +400,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
                 object Button15: TButton
                   StyledSettings = [FontColor]
@@ -399,6 +417,7 @@ object FormGallery: TFormGallery
                   TextSettings.Font.StyleExt = {00060000000000000004000000}
                   TextSettings.HorzAlign = Leading
                   TextSettings.VertAlign = Trailing
+                  TextSettings.Trimming = None
                 end
               end
             end
@@ -429,6 +448,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 112.000000000000000000
             Size.Height = 48.000000000000000000
@@ -443,6 +463,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 129.000000000000000000
             Size.Height = 48.000000000000000000
@@ -457,6 +478,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 116.000000000000000000
             Size.Height = 48.000000000000000000
@@ -471,6 +493,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 111.000000000000000000
             Size.Height = 48.000000000000000000
@@ -485,6 +508,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 109.000000000000000000
             Size.Height = 48.000000000000000000
@@ -499,6 +523,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 112.000000000000000000
             Size.Height = 48.000000000000000000
@@ -513,6 +538,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 121.000000000000000000
             Size.Height = 48.000000000000000000
@@ -527,6 +553,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 94.000000000000000000
             Size.Height = 48.000000000000000000
@@ -541,6 +568,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 104.000000000000000000
             Size.Height = 48.000000000000000000
@@ -555,6 +583,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 108.000000000000000000
             Size.Height = 48.000000000000000000
@@ -569,6 +598,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 105.000000000000000000
             Size.Height = 48.000000000000000000
@@ -583,6 +613,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 114.000000000000000000
             Size.Height = 48.000000000000000000
@@ -597,6 +628,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 95.000000000000000000
             Size.Height = 48.000000000000000000
@@ -611,6 +643,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 147.000000000000000000
             Size.Height = 48.000000000000000000
@@ -625,6 +658,7 @@ object FormGallery: TFormGallery
             CustomIcon = <
               item
               end>
+            TextSettings.Trimming = None
             IsSelected = False
             Size.Width = 120.000000000000000000
             Size.Height = 48.000000000000000000
@@ -1550,7 +1584,7 @@ object FormGallery: TFormGallery
         Align = Top
         Position.Y = 1.000000000000000000
         Size.Width = 312.000000000000000000
-        Size.Height = 40.000000000000000000
+        Size.Height = 34.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'buttonstyle_multiview'
         TabOrder = 0
@@ -1578,8 +1612,9 @@ object FormGallery: TFormGallery
       object ButtonMenu: TButton
         Align = Left
         StyledSettings = [Family, Style, FontColor]
-        Size.Width = 40.000000000000000000
-        Size.Height = 40.000000000000000000
+        Position.Y = 3.000000000000000000
+        Size.Width = 38.000000000000000000
+        Size.Height = 34.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'buttonstyle_multiview_drawer'
         TabOrder = 0
@@ -1631,8 +1666,10 @@ object FormGallery: TFormGallery
         TextPrompt = 'Search'
         Visible = False
         object SearchEditButton1: TSearchEditButton
+          Touch.InteractiveGestures = [LongTap]
           CanFocus = False
           Cursor = crArrow
+          TextSettings.Trimming = None
           Size.Width = 28.000000000000000000
           Size.Height = 28.000000000000000000
           Size.PlatformDefault = False
@@ -1653,7 +1690,7 @@ object FormGallery: TFormGallery
         StaysPressed = True
         Align = Top
         Size.Width = 312.000000000000000000
-        Size.Height = 40.000000000000000000
+        Size.Height = 34.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'buttonstyle_multiview'
         TabOrder = 0
@@ -1665,9 +1702,9 @@ object FormGallery: TFormGallery
       object ButtonAll: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 80.000000000000000000
+        Position.Y = 74.000000000000000000
         Size.Width = 312.000000000000000000
-        Size.Height = 40.000000000000000000
+        Size.Height = 34.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'buttonstyle_multiview'
         TabOrder = 2
@@ -1679,7 +1716,7 @@ object FormGallery: TFormGallery
       object ButtonDateTime: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 809.000000000000000000
+        Position.Y = 797.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1693,7 +1730,7 @@ object FormGallery: TFormGallery
       object ButtonCollections: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 769.000000000000000000
+        Position.Y = 757.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1708,7 +1745,7 @@ object FormGallery: TFormGallery
         Align = Top
         Margins.Top = 2.000000000000000000
         Margins.Bottom = 2.000000000000000000
-        Position.Y = 122.000000000000000000
+        Position.Y = 110.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 1.000000000000000000
         Size.PlatformDefault = False
@@ -1718,7 +1755,7 @@ object FormGallery: TFormGallery
       object ButtonDialogs: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 849.000000000000000000
+        Position.Y = 837.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1732,7 +1769,7 @@ object FormGallery: TFormGallery
       object ButtonLayout: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 889.000000000000000000
+        Position.Y = 877.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1746,7 +1783,7 @@ object FormGallery: TFormGallery
       object ButtonMedia: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 929.000000000000000000
+        Position.Y = 917.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1760,7 +1797,7 @@ object FormGallery: TFormGallery
       object ButtonMenus: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 969.000000000000000000
+        Position.Y = 957.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1774,7 +1811,7 @@ object FormGallery: TFormGallery
       object ButtonMotions: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 1009.000000000000000000
+        Position.Y = 997.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1788,7 +1825,7 @@ object FormGallery: TFormGallery
       object ButtonNav: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 1049.000000000000000000
+        Position.Y = 1037.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1802,7 +1839,7 @@ object FormGallery: TFormGallery
       object ButtonScrolling: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 1089.000000000000000000
+        Position.Y = 1077.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1816,7 +1853,7 @@ object FormGallery: TFormGallery
       object ButtonStatusInfo: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 1129.000000000000000000
+        Position.Y = 1117.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1830,7 +1867,7 @@ object FormGallery: TFormGallery
       object ButtonStyles: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 1169.000000000000000000
+        Position.Y = 1157.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1844,7 +1881,7 @@ object FormGallery: TFormGallery
       object ButtonSystem: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 1209.000000000000000000
+        Position.Y = 1197.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1858,7 +1895,7 @@ object FormGallery: TFormGallery
       object ButtonText: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 1249.000000000000000000
+        Position.Y = 1237.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1872,7 +1909,7 @@ object FormGallery: TFormGallery
       object ButtonWindowing: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 1289.000000000000000000
+        Position.Y = 1277.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1886,7 +1923,7 @@ object FormGallery: TFormGallery
       object ButtonDesignGuid: TButton
         StaysPressed = True
         Align = Top
-        Position.Y = 40.000000000000000000
+        Position.Y = 34.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -1900,7 +1937,7 @@ object FormGallery: TFormGallery
       object LayoutBasic: TLayout
         Align = Top
         ClipChildren = True
-        Position.Y = 125.000000000000000000
+        Position.Y = 113.000000000000000000
         Size.Width = 312.000000000000000000
         Size.Height = 644.000000000000000000
         Size.PlatformDefault = False
@@ -1923,7 +1960,7 @@ object FormGallery: TFormGallery
           Align = Top
           Position.Y = 40.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 14
@@ -1935,9 +1972,9 @@ object FormGallery: TFormGallery
         object ButtonCheckBox: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 80.000000000000000000
+          Position.Y = 74.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 13
@@ -1949,9 +1986,9 @@ object FormGallery: TFormGallery
         object ButtonColorPicker: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 120.000000000000000000
+          Position.Y = 108.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 12
@@ -1963,9 +2000,9 @@ object FormGallery: TFormGallery
         object ButtonComboBox: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 160.000000000000000000
+          Position.Y = 142.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 11
@@ -1977,9 +2014,9 @@ object FormGallery: TFormGallery
         object ButtonDropDownButton: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 200.000000000000000000
+          Position.Y = 176.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 10
@@ -1991,9 +2028,9 @@ object FormGallery: TFormGallery
         object ButtonHyperlinkButton: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 240.000000000000000000
+          Position.Y = 210.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 9
@@ -2006,9 +2043,9 @@ object FormGallery: TFormGallery
           StaysPressed = True
           Align = Top
           Enabled = False
-          Position.Y = 280.000000000000000000
+          Position.Y = 244.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 8
@@ -2020,9 +2057,9 @@ object FormGallery: TFormGallery
         object ButtonRadioButton: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 320.000000000000000000
+          Position.Y = 278.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 7
@@ -2034,9 +2071,9 @@ object FormGallery: TFormGallery
         object ButtonRatingControl: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 360.000000000000000000
+          Position.Y = 312.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 6
@@ -2048,7 +2085,7 @@ object FormGallery: TFormGallery
         object ButtonToggleSplitButton: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 560.000000000000000000
+          Position.Y = 488.000000000000000000
           Size.Width = 312.000000000000000000
           Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
@@ -2062,7 +2099,7 @@ object FormGallery: TFormGallery
         object ButtonToggleButton: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 520.000000000000000000
+          Position.Y = 448.000000000000000000
           Size.Width = 312.000000000000000000
           Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
@@ -2076,9 +2113,9 @@ object FormGallery: TFormGallery
         object ButtonSplitButton: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 480.000000000000000000
+          Position.Y = 414.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 2
@@ -2090,9 +2127,9 @@ object FormGallery: TFormGallery
         object ButtonSlider: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 440.000000000000000000
+          Position.Y = 380.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 1
@@ -2104,9 +2141,9 @@ object FormGallery: TFormGallery
         object ButtonRepeatButton: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 400.000000000000000000
+          Position.Y = 346.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 0
@@ -2118,7 +2155,7 @@ object FormGallery: TFormGallery
         object ButtonToggleSwitch: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 600.000000000000000000
+          Position.Y = 528.000000000000000000
           Size.Width = 312.000000000000000000
           Size.Height = 40.000000000000000000
           Size.PlatformDefault = False
