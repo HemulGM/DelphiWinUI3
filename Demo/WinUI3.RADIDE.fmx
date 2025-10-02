@@ -3230,8 +3230,8 @@ object FormIDE: TFormIDE
               Size.PlatformDefault = False
               TabOrder = 0
               OnPresentationNameChoosing = Memo2PresentationNameChoosing
-              Viewport.Width = 615.000000000000000000
-              Viewport.Height = 547.000000000000000000
+              Viewport.Width = 645.000000000000000000
+              Viewport.Height = 571.000000000000000000
             end
           end
           object TabItem2: TTabItem
@@ -3370,8 +3370,8 @@ object FormIDE: TFormIDE
               Size.Height = 571.000000000000000000
               Size.PlatformDefault = False
               TabOrder = 0
-              Viewport.Width = 615.000000000000000000
-              Viewport.Height = 547.000000000000000000
+              Viewport.Width = 645.000000000000000000
+              Viewport.Height = 571.000000000000000000
             end
           end
           object TabItem3: TTabItem

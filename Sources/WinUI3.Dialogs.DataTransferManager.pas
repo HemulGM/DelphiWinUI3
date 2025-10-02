@@ -15,7 +15,7 @@ type
   {$IFDEF MSWINDOWS}
   TShareContract = class(System.Win.ShareContract.TShareContract)
     type
-      TDataTransferEventHandler = class(TInspectableObject, TypedEventHandler_2__IDataTransferManager__IDataRequestedEventArgs_Delegate_Base, TypedEventHandler_2__IDataTransferManager__IDataRequestedEventArgs)
+      TDataTransferEventHandler = class(TInspectableObject, TypedEventHandler_2__IDataTransferManager__IDataRequestedEventArgs)
       private
         [Weak]
         FOwner: TShareContract;

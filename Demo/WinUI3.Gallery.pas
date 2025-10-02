@@ -160,7 +160,7 @@ var
 implementation
 
 uses
-  DelphiWindowStyle.FMX, System.Math;
+  DelphiWindowStyle.FMX, System.Math, FMX.Platform;
 
 {$R *.fmx}
 
@@ -268,6 +268,11 @@ end;
 
 procedure TFormGallery.FormCreate(Sender: TObject);
 begin
+  StyleBook := FormMain.StyleBook;
+  if FormMain.IsDark then
+    OverrideThemeKind := TSystemThemeKind.Dark
+  else
+    OverrideThemeKind := TSystemThemeKind.Light;
   FNavigation := TList<TNavigationItem>.Create;
 
   VertScrollBoxMenu.AniCalculations.Animation := True;

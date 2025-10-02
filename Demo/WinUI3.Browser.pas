@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, WinUI3.Form,
   FMX.TabControl, FMX.Layouts, FMX.Controls.Presentation, FMX.StdCtrls,
-  FMX.WebBrowser, FMX.Edit;
+  FMX.WebBrowser, FMX.Edit, DelphiWindowStyle.FMX;
 
 type
   TFormBrowser = class(TWinUIForm)
@@ -98,6 +98,11 @@ end;
 
 procedure TFormBrowser.FormCreate(Sender: TObject);
 begin
+  StyleBook := FormMain.StyleBook;
+  if FormMain.IsDark then
+    OverrideThemeKind := TSystemThemeKind.Dark
+  else
+    OverrideThemeKind := TSystemThemeKind.Light;
   HorzScrollBoxTabs.AniCalculations.Animation := True;
   CaptionControls := [LayoutTitle, TabControlView];
   OffsetControls := [LayoutTitle, LayoutClient];

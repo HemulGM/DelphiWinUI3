@@ -1671,7 +1671,7 @@ object FormGallery: TFormGallery
           Cursor = crArrow
           TextSettings.Trimming = None
           Size.Width = 28.000000000000000000
-          Size.Height = 28.000000000000000000
+          Size.Height = 24.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
         end
@@ -2085,9 +2085,9 @@ object FormGallery: TFormGallery
         object ButtonToggleSplitButton: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 488.000000000000000000
+          Position.Y = 482.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 5
@@ -2101,7 +2101,7 @@ object FormGallery: TFormGallery
           Align = Top
           Position.Y = 448.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 3
@@ -2155,9 +2155,9 @@ object FormGallery: TFormGallery
         object ButtonToggleSwitch: TButton
           StaysPressed = True
           Align = Top
-          Position.Y = 528.000000000000000000
+          Position.Y = 516.000000000000000000
           Size.Width = 312.000000000000000000
-          Size.Height = 40.000000000000000000
+          Size.Height = 34.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'buttonstyle_multiview'
           TabOrder = 4

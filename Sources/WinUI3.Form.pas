@@ -8,10 +8,12 @@ uses
   {$IFDEF MSWINDOWS}
   Winapi.Windows, Winapi.Messages, FMX.Windows.Dispatch, FMX.Platform.Win,
   {$ENDIF}
-  FMX.PLatform, FMX.Ani, FMX.Filter.Effects, FMX.Effects, FMX.ActnList,
+  FMX.Platform, FMX.Ani, FMX.Filter.Effects, FMX.Effects, FMX.ActnList,
   DelphiWindowStyle.FMX;
 
 type
+  TSystemThemeKind = FMX.platform.TSystemThemeKind;
+
   TPopup = class(FMX.Controls.TPopup)
   end;
 
@@ -39,6 +41,9 @@ type
     FTitleControls: TArray<TControl>;
     FSystemThemeKind: TSystemThemeKind;
     FSystemAccentColor: TAlphaColor;
+    FOverrideThemeKind: TSystemThemeKind;
+    FAutoScrollToFocused: Boolean;
+    FFocusHighlight: Boolean;
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
     procedure SetFocusOpacity(const Value: Single);
@@ -47,11 +52,14 @@ type
     procedure SetFocusInflate(const Value: Single);
     procedure SetOffsetControls(const Value: TArray<TControl>);
     procedure SetTitleControls(const Value: TArray<TControl>);
+    procedure SetOverrideThemeKind(const Value: TSystemThemeKind);
+    procedure SetPropSystemBackdropType(const Value: TSystemBackdropType);
+    procedure SetAutoScrollToFocused(const Value: Boolean);
+    procedure SetFocusHighlight(const Value: Boolean);
   protected
     procedure PaintRects(const UpdateRects: array of TRectF); override;
     procedure CreateHandle; override;
   protected
-    function NotInitStyle: Boolean; virtual;
     procedure TimerHintCloseTimer(Sender: TObject); virtual;
     procedure TimerHintTimer(Sender: TObject); virtual;
     procedure FloatAnimationHintProcess(Sender: TObject); virtual;
@@ -63,6 +71,9 @@ type
     procedure WMNCCalcSize(var Message: TWMNCCalcSize); message WM_NCCALCSIZE;
     procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
     {$ENDIF}
+    procedure HookHints; virtual;
+  protected
+    function NotInitStyle: Boolean; virtual;
     procedure DoOnSettingChange; virtual;
   public
     procedure AfterConstruction; override;
@@ -71,11 +82,12 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   public
-    procedure HookHints; virtual;
     procedure BeginLauncher(Proc: TProc = nil); virtual;
     procedure EndLauncher(Proc: TProc = nil); virtual;
     property SystemAccentColor: TAlphaColor read FSystemAccentColor;
     property SystemThemeKind: TSystemThemeKind read FSystemThemeKind;
+    property OverrideThemeKind: TSystemThemeKind read FOverrideThemeKind write SetOverrideThemeKind;
+    property SystemBackdropType: TSystemBackdropType read FSystemBackdropType write SetPropSystemBackdropType;
     //
     /// <summary>
     /// Controls for drag form
@@ -89,7 +101,11 @@ type
     /// Control for form catpion text
     /// </summary>
     property TitleControls: TArray<TControl> read FTitleControls write SetTitleControls;
-    property HideTitleBar: Boolean read FHideTitleBar write SetHideTitleBar;
+    property HideTitleBar: Boolean read FHideTitleBar write SetHideTitleBar;  
+    /// <summary>
+    /// Enables/disables the highlight of the control in focus when using the keyboard (Tab)
+    /// </summary>
+    property FocusHighlight: Boolean read FFocusHighlight write SetFocusHighlight;
     property FocusStyle: TStrokeBrush read FFocusStyle;
     property FocusXRadius: Single read FFocusXRadius write SetFocusXRadius;
     property FocusYRadius: Single read FFocusYRadius write SetFocusYRadius;
@@ -97,12 +113,13 @@ type
     property FocusOpacity: Single read FFocusOpacity write SetFocusOpacity;
     property FocusCornerType: TCornerType read FFocusCornerType write SetFocusCornerType;
     property FocusInflate: Single read FFocusInflate write SetFocusInflate;
+    property AutoScrollToFocused: Boolean read FAutoScrollToFocused write SetAutoScrollToFocused;
   end;
 
 implementation
 
 uses
-  FMX.Menus, FMX.DateTimeCtrls, System.Messaging, System.Threading;
+  FMX.Menus, FMX.DateTimeCtrls, System.Messaging, System.Threading, FMX.Layouts;
 
 {$REGION 'WinAPI for no TitleBar'}
 {$IFDEF MSWINDOWS}
@@ -201,6 +218,11 @@ begin
   FFocusOpacity := 1;
   FFocusCornerType := TCornerType.Round;
 
+  //
+  FOverrideThemeKind := TSystemThemeKind.Unspecified;
+  FAutoScrollToFocused := True;
+  FFocusHighlight := True;
+
   // Read system style kind
   var SystemAppearanceService: IFMXSystemAppearanceService;
   if TPlatformServices.Current.SupportsPlatformService(IFMXSystemAppearanceService, SystemAppearanceService) then
@@ -255,7 +277,7 @@ begin
   // Style defaults
   FSystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
   inherited;
-  TAnimation.AniFrameRate := 120;
+  //TAnimation.AniFrameRate := 120;
 end;
 
 procedure TWinUIForm.CreateHandle;
@@ -274,7 +296,10 @@ end;
 
 procedure TWinUIForm.DoOnSettingChange;
 begin
-  SetWindowColorMode(FSystemThemeKind = TSystemThemeKind.Dark);
+  if FOverrideThemeKind <> TSystemThemeKind.Unspecified then
+    SetWindowColorMode(FOverrideThemeKind = TSystemThemeKind.Dark)
+  else
+    SetWindowColorMode(FSystemThemeKind = TSystemThemeKind.Dark);
   if SetSystemBackdropType(FSystemBackdropType) then
   begin
     Fill.Kind := TBrushKind.Solid;
@@ -426,6 +451,13 @@ end;
 
 procedure TWinUIForm.KeyDown(var Key: Word; var KeyChar: System.WideChar; Shift: TShiftState);
 begin
+  if not FFocusHighlight then
+  begin
+    inherited;
+    Exit;
+  end;
+
+  var DoScroll := False;
   if Key = vkTab then
   begin
     if not FModeFocus then
@@ -436,9 +468,27 @@ begin
         Exit;
     end
     else
+    begin
+      DoScroll := True;
       Invalidate;
+    end;
   end;
   inherited;
+  if DoScroll and FAutoScrollToFocused then
+    if Assigned(Focused) and (Focused is TControl) and Assigned(TControl(Focused).Parent) then
+      if TControl(Focused).Parent is TScrollContent then
+      begin
+        var Control := TControl(Focused);
+        var ScrollBox := TScrollContent(Control.Parent).ScrollBox;
+        var NewViewPos: TPointF := ScrollBox.ViewportPosition;
+
+        if (Control.Position.Y < ScrollBox.ViewportPosition.Y) or (Control.Position.Y + Control.Height > ScrollBox.BoundsRect.Bottom) then
+          NewViewPos.Y := Control.Position.Y;
+        if (Control.Position.X < ScrollBox.ViewportPosition.X) or (Control.Position.X + Control.Width > ScrollBox.BoundsRect.Right) then
+          NewViewPos.X := Control.Position.X;
+
+        ScrollBox.ViewportPosition := NewViewPos;
+      end;
 end;
 
 procedure TWinUIForm.MouseDown(Button: TMouseButton; Shift: TShiftState; AFormX, AFormY: Single);
@@ -455,38 +505,45 @@ end;
 
 procedure TWinUIForm.PaintRects(const UpdateRects: array of TRectF);
 
-  function IsControlInput(Control: IControl): Boolean;
+  function IsControlHighlight(Control: IControl): Boolean;
   begin
+    if not Assigned(Focused) then
+      Exit(False);   
+    if not (Control is TControl) then
+      Exit(False); 
     if Control is TCustomEdit then
-      Exit(True);
+      Exit(False);
     if Control is TCustomMemo then
-      Exit(True);
+      Exit(False);
     if Control is TCustomDateTimeEdit then
-      Exit(True);
-    Result := False;
+      Exit(False);
+    Result := True;
   end;
 
-begin
-  // draw all form if focus mode is on
-  if FModeFocus then
-    inherited PaintRects(ClientRect)
+begin    
+  if FFocusHighlight and FModeFocus and IsControlHighlight(Focused) then
+  begin
+    var FUpdateRects := [ClientRect];
+    Canvas.BeginScene(@FUpdateRects, ContextHandle);
+    try                         
+      // draw all form if focus mode is on
+      inherited PaintRects(FUpdateRects);
+      
+      var R := TControl(Focused).AbsoluteRect;
+      Canvas.Stroke.Assign(FFocusStyle);
+      R.Inflate(FFocusInflate, FFocusInflate);
+      Canvas.DrawRect(R, FFocusXRadius, FFocusYRadius, FFocusCorners, FFocusOpacity, FFocusCornerType);
+    finally
+      Canvas.EndScene;
+    end;
+  end
   else
     inherited;
-  if FModeFocus and Assigned(Focused) then
-  begin
-    if (Focused is TControl) and not IsControlInput(Focused) then
-    begin
-      var R := TControl(Focused).AbsoluteRect;
-      Canvas.BeginScene;
-      try
-        Canvas.Stroke.Assign(FFocusStyle);
-        R.Inflate(FFocusInflate, FFocusInflate);
-        Canvas.DrawRect(R, FFocusXRadius, FFocusYRadius, FFocusCorners, FFocusOpacity, FFocusCornerType);
-      finally
-        Canvas.EndScene;
-      end;
-    end;
-  end;
+end;
+
+procedure TWinUIForm.SetAutoScrollToFocused(const Value: Boolean);
+begin
+  FAutoScrollToFocused := Value;
 end;
 
 procedure TWinUIForm.SetCaptionControls(const Value: TArray<TControl>);
@@ -502,6 +559,11 @@ end;
 procedure TWinUIForm.SetFocusCornerType(const Value: TCornerType);
 begin
   FFocusCornerType := Value;
+end;
+
+procedure TWinUIForm.SetFocusHighlight(const Value: Boolean);
+begin
+  FFocusHighlight := Value;
 end;
 
 procedure TWinUIForm.SetFocusInflate(const Value: Single);
@@ -536,6 +598,16 @@ end;
 procedure TWinUIForm.SetOffsetControls(const Value: TArray<TControl>);
 begin
   FOffsetControls := Value;
+end;
+
+procedure TWinUIForm.SetOverrideThemeKind(const Value: TSystemThemeKind);
+begin
+  FOverrideThemeKind := Value;
+end;
+
+procedure TWinUIForm.SetPropSystemBackdropType(const Value: TSystemBackdropType);
+begin
+  FSystemBackdropType := Value;
 end;
 
 procedure TWinUIForm.SetTitleControls(const Value: TArray<TControl>);

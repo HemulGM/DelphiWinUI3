@@ -8,7 +8,7 @@ uses
   FMX.Menus, FMX.Layouts, FMX.TabControl, FMX.ExtCtrls, FMX.StdCtrls,
   FMX.ListBox, FMX.TreeView, FMX.Controls.Presentation, FMX.Memo.Types,
   FMX.ScrollBox, FMX.Memo, FMX.Edit, FMX.ComboEdit, FMX.Objects,
-  System.ImageList, FMX.ImgList, FMX.RichEdit.Style;
+  System.ImageList, FMX.ImgList, FMX.RichEdit.Style, DelphiWindowStyle.FMX;
 
 type
   TFormIDE = class(TWinUIForm)
@@ -198,7 +198,7 @@ var
 implementation
 
 uses
-  WinUI3.Main;
+  WinUI3.Main, FMX.Platform;
 
 {$R *.fmx}
 
@@ -209,6 +209,11 @@ end;
 
 procedure TFormIDE.FormCreate(Sender: TObject);
 begin
+  StyleBook := FormMain.StyleBook;
+  if FormMain.IsDark then
+    OverrideThemeKind := TSystemThemeKind.Dark
+  else
+    OverrideThemeKind := TSystemThemeKind.Light;
   (Memo2.Presentation as TRichEditStyled).SetCodeSyntaxName('pascal', Memo2.Font, Memo2.FontColor);
   PlotGrid2.CanFocus := True;
   Selection2.CanFocus := True;

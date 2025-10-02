@@ -2,7 +2,7 @@
 {                                                       }
 {              Delphi FireMonkey Platform               }
 {                                                       }
-{ Copyright(c) 2011-2024 Embarcadero Technologies, Inc. }
+{ Copyright(c) 2011-2025 Embarcadero Technologies, Inc. }
 {              All rights reserved                      }
 {                                                       }
 {*******************************************************}
@@ -82,6 +82,9 @@ type
   ///  main menu, menu bar, popup menu.
   /// </summary>
   TMenuItem = class(TTextControl, IItemsContainer, INativeControl, IGroupName, IGlyph, IKeyShortcut, IIsChecked)
+  const
+    DefaultSeparatorHeight = 8;
+    DefaultHeight = 23;
   private
     FContent: TContent;
     FNoItemsContent: TFmxObject;
@@ -119,6 +122,7 @@ type
     FImageOffset: Single;
     FIsMenuBarItem: Boolean;
     FIsMenuBarItemCached: Boolean;
+    FStyledItemHeight: Single;
     procedure SetIsSelected(const Value: Boolean);
     function GetMenuView: IMenuView;
     procedure DoPopupTimer(Sender: TObject);
@@ -237,6 +241,7 @@ type
     property Images: TCustomImageList read GetImages;
   published
     property Action;
+    property AutoTranslate default False;
     property Bitmap: TBitmap read FBitmap write SetBitmap;
     property Enabled;
     property Locked;
@@ -265,8 +270,8 @@ type
 
 { TPopupMenu }
    ///<summary> This class implement a popup type menu. To open this popupmenu you
-   /// to specify the call Popup(X, Y) where X, Y are the top left coordinates of the 
-   /// menu placement rectangle. 
+   /// to specify the call Popup(X, Y) where X, Y are the top left coordinates of the
+   /// menu placement rectangle.
    ///</summary>
   [ComponentPlatformsAttribute(pfidWindows or pfidOSX or pfidLinux)]
   TPopupMenu = class(TCustomPopupMenu, IItemsContainer, IGlyph)
@@ -518,11 +523,11 @@ implementation
 uses
   System.SysConst, System.RTLConsts, System.SysUtils, System.Actions, System.Generics.Collections, System.Math,
   FMX.Consts, FMX.Dialogs, FMX.DialogService, FMX.Platform, FMX.Utils, FMX.AcceleratorKey, FMX.Styles,
-  DelphiWindowStyle.FMX, FMX.StyledContextMenu, WinUI3.Utils, FMX.Ani;
-
-const
-  DefaultMenuItemSeparatorHeight = 8;
-  DefaultMenuItemHeight = 23;
+  // HGM
+  DelphiWindowStyle.FMX,
+  WinUI3.Utils,
+  FMX.StyledContextMenu,
+  FMX.Ani;
 
 var
   GMainMenu: TFmxObject;
@@ -549,7 +554,7 @@ end;
 type
   TClickList = class (TComponent)
   public const
-    TimerInterval: Integer = 20;
+    TimerInterval: Integer = 40;
   private
     FMenuItemList: TList<Pointer>;
     FTimers: TList<TTimer>;
@@ -730,7 +735,7 @@ begin
     FDelay := SystemInfoSrv.GetMenuShowDelay;
   if FDelay <= 0 then
     FDelay := 200;
-  Interval := Max(FDelay div 20, 10);
+  Interval := Max(FDelay div 2, 10);
   OnTimer := ProcTimer;
 end;
 
@@ -1046,6 +1051,8 @@ begin
   inherited;
 end;
 
+// HGM Begin
+
 procedure AnimateMenu(Menu: TMenuView);
 begin
   //Menu.Opacity := 0;
@@ -1055,22 +1062,31 @@ begin
   //TAnimator.AnimateFloat(Menu, 'Opacity', 1);
 end;
 
+// HGM End
+
 type
   TPopupOfMenu = class(TPopup)
   protected
-    FClearBG: Boolean;
     procedure OnFormShow(Sender: TObject);
     function CreatePopupForm: TFmxObject; override;
+  // HGM Begin
+  protected
+    FClearBG: Boolean;
     constructor Create(AOwner: TComponent); override;
+  // HGM End
   end;
 
 { TPopupOfMenu }
 
+// HGM Begin
+
 constructor TPopupOfMenu.Create(AOwner: TComponent);
 begin
   inherited;
-  FClearBG := False;// IsWin11OrNewest;
+  FClearBG := IsWin11OrNewest;
 end;
+
+// HGM End
 
 function TPopupOfMenu.CreatePopupForm: TFmxObject;
 var
@@ -1111,7 +1127,7 @@ begin
     if not FClearBG then
       TCustomPopupForm(Sender).Padding.Rect := TRectF.Create(12, 12, 12, 12);
   end;
-  TCustomPopupForm(Sender).BringToFront;
+  //TCustomPopupForm(Sender).BringToFront;
   TCustomPopupForm(Sender).MouseCapture;
 end;
 
@@ -1551,6 +1567,8 @@ begin
 end;
 
 procedure TMenuItem.ApplyStyle;
+var
+  HeightObject: TStyleTag;
 begin
   inherited;
   FIsMenuBarItemCached := False;
@@ -1593,12 +1611,15 @@ begin
     FOldSubmarkVisible := FSubmarkObject.Visible;
     FSubmarkObject.Visible := False;
   end;
+  if FindStyleResource<TStyleTag>('height',  HeightObject) then
+    FStyledItemHeight := HeightObject.TagFloat;
   ImagesChanged;
 end;
 
 procedure TMenuItem.FreeStyle;
 begin
   inherited;
+  FStyledItemHeight := 0;
   FIsMenuBarItemCached := False;
   FShown := False;
   StopAutopopupMenuTimer;
@@ -1687,25 +1708,15 @@ begin
 end;
 
 function TMenuItem.CalcRenderSize: TPointF;
-
-  function GetBasicItemHeight: Single;
-  var
-    HeightObject: TStyleTag;
-  begin
-    if FindStyleResource<TStyleTag>('height',  HeightObject) then
-      Result := HeightObject.TagFloat
-    else if IsSeparator then
-      Result := DefaultMenuItemSeparatorHeight
-    else
-      Result := DefaultMenuItemHeight;
-  end;
-
 var
   C: TCanvas;
 begin
   if IsSeparator then
   begin
-    Result := TPointF.Create(0, GetBasicItemHeight);
+    if IsZero(FStyledItemHeight) then
+      Result := TPointF.Create(0, DefaultSeparatorHeight)
+    else
+      Result := TPointF.Create(0, FStyledItemHeight);
     Exit;
   end;
   if Canvas = nil then
@@ -1713,7 +1724,11 @@ begin
   else
     C := Canvas;
 
-  Result := TPointF.Create(0, GetBasicItemHeight);
+  if IsZero(FStyledItemHeight) then
+    Result := TPointF.Create(0, DefaultHeight)
+  else
+    Result := TPointF.Create(0, FStyledItemHeight);
+
   Result := CalcVisibleObjectsItemSize(C, Result);
 end;
 
@@ -1746,7 +1761,7 @@ function TMenuItem.CalcVisibleObjectsItemSize(const ACanvas: TCanvas; APointF: T
 begin
   if IsSeparator then
   begin
-    Result := TPointF.Create(0, DefaultMenuItemSeparatorHeight);
+    Result := TPointF.Create(0, DefaultSeparatorHeight);
     FImageOffset := 0;
   end
   else
@@ -1804,6 +1819,7 @@ begin
     Exit;
   end;
   // HGM end
+
   if FClickImmediately then
   begin
     if not (ActionClient and (Action is TCustomAction) and (TCustomAction(Action).AutoCheck)) then
@@ -1901,26 +1917,36 @@ begin
         begin
           Item := TMenuItem(GetItem(0));
           Item.Parent := Menu;
+
+          // hgm
           LocalizeDefMenuItem(Item);
+          // hgm end
         end;
       finally
         Menu.EndUpdate;
       end;
+
+      // hgm
       if TPopupOfMenu(Popup).FClearBG then
         Menu.StylesData['bg.Opacity'] := 0.5;
       Popup.BorderWidth := 0;
+      // hgm end
+
       // calc size
       Popup.BoundsRect := TRectF.Create(0, 0, Menu.Width, Menu.Height);
+
       LOffset := Menu.ConvertLocalPointFrom(Menu.FContentLayout, TPointF.Zero);
       if not IsMenuBarItem then
       begin
         Popup.HorizontalOffset := -LOffset.X;
         Popup.VerticalOffset := -LOffset.Y;
+      // hgm
       end
       else
       begin
         Popup.HorizontalOffset := LOffset.X - 8;
         Popup.VerticalOffset := LOffset.Y;// + 10;
+      // hgm end
       end;
       Menu.Align := TAlignLayout.Client;
       // show
@@ -2634,7 +2660,7 @@ begin
     inherited;
 end;
 
-procedure TPopupMenu.DoRemoveObject(const AObject: TFmxObject); 
+procedure TPopupMenu.DoRemoveObject(const AObject: TFmxObject);
 begin
   if AObject is TMenuItem then
     FContent.RemoveObject(AObject)
@@ -2705,7 +2731,11 @@ begin
         begin
           LTop := LTop + List[I].Margins.Top;
           List[I].Parent := Menu;
+
+          // hgm
           LocalizeDefMenuItem(List[I]);
+          // hgm end
+
           List[I].Position.Y := LTop;
           LTop := LTop + List[I].Margins.Bottom + List[I].Height;
         end;
@@ -2715,11 +2745,17 @@ begin
     finally
       Menu.EndUpdate;
     end;
+
+    // hgm
     if TPopupOfMenu(Popup).FClearBG then
       Menu.StylesData['bg.Opacity'] := 0.5;
     Popup.BorderWidth := 0;
+    Menu.Align := TAlignLayout.Client;
+    // hgm end
+
     // calc size
-    Popup.BoundsRect := TRectF.Create(0, 0, Menu.Width, Menu.Height + 10);
+    Popup.BoundsRect := TRectF.Create(0, 0, Menu.Width, Menu.Height);
+
     Popup.PlacementRectangle.Left := X;
     Popup.PlacementRectangle.Top := Y;
     Popup.Placement := TPlacement.Absolute;
@@ -2744,11 +2780,14 @@ begin
       Popup.PlacementRectangle.Right := Popup.PlacementRectangle.Left + Menu.Width * Popup.AbsoluteScale.X;
       Popup.PlacementRectangle.Bottom := Popup.PlacementRectangle.Top + Menu.Height * Popup.AbsoluteScale.Y;
     end;
-    Menu.Align := TAlignLayout.Client;
     // show
     Popup.Popup;
+
+    // hgm
     //anim
     AnimateMenu(Menu);
+    //hgm end
+
     // start loop
     if FMenuService <> nil then
       FMenuService.StartMenuLoop(Menu);
