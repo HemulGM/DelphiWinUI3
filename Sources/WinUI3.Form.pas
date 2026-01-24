@@ -70,6 +70,8 @@ type
     procedure InvalidateNonClient;
     procedure WMNCCalcSize(var Message: TWMNCCalcSize); message WM_NCCALCSIZE;
     procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
+    procedure WMNCPAINT(var Msg: TWMNCPaint); message WM_NCPAINT;
+    procedure WMNCACTIVATE(var Msg: TWMNCActivate); message WM_NCACTIVATE;
     {$ENDIF}
     procedure HookHints; virtual;
   protected
@@ -101,7 +103,7 @@ type
     /// Control for form catpion text
     /// </summary>
     property TitleControls: TArray<TControl> read FTitleControls write SetTitleControls;
-    property HideTitleBar: Boolean read FHideTitleBar write SetHideTitleBar;  
+    property HideTitleBar: Boolean read FHideTitleBar write SetHideTitleBar;
     /// <summary>
     /// Enables/disables the highlight of the control in focus when using the keyboard (Tab)
     /// </summary>
@@ -149,9 +151,21 @@ begin
       Item.Margins.Top := Offset;
 
     Inc(Message.CalcSize_Params.rgrc[0].Top, R.Top);
+    //Message.CalcSize_Params.rgrc[0].Top := 48;
+    Message.Result := 0;
   end
   else
     inherited;
+end;
+
+procedure TWinUIForm.WMNCPAINT(var Msg: TWMNCPaint);
+begin
+  //Msg.Result := 0;
+end;
+
+procedure TWinUIForm.WMNCACTIVATE(var Msg: TWMNCActivate);
+begin
+  //Msg.Result := 1;
 end;
 
 procedure TWinUIForm.WMNCHitTest(var Message: TWMNCHitTest);
@@ -167,12 +181,21 @@ begin
         var P := ScreenToClient(Screen.MousePos).Round;
         if P.Y > FCaptionControls[0].Height then
           Exit;
-        var R := TRect.Create(0, 0, 0, 0);
+        var R := TRect.Create(5, 5, 32, 32);
+        // sys menu
         if (P.X < R.Right) and ((WindowState = TWindowState.wsMaximized) or ((P.Y >= R.Top) and (P.Y < R.Bottom))) then
           Message.Result := HTSYSMENU
-        else if (P.Y < 4) and (BorderStyle in [TFmxFormBorderStyle.Sizeable, TFmxFormBorderStyle.SizeToolWin]) then
-          Message.Result := HTTOP
-        else
+        else  // top resize
+        if (P.Y < 5) and (BorderStyle in [TFmxFormBorderStyle.Sizeable, TFmxFormBorderStyle.SizeToolWin]) then
+        begin
+          if P.X < 5 then
+            Message.Result := HTTOPLEFT
+          else if P.X > ClientWidth - 5 then
+            Message.Result := HTTOPRIGHT
+          else
+            Message.Result := HTTOP;
+        end
+        else // drag
         begin
           var Obj := ObjectAtPoint(Screen.MousePos);
           if not Assigned(Obj) then
@@ -277,6 +300,17 @@ begin
   // Style defaults
   FSystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
   inherited;
+                      {
+  var hwnd: HWND;
+  // Получаем HWND окна
+  hwnd := FmxHandleToHWND(Handle);
+  if hwnd = 0 then Exit;
+
+  // Убираем системный заголовок
+  SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) and not (WS_CAPTION));
+
+  // Применяем изменения
+  SetWindowPos(hwnd, 0, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE or SWP_NOZORDER or SWP_FRAMECHANGED);  }
   //TAnimation.AniFrameRate := 120;
 end;
 
@@ -508,9 +542,9 @@ procedure TWinUIForm.PaintRects(const UpdateRects: array of TRectF);
   function IsControlHighlight(Control: IControl): Boolean;
   begin
     if not Assigned(Focused) then
-      Exit(False);   
+      Exit(False);
     if not (Control is TControl) then
-      Exit(False); 
+      Exit(False);
     if Control is TCustomEdit then
       Exit(False);
     if Control is TCustomMemo then
@@ -520,15 +554,15 @@ procedure TWinUIForm.PaintRects(const UpdateRects: array of TRectF);
     Result := True;
   end;
 
-begin    
+begin
   if FFocusHighlight and FModeFocus and IsControlHighlight(Focused) then
   begin
     var FUpdateRects := [ClientRect];
     Canvas.BeginScene(@FUpdateRects, ContextHandle);
-    try                         
+    try
       // draw all form if focus mode is on
       inherited PaintRects(FUpdateRects);
-      
+
       var R := TControl(Focused).AbsoluteRect;
       Canvas.Stroke.Assign(FFocusStyle);
       R.Inflate(FFocusInflate, FFocusInflate);

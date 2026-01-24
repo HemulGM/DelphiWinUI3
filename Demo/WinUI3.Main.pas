@@ -94,7 +94,7 @@ type
     VertScrollBoxMenu: TVertScrollBox;
     ButtonMenuLists: TButton;
     ButtonMenuSplitter: TButton;
-    Panel53: TPanel;
+    PanelContent: TPanel;
     ButtonMenuMenus: TButton;
     ButtonMenuMore: TButton;
     ButtonMenuGrid: TButton;
@@ -1182,6 +1182,14 @@ type
     Label124: TLabel;
     Layout11: TLayout;
     Panel61: TPanel;
+    CheckBoxCustomTitle: TCheckBox;
+    ButtonMenuStyle: TButton;
+    TabItemStyleBook: TTabItem;
+    TreeViewStyle: TTreeView;
+    ToolBar2: TToolBar;
+    SpeedButton7: TSpeedButton;
+    ListBoxStyles: TListBox;
+    ButtonApplyStyle: TSpeedButton;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1258,9 +1266,13 @@ type
     procedure TrackBar1Change(Sender: TObject);
     procedure ButtonDialogFontClick(Sender: TObject);
     procedure Button309Click(Sender: TObject);
+    procedure ButtonApplyStyleClick(Sender: TObject);
     procedure ButtonSettingsClick(Sender: TObject);
+    procedure CheckBoxCustomTitleChange(Sender: TObject);
     procedure ComboColorBoxThemeGradient1Change(Sender: TObject);
     procedure HorzScrollBoxFilterMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
+    procedure Memo1PresentationNameChoosing(Sender: TObject; var PresenterName: string);
+    procedure SpeedButton7Click(Sender: TObject);
   private
     {$IFDEF MSWINDOWS}
     FNotifyDemo: TNotifyDemo;
@@ -1296,7 +1308,7 @@ uses
   HGM.ColorUtils, System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery,
   WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic, WinUI3.RADIDE,
   WinUI3.Browser, FMX.MultiView.Types, WinUI3.MultiView.CustomPresentation,
-  FMX.Styles,
+  FMX.Styles, FMX.Memo.ExtStyle,
   {$IFDEF MSWINDOWS}
   FMX.Platform.Win,
   {$ENDIF}
@@ -1648,10 +1660,9 @@ var
 
 begin
   var Style := StyleBook.Style;
+  RemoveObject(Style);
   OldColorRec := TAlphaColorF.Create(OldColor);
   NewColorRec := TAlphaColorF.Create(NewColor);
-
-
 
   // Fix for progresscell style
   if ChangeProgress then
@@ -1859,7 +1870,7 @@ begin
     0:
       begin
         // mica
-        SetWindowCaptionColor(TColors.Null);
+        SetWindowCaptionColor(TColors.SysNone);
         if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
         begin
           Fill.Kind := TBrushKind.Solid;
@@ -1873,7 +1884,7 @@ begin
     1:
       begin
         // tabbed
-        SetWindowCaptionColor(TColors.Null);
+        SetWindowCaptionColor(TColors.SysNone);
         if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW) then
         begin
           Fill.Kind := TBrushKind.Solid;
@@ -1887,7 +1898,7 @@ begin
     2:
       begin
         // acrilyc
-        SetWindowCaptionColor(TColors.Null);
+        SetWindowCaptionColor(TColors.SysNone);
         if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW) then
         begin
           Fill.Kind := TBrushKind.Solid;
@@ -1901,11 +1912,15 @@ begin
     3:
       begin
         // none
-        SetWindowCaptionColor(TColors.Null);
-        SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE);
-        SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        Fill.Kind := TBrushKind.None;
-        Fill.Color := TAlphaColorRec.Null;
+        SetWindowCaptionColor(TColors.SysNone);
+        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE) then
+        begin
+          Fill.Kind := TBrushKind.None;
+          Fill.Color := TAlphaColorRec.Null;
+          SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+        end
+        else
+          Fill.Kind := TBrushKind.None;
         StyleLookup := 'backgroundstyle';
 
         // Custom bg colors
@@ -2150,6 +2165,11 @@ procedure TFormMain.ButtonSettingsClick(Sender: TObject);
 begin
   PopupTheme.PlacementTarget := ButtonSettings;
   PopupTheme.Popup;
+end;
+
+procedure TFormMain.CheckBoxCustomTitleChange(Sender: TObject);
+begin
+  HideTitleBar := CheckBoxCustomTitle.IsChecked;
 end;
 
 procedure TFormMain.ComboColorBoxThemeGradient1Change(Sender: TObject);
@@ -2458,6 +2478,8 @@ begin
 
   Button15.StylesData['arrow.OnClick'] := TValue.From<TNotifyEvent>(FOnButton15SplitClick);
 
+  TMemoExtStyled(Memo1.Presentation).SetSelectedTextColor(TAlphaColorRec.Red);
+
   TabControlMain.ActiveTab := TabItemButtons;
   TabControlMain.ActiveTab := TabItemHome;
   BeginLauncher(
@@ -2474,6 +2496,108 @@ begin
   var Pt := Button15.AbsoluteRect.TopLeft;
   Pt := ClientToScreen(Pt);
   PopupMenu1.Popup(Pt.X + 8, Pt.Y + Button15.Height + 16);
+end;
+
+procedure TFormMain.ButtonApplyStyleClick(Sender: TObject);
+
+  function AddNode(AParentNode: TTreeViewItem; const ATitle: string): TTreeViewItem;
+  begin
+    Result := TTreeViewItem.Create(Self);
+    if AParentNode = nil then
+      Result.Parent := TreeViewStyle
+    else
+      Result.Parent := AParentNode;
+    Result.Text := ATitle;
+  end;
+
+  procedure ReadStyleObject(AParentNode: TTreeViewItem; const AStyleObject: TFmxObject);
+  begin
+    for var ChildStyle in AStyleObject.Children do
+    begin
+      // Создаем узел дочернего объекта стиля
+      var ChildNode := AddNode(AParentNode, Format('%s: %s', [ChildStyle.StyleName, ChildStyle.ClassName]));
+      // Если у текущего объекта стиля есть дочерние, то читаем этот объект
+      if ChildStyle.ChildrenCount > 0 then
+        ReadStyleObject(ChildNode, ChildStyle);
+    end;
+  end;
+
+begin
+  TreeViewStyle.BeginUpdate;
+  try
+    TreeViewStyle.Clear;   //StyleBookWinUI3.Styles
+    var Style := TStyleCollectionItem(StyleBookWinUI3.Styles.FindItemID(ListBoxStyles.Selected.Tag)).Style;
+    TStyleManager.SetStyle(Style);
+    //var Style := TStyleManager.ActiveStyle(nil);
+    Style.Sort(
+      function(Left, Right: TFmxObject): integer
+      begin
+        Result := string.Compare(Left.StyleName, Right.StyleName);
+      end);
+    ReadStyleObject(nil, Style);
+  finally
+    TreeViewStyle.EndUpdate;
+  end;
+end;
+
+procedure TFormMain.Memo1PresentationNameChoosing(Sender: TObject; var PresenterName: string);
+begin
+  PresenterName := 'MemoExtStyled';
+end;
+
+procedure TFormMain.SpeedButton7Click(Sender: TObject);
+
+  function AddNode(AParentNode: TTreeViewItem; const ATitle: string): TTreeViewItem;
+  begin
+    Result := TTreeViewItem.Create(Self);
+    if AParentNode = nil then
+      Result.Parent := TreeViewStyle
+    else
+      Result.Parent := AParentNode;
+    Result.Text := ATitle;
+  end;
+
+  procedure ReadStyleObject(AParentNode: TTreeViewItem; const AStyleObject: TFmxObject);
+  begin
+    for var ChildStyle in AStyleObject.Children do
+    begin
+      // Создаем узел дочернего объекта стиля
+      var ChildNode := AddNode(AParentNode, Format('%s: %s', [ChildStyle.StyleName, ChildStyle.ClassName]));
+      // Если у текущего объекта стиля есть дочерние, то читаем этот объект
+      if ChildStyle.ChildrenCount > 0 then
+        ReadStyleObject(ChildNode, ChildStyle);
+    end;
+  end;
+
+begin
+  ListBoxStyles.BeginUpdate;
+  try
+    ListBoxStyles.Clear;
+    for var Item in StyleBookWinUI3.Styles do
+    begin
+      var ListItem := TListBoxItem.Create(ListBoxStyles);
+      ListItem.Text := Item.ID.ToString + ': ' + Item.DisplayName;
+      ListItem.Tag := Item.ID;
+      ListBoxStyles.AddObject(ListItem);
+    end;
+  finally
+    ListBoxStyles.EndUpdate;
+  end;
+  TreeViewStyle.BeginUpdate;
+  try
+    TreeViewStyle.Clear;   //StyleBookWinUI3.Styles
+    var Style := StyleBookWinUI3.Style;
+    TStyleManager.SetStyle(StyleBookWinUI3.Style);
+    //var Style := TStyleManager.ActiveStyle(nil);
+    Style.Sort(
+      function(Left, Right: TFmxObject): integer
+      begin
+        Result := string.Compare(Left.StyleName, Right.StyleName);
+      end);
+    ReadStyleObject(nil, Style);
+  finally
+    TreeViewStyle.EndUpdate;
+  end;
 end;
 
 procedure TFormMain.TabViewTest;

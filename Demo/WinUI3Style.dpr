@@ -26,7 +26,9 @@ uses
   FMX.MultiView.Presentations in '..\Fixes\D12\FMX.MultiView.Presentations.pas',
   FMX.StyledContextMenu in '..\Fixes\D12\FMX.StyledContextMenu.pas',
   FMX.Windows.Hints in '..\FMXWindowsHint\FMX.Windows.Hints.pas',
-  FMX.Menus in '..\Fixes\D13\FMX.Menus.pas';
+  FMX.Menus in '..\Fixes\D13\FMX.Menus.pas',
+  FMX.Memo.ExtStyle in 'Utils\FMX.Memo.ExtStyle.pas',
+  FMX.Platform.Win in '..\Fixes\D13\FMX.Platform.Win.pas';
 
 type
   TFMXSystemFontService = class(TInterfacedObject, IFMXSystemFontService)
