@@ -350,7 +350,6 @@
         <DCCReference Include="..\Fixes\D12\FMX.MultiView.Presentations.pas"/>
         <DCCReference Include="..\Fixes\D12\FMX.StyledContextMenu.pas"/>
         <DCCReference Include="..\FMXWindowsHint\FMX.Windows.Hints.pas"/>
-        <DCCReference Include="..\Fixes\D13\FMX.Menus.pas"/>
         <DCCReference Include="Utils\FMX.Memo.ExtStyle.pas"/>
         <DCCReference Include="..\Sources\WinUI3.Form.pas"/>
         <DCCReference Include="..\Sources\WinUI3.Frame.Inner.InfoBar.pas">
@@ -375,6 +374,7 @@
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="..\Fixes\D12\FMX.Menus.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -1440,9 +1440,6 @@
                     <Platform Name="Win64x">
                         <Operation>1</Operation>
                     </Platform>
-                    <Platform Name="WinARM64EC">
-                        <Operation>1</Operation>
-                    </Platform>
                 </DeployClass>
                 <DeployClass Name="ProjectiOSDeviceDebug">
                     <Platform Name="iOSDevice32">
@@ -1513,10 +1510,6 @@
                         <RemoteDir>Assets</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
-                    <Platform Name="WinARM64EC">
-                        <RemoteDir>Assets</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
                 </DeployClass>
                 <DeployClass Name="UWP_DelphiLogo44">
                     <Platform Name="Win32">
@@ -1524,10 +1517,6 @@
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win64">
-                        <RemoteDir>Assets</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="WinARM64EC">
                         <RemoteDir>Assets</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>

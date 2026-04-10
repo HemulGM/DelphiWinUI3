@@ -145,7 +145,7 @@ end;
 constructor TFrameDialogFont.Create(AOwner: TComponent);
 begin
   inherited;
-  ListBoxFonts.ScrollAnimation := TBehaviorBoolean.True;
+  ListBoxFonts.AniCalculations.Animation := True;
   Name := '';
   var FontList := TStringList.Create;
   try

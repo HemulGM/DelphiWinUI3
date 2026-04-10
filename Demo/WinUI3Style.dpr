@@ -27,7 +27,6 @@ uses
   FMX.MultiView.Presentations in '..\Fixes\D12\FMX.MultiView.Presentations.pas',
   FMX.StyledContextMenu in '..\Fixes\D12\FMX.StyledContextMenu.pas',
   FMX.Windows.Hints in '..\FMXWindowsHint\FMX.Windows.Hints.pas',
-  FMX.Menus in '..\Fixes\D13\FMX.Menus.pas',
   FMX.Memo.ExtStyle in 'Utils\FMX.Memo.ExtStyle.pas',
   WinUI3.Form in '..\Sources\WinUI3.Form.pas',
   WinUI3.Frame.Inner.InfoBar in '..\Sources\WinUI3.Frame.Inner.InfoBar.pas' {FrameInnerInfoBar: TFrame},
@@ -35,7 +34,8 @@ uses
   WinUI3.Frame.Dialog in '..\Sources\WinUI3.Frame.Dialog.pas' {FrameDialog: TFrame},
   WinUI3.Frame.Dialog.Input in '..\Sources\WinUI3.Frame.Dialog.Input.pas' {FrameDialogInput: TFrame},
   WinUI3.Dialogs in '..\Sources\WinUI3.Dialogs.pas',
-  WinUI3.Frame.Dialog.Font in '..\Sources\WinUI3.Frame.Dialog.Font.pas' {FrameDialogFont: TFrame};
+  WinUI3.Frame.Dialog.Font in '..\Sources\WinUI3.Frame.Dialog.Font.pas' {FrameDialogFont: TFrame},
+  FMX.Menus in '..\Fixes\D12\FMX.Menus.pas';
 
 {$R *.res}
 

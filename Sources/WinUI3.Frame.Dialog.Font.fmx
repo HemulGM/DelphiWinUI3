@@ -23,7 +23,7 @@ object FrameDialogFont: TFrameDialogFont
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Align = Top
       TabOrder = 0
-      Size.Width = 221.000000000000000000
+      Size.Width = 225.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
       TextPrompt = 'Search'

@@ -25,7 +25,7 @@ uses
   FMX.Calendar.Style, FMX.Edit.Style.New,
   //
   FMX.Styles.Objects, FMX.Styles.Switch, FMX.Viewport3D, System.Math.Vectors,
-  FMX.Controls3D, FMX.Objects3D, FMX.Types3D, FMX.MaterialSources, FMX.MaskEdit;
+  FMX.Controls3D, FMX.Objects3D, FMX.Types3D, FMX.MaterialSources;
 
 type
   TFormMain = class(TWinUIForm)
@@ -1160,9 +1160,7 @@ type
     StyleBookWinUI3Light: TStyleBook;
     ButtonDialogFont: TButton;
     Button309: TButton;
-    MaskEdit1: TMaskEdit;
     Label120: TLabel;
-    ClearEditButton5: TClearEditButton;
     ButtonSettings: TButton;
     PopupTheme: TPopup;
     Label121: TLabel;
