@@ -99,10 +99,6 @@ end;
 procedure TFormBrowser.FormCreate(Sender: TObject);
 begin
   StyleBook := FormMain.StyleBook;
-  if FormMain.IsDark then
-    OverrideThemeKind := TSystemThemeKind.Dark
-  else
-    OverrideThemeKind := TSystemThemeKind.Light;
   HorzScrollBoxTabs.AniCalculations.Animation := True;
   CaptionControls := [LayoutTitle, TabControlView];
   OffsetControls := [LayoutTitle, LayoutClient];

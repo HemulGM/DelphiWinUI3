@@ -1,2 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject/>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.258,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.Input.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.026,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Inner.InfoBar.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.745,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.Font.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.148,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Form.Dialog.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.007,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.264,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Form.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.909,=D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.461,D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.069,D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.215,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Dialogs.pas</Transaction>
+  </Transactions>
+</BorlandProject>

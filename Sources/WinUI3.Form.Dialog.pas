@@ -33,6 +33,7 @@ type
     procedure CreateHandle; override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure BeforeShow; //override;
+    procedure DoOnSettingChange; override;
   private
     FBeforeShowMessageId: Integer;
     FCanClose: Boolean;
@@ -64,6 +65,32 @@ uses
   System.Math, DelphiWindowStyle.FMX, System.Messaging, WinUI3.Utils;
 
 {$R *.fmx}
+
+procedure TFormDialogs.DoOnSettingChange;
+begin
+  if OverrideThemeKind <> TSystemThemeKind.Unspecified then
+    SetWindowColorMode(OverrideThemeKind = TSystemThemeKind.Dark)
+  else
+    SetWindowColorMode(SystemThemeKind = TSystemThemeKind.Dark);
+
+  if SetSystemBackdropType(SystemBackdropType) then
+  begin
+    Fill.Kind := TBrushKind.Solid;
+    Fill.Color := TAlphaColorRec.Null;
+    SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+  end
+  else
+    Fill.Kind := TBrushKind.None;
+
+  //Self.SetWindowColorMode(False);
+  Self.SetWindowCorner(TWindowCornerPreference.DWMWCP_ROUND);
+  if FFrameColor <> TColors.Null then
+    Self.SetWindowBorderColor(FFrameColor);  {
+  if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
+  begin
+    SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
+  end;  }
+end;
 
 procedure TFormDialogs.ActionCloseExecute(Sender: TObject);
 begin
@@ -107,14 +134,7 @@ begin
   begin
     BorderStyle := TFmxFormBorderStyle.Single;
   end;
-  Self.SetWindowColorMode(True);
-  Self.SetWindowCorner(TWindowCornerPreference.DWMWCP_ROUND);
-  if FFrameColor <> TColors.Null then
-    Self.SetWindowBorderColor(FFrameColor);
-  if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
-  begin
-    SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-  end;
+  //DoOnSettingChange;
 end;
 
 class function TFormDialogs.Execute(Owner: TCustomForm; Params: TDialogColorParams): TDialogColorResult;

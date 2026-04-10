@@ -23,13 +23,6 @@ object FrameInnerInfoBar: TFrameInnerInfoBar
       Size.PlatformDefault = False
       StyleLookup = 'panelstyle_infobar_success'
       TabOrder = 0
-      object ShadowEffect1: TShadowEffect
-        Distance = 0.000099999997473788
-        Direction = 90.000000000000000000
-        Softness = 0.699999988079071000
-        Opacity = 0.400000005960464500
-        ShadowColor = claBlack
-      end
       object FlowLayoutContent: TFlowLayout
         Align = Client
         Size.Width = 484.000000000000000000
@@ -152,6 +145,13 @@ object FrameInnerInfoBar: TFrameInnerInfoBar
         StartValue = 1.000000000000000000
         StopValue = 0.000000000000000000
       end
+    end
+    object ShadowEffect1: TShadowEffect
+      Distance = 0.000099999997473788
+      Direction = 90.000000000000000000
+      Softness = 0.699999988079071000
+      Opacity = 0.400000005960464500
+      ShadowColor = claBlack
     end
   end
   object TimerAutoClose: TTimer

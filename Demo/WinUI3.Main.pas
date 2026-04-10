@@ -188,7 +188,6 @@ type
     Button39: TButton;
     ButtonTaskTest: TButton;
     Label63: TLabel;
-    Path1: TPath;
     PanelStoreMenu: TPanel;
     Button284: TButton;
     Button285: TButton;
@@ -368,7 +367,6 @@ type
     Label74: TLabel;
     Label75: TLabel;
     Label46: TLabel;
-    Path3: TPath;
     Label52: TLabel;
     Label56: TLabel;
     Label64: TLabel;
@@ -378,7 +376,6 @@ type
     Line2: TLine;
     Label65: TLabel;
     Label67: TLabel;
-    Path4: TPath;
     Label66: TLabel;
     Layout23: TLayout;
     Panel32: TPanel;
@@ -386,10 +383,8 @@ type
     Label68: TLabel;
     Label69: TLabel;
     Button188: TButton;
-    Path5: TPath;
     Label70: TLabel;
     Label72: TLabel;
-    Path6: TPath;
     Button185: TButton;
     Button189: TButton;
     Button190: TButton;
@@ -652,7 +647,6 @@ type
     Button119: TButton;
     BindNavigator1: TBindNavigator;
     Label58: TLabel;
-    BindNavigator2: TBindNavigator;
     Button120: TButton;
     Button121: TButton;
     Button122: TButton;
@@ -764,7 +758,6 @@ type
     Button186: TButton;
     Button187: TButton;
     Label24: TLabel;
-    Path2: TPath;
     Label55: TLabel;
     CalloutPanel2: TCalloutPanel;
     Layout20: TLayout;
@@ -813,7 +806,6 @@ type
     MagnifierGlass3: TMagnifierGlass;
     ImageViewer1: TImageViewer;
     TabItemMultiView: TTabItem;
-    Rectangle23: TRectangle;
     TabControl3: TTabControl;
     TabItem16: TTabItem;
     Panel24: TPanel;
@@ -1190,6 +1182,36 @@ type
     SpeedButton7: TSpeedButton;
     ListBoxStyles: TListBox;
     ButtonApplyStyle: TSpeedButton;
+    ButtonWinMin: TButton;
+    ButtonWinMax: TButton;
+    ButtonWinClose: TButton;
+    Edit5: TEdit;
+    ClearEditButton6: TClearEditButton;
+    PathLabel1: TPathLabel;
+    PathLabel2: TPathLabel;
+    PathLabel3: TPathLabel;
+    PathLabel4: TPathLabel;
+    PathLabel5: TPathLabel;
+    Panel53: TPanel;
+    TabControl7: TTabControl;
+    TabItem9: TTabItem;
+    Rectangle8: TRectangle;
+    TabItem10: TTabItem;
+    Rectangle9: TRectangle;
+    TabItem14: TTabItem;
+    Rectangle10: TRectangle;
+    TabControl8: TTabControl;
+    TabItem15: TTabItem;
+    Rectangle11: TRectangle;
+    TabItem21: TTabItem;
+    Rectangle12: TRectangle;
+    TabItem22: TTabItem;
+    Rectangle17: TRectangle;
+    TabItem30: TTabItem;
+    Rectangle23: TRectangle;
+    PathLabel6: TPathLabel;
+    PathLabel7: TPathLabel;
+    BindNavigator2: TBindNavigator;
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormDeactivate(Sender: TObject);
@@ -1807,12 +1829,11 @@ end;
 procedure TFormMain.DoOnSettingChange;
 begin
   // Get accent color
-  var SysAccent := ChangeColorSat(OverAccentColor, 50);
+  var SysAccent: TAlphaColor;
   // DecreaseSaturation(SystemAccentColor, 0.8);
 
   // Get theme color
   IsDark := SystemThemeKind = TSystemThemeKind.Dark;
-
   // Override theme color
   case OverTheme of
     0:
@@ -1822,6 +1843,16 @@ begin
     2:
       IsDark := SystemThemeKind = TSystemThemeKind.Dark;
   end;
+
+  if IsDark then
+    OverrideThemeKind := TSystemThemeKind.Dark
+  else
+    OverrideThemeKind := TSystemThemeKind.Light;
+
+  if IsDark then
+    SysAccent := ChangeColorSat(OverAccentColor, 50)
+  else
+    SysAccent := OverAccentColor;
 
   // Debug
   //IsDark := True;
@@ -2389,10 +2420,11 @@ procedure TFormMain.FormCreate(Sender: TObject);
 begin
   OverAccentColor := SystemAccentColor;
   ComboColorBoxAccentColor.Color := OverAccentColor;
-  OverTheme := 0;
+  OverTheme := 1;
 {$IFDEF MSWINDOWS}
   FNotifyDemo := TNotifyDemo.Create(Self);
 {$ENDIF}
+  SetSystemWindowControls(ButtonWinClose, ButtonWinMax, ButtonWinMin);
   CaptionControls := [LayoutCaption, LayoutHead];
   OffsetControls := [LayoutHead];
   TitleControls := [LabelTitle];

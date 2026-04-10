@@ -139,7 +139,6 @@ type
     TreeViewItem46: TTreeViewItem;
     TreeViewItem47: TTreeViewItem;
     Selection1: TSelection;
-    Rectangle1: TRectangle;
     Selection2: TSelection;
     Button5: TButton;
     ScrollBox1: TScrollBox;
@@ -177,6 +176,8 @@ type
     MenuItem64: TMenuItem;
     MenuItem65: TMenuItem;
     MenuItem66: TMenuItem;
+    Panel3: TPanel;
+    LayoutForm: TLayout;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Selection2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -184,6 +185,7 @@ type
     procedure PlotGrid2DragDrop(Sender: TObject; const Data: TDragObject; const Point: TPointF);
     procedure PlotGrid2DragOver(Sender: TObject; const Data: TDragObject; const Point: TPointF; var Operation: TDragOperation);
     procedure Memo2PresentationNameChoosing(Sender: TObject; var PresenterName: string);
+    procedure Memo2ApplyStyleLookup(Sender: TObject);
   private
     procedure FOnSelEnter(Sender: TObject);
     procedure FOnSelExit(Sender: TObject);
@@ -210,15 +212,17 @@ end;
 procedure TFormIDE.FormCreate(Sender: TObject);
 begin
   StyleBook := FormMain.StyleBook;
-  if FormMain.IsDark then
-    OverrideThemeKind := TSystemThemeKind.Dark
-  else
-    OverrideThemeKind := TSystemThemeKind.Light;
-  (Memo2.Presentation as TRichEditStyled).SetCodeSyntaxName('pascal', Memo2.Font, Memo2.FontColor);
-  PlotGrid2.CanFocus := True;
+  LayoutForm.CanFocus := True;
   Selection2.CanFocus := True;
   Selection2.OnEnter := FOnSelEnter;
   Selection2.OnExit := FOnSelExit;
+  Memo2.StyleLookup := 'memostyle_clear';
+  Memo1.StyleLookup := 'memostyle_clear';
+end;
+
+procedure TFormIDE.Memo2ApplyStyleLookup(Sender: TObject);
+begin
+  (Memo2.Presentation as TRichEditStyled).SetCodeSyntaxName('pascal', Memo2.Font, Memo2.FontColor);
 end;
 
 procedure TFormIDE.Memo2PresentationNameChoosing(Sender: TObject; var PresenterName: string);
@@ -238,8 +242,8 @@ begin
     begin
       if NewItem.InheritsFrom(TControl) then
       begin
-        var Sel := TSelection.Create(PlotGrid2);
-        Sel.Parent := PlotGrid2;
+        var Sel := TSelection.Create(LayoutForm);
+        Sel.Parent := LayoutForm;
         Sel.Position.Point := Point;
         Sel.CanFocus := True;
         Sel.OnEnter := FOnSelEnter;

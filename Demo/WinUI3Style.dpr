@@ -13,6 +13,7 @@ uses
   WinUI3.Gallery in 'WinUI3.Gallery.pas' {FormGallery},
   {$IFDEF MSWINDOWS}
   WinUI3.NotifyDemo in 'WinUI3.NotifyDemo.pas',
+  FMX.Platform.Win,
   {$ENDIF }
   WinUI3.Frame.Dialog.Test in 'WinUI3.Frame.Dialog.Test.pas' {FrameTestDialog: TFrame},
   WinUI3.YandexMusic in 'WinUI3.YandexMusic.pas' {FormMusic},
@@ -28,31 +29,17 @@ uses
   FMX.Windows.Hints in '..\FMXWindowsHint\FMX.Windows.Hints.pas',
   FMX.Menus in '..\Fixes\D13\FMX.Menus.pas',
   FMX.Memo.ExtStyle in 'Utils\FMX.Memo.ExtStyle.pas',
-  FMX.Platform.Win in '..\Fixes\D13\FMX.Platform.Win.pas';
-
-type
-  TFMXSystemFontService = class(TInterfacedObject, IFMXSystemFontService)
-    function GetDefaultFontFamilyName: string;
-    function GetDefaultFontSize: Single;
-  end;
+  WinUI3.Form in '..\Sources\WinUI3.Form.pas',
+  WinUI3.Frame.Inner.InfoBar in '..\Sources\WinUI3.Frame.Inner.InfoBar.pas' {FrameInnerInfoBar: TFrame},
+  WinUI3.Form.Dialog in '..\Sources\WinUI3.Form.Dialog.pas',
+  WinUI3.Frame.Dialog in '..\Sources\WinUI3.Frame.Dialog.pas' {FrameDialog: TFrame},
+  WinUI3.Frame.Dialog.Input in '..\Sources\WinUI3.Frame.Dialog.Input.pas' {FrameDialogInput: TFrame},
+  WinUI3.Dialogs in '..\Sources\WinUI3.Dialogs.pas',
+  WinUI3.Frame.Dialog.Font in '..\Sources\WinUI3.Frame.Dialog.Font.pas' {FrameDialogFont: TFrame};
 
 {$R *.res}
 
-{ TFMXSystemFontService }
-
-function TFMXSystemFontService.GetDefaultFontFamilyName: string;
 begin
-  Result := 'Segoe UI';
-end;
-
-function TFMXSystemFontService.GetDefaultFontSize: Single;
-begin
-  Result := 10;
-end;
-
-begin
-  //var FontServ := TFMXSystemFontService.Create;
-  //TPlatformServices.Current.AddPlatformService(IFMXSystemFontService, FontServ);
   //GlobalUseDirect2D := False; //(for xp)
   {$IFDEF ANDROID}
   GlobalUseSkia := True;
@@ -61,6 +48,5 @@ begin
   Application.FormFactor.Orientations := [TFormOrientation.Portrait, TFormOrientation.InvertedPortrait, TFormOrientation.Landscape, TFormOrientation.InvertedLandscape];
   Application.CreateForm(TFormMain, FormMain);
   Application.Run;
-  //FontServ.Free;
 end.
 

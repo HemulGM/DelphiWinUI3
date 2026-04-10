@@ -9,6 +9,7 @@
         <DeviceId Condition="'$(Platform)'=='iOSDevice64'"/>
         <DeviceId Condition="'$(Platform)'=='iOSSimARM64'"/>
     </PropertyGroup>
+    <ItemGroup Condition="'$(Platform)'=='WinARM64EC'"/>
     <ItemGroup Condition="'$(Platform)'=='OSX64'">
         <DeployFile Include="OSX64\Debug\WinUI3Style.entitlements" Condition="'$(Config)'=='Debug'">
             <RemoteDir>WinUI3Style.app\..\</RemoteDir>

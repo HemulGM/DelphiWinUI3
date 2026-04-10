@@ -26,6 +26,7 @@ object FrameDialogFont: TFrameDialogFont
       Size.Width = 221.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
+      TextPrompt = 'Search'
     end
   end
   object CheckBoxBold: TCheckBox
@@ -65,6 +66,7 @@ object FrameDialogFont: TFrameDialogFont
     Value = 8.000000000000000000
     Position.X = 369.000000000000000000
     Position.Y = 35.000000000000000000
+    TextSettings.HorzAlign = Leading
     Size.Width = 100.000000000000000000
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False

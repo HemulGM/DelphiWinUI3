@@ -7,6 +7,7 @@ uses
   System.UITypes, FMX.Memo, FMX.StdCtrls, FMX.Graphics, FMX.Forms, FMX.Types,
   {$IFDEF MSWINDOWS}
   Winapi.Windows, Winapi.Messages, FMX.Windows.Dispatch, FMX.Platform.Win,
+  DelphiWindowStyle.Types,
   {$ENDIF}
   FMX.Platform, FMX.Ani, FMX.Filter.Effects, FMX.Effects, FMX.ActnList,
   DelphiWindowStyle.FMX;
@@ -20,6 +21,8 @@ type
   TSystemBackdropType = DelphiWindowStyle.FMX.TSystemBackdropType;
 
   TWinUIForm = class(TForm)
+  protected
+    class var FOverrideThemeKind: TSystemThemeKind;
   private
     FModeFocus: Boolean;
     FPopupHint: TPopup;
@@ -39,11 +42,16 @@ type
     FFocusInflate: Single;
     FOffsetControls: TArray<TControl>;
     FTitleControls: TArray<TControl>;
-    FSystemThemeKind: TSystemThemeKind;
     FSystemAccentColor: TAlphaColor;
-    FOverrideThemeKind: TSystemThemeKind;
+    FSystemThemeKind: TSystemThemeKind;
     FAutoScrollToFocused: Boolean;
     FFocusHighlight: Boolean;
+    FButtonClose: TStyledControl;
+    FButtonMin: TStyledControl;
+    FButtonMax: TStyledControl;
+    {$IFDEF MSWINDOWS}
+    FWindowHandle: HWND;
+    {$ENDIF}
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
     procedure SetFocusOpacity(const Value: Single);
@@ -52,7 +60,6 @@ type
     procedure SetFocusInflate(const Value: Single);
     procedure SetOffsetControls(const Value: TArray<TControl>);
     procedure SetTitleControls(const Value: TArray<TControl>);
-    procedure SetOverrideThemeKind(const Value: TSystemThemeKind);
     procedure SetPropSystemBackdropType(const Value: TSystemBackdropType);
     procedure SetAutoScrollToFocused(const Value: Boolean);
     procedure SetFocusHighlight(const Value: Boolean);
@@ -70,13 +77,19 @@ type
     procedure InvalidateNonClient;
     procedure WMNCCalcSize(var Message: TWMNCCalcSize); message WM_NCCALCSIZE;
     procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
+    procedure WMNCLButtonDown(var Message: TWMNCLButtonDown); message WM_NCLBUTTONDOWN;
+    procedure WMNCLButtonUp(var Message: TWMNCLButtonUp); message WM_NCLBUTTONUP;
     procedure WMNCPAINT(var Msg: TWMNCPaint); message WM_NCPAINT;
     procedure WMNCACTIVATE(var Msg: TWMNCActivate); message WM_NCACTIVATE;
+    procedure WMSize(var Msg: TWMSize); message WM_SIZE;
     {$ENDIF}
     procedure HookHints; virtual;
   protected
     function NotInitStyle: Boolean; virtual;
     procedure DoOnSettingChange; virtual;
+    procedure FOnSysClose(Sender: TObject);
+    procedure FOnSysMin(Sender: TObject);
+    procedure FOnSysMax(Sender: TObject);
   public
     procedure AfterConstruction; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; AFormX, AFormY: Single); override;
@@ -86,9 +99,10 @@ type
   public
     procedure BeginLauncher(Proc: TProc = nil); virtual;
     procedure EndLauncher(Proc: TProc = nil); virtual;
+    procedure SetSystemWindowControls(const AClose, AMax, AMin: TStyledControl); virtual;
     property SystemAccentColor: TAlphaColor read FSystemAccentColor;
     property SystemThemeKind: TSystemThemeKind read FSystemThemeKind;
-    property OverrideThemeKind: TSystemThemeKind read FOverrideThemeKind write SetOverrideThemeKind;
+    class property OverrideThemeKind: TSystemThemeKind read FOverrideThemeKind write FOverrideThemeKind;
     property SystemBackdropType: TSystemBackdropType read FSystemBackdropType write SetPropSystemBackdropType;
     //
     /// <summary>
@@ -118,19 +132,31 @@ type
     property AutoScrollToFocused: Boolean read FAutoScrollToFocused write SetAutoScrollToFocused;
   end;
 
+procedure UpdateNavButtons;
+
 implementation
 
 uses
-  FMX.Menus, FMX.DateTimeCtrls, System.Messaging, System.Threading, FMX.Layouts;
+  FMX.Menus, FMX.DateTimeCtrls, System.Messaging, System.Threading, FMX.Layouts, FMX.Bind.Navigator, Data.Bind.Controls;
+
+
+procedure UpdateNavButtons;
+begin
+  //BtnTypePath
+  //BtnTypePath[
+end;
 
 {$REGION 'WinAPI for no TitleBar'}
 {$IFDEF MSWINDOWS}
 
 procedure TWinUIForm.InvalidateNonClient;
 begin
-  var Handle := FormToHWND(Self);
-  LockWindowUpdate(Handle);
-  SetWindowPos(Handle, 0, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE or SWP_NOZORDER or SWP_NOACTIVATE or SWP_NOSENDCHANGING or SWP_FRAMECHANGED);
+  LockWindowUpdate(FWindowHandle);
+  SetWindowPos(FWindowHandle, 0, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE or SWP_NOZORDER or SWP_NOACTIVATE or SWP_NOSENDCHANGING or SWP_FRAMECHANGED);
+  if not FHideTitleBar then
+    SetWindowLong(FWindowHandle, GWL_STYLE, GetWindowLong(FWindowHandle, GWL_STYLE) + WS_SYSMENU)
+  else
+    SetWindowLong(FWindowHandle, GWL_STYLE, GetWindowLong(FWindowHandle, GWL_STYLE) - WS_SYSMENU);
   LockWindowUpdate(0);
 end;
 
@@ -145,7 +171,7 @@ begin
   begin
     var R := GetAdjustWindowRect;
     var Offset := 0.0;
-    if IsZoomed(FormToHWND(Self)) then
+    if IsZoomed(FWindowHandle) then
       Offset := R.Bottom;
     for var Item in OffsetControls do
       Item.Margins.Top := Offset;
@@ -163,6 +189,21 @@ begin
   //Msg.Result := 0;
 end;
 
+procedure TWinUIForm.WMSize(var Msg: TWMSize);
+begin
+  inherited;
+  if WindowState = TWindowState.wsMaximized then
+  begin
+    if Assigned(FButtonMax) then
+      FButtonMax.StyleLookup := 'win_sys_btn_restore'
+  end
+  else
+  begin
+    if Assigned(FButtonMax) then
+      FButtonMax.StyleLookup := 'win_sys_btn_max';
+  end;
+end;
+
 procedure TWinUIForm.WMNCACTIVATE(var Msg: TWMNCActivate);
 begin
   //Msg.Result := 1;
@@ -178,6 +219,17 @@ begin
   case Message.Result of
     HTNOWHERE:
       begin
+        var Control := ObjectAtPoint(Screen.MousePos);
+        if Assigned(Control) then
+        begin
+          if Control.GetObject = FButtonMax then
+          begin
+            Message.Result := HTMAXBUTTON;
+            var P := ScreenToClient(Screen.MousePos);
+            MouseMove([], P.X, P.Y);
+            Exit;
+          end;
+        end;
         var P := ScreenToClient(Screen.MousePos).Round;
         if P.Y > FCaptionControls[0].Height then
           Exit;
@@ -217,6 +269,36 @@ begin
   inherited;
 end;
 
+procedure TWinUIForm.WMNCLButtonDown(var Message: TWMNCLButtonDown);
+begin
+  var Control := ObjectAtPoint(Screen.MousePos);
+  if Assigned(Control) then
+  begin
+    if Control.GetObject = FButtonMax then
+    begin
+      Message.Result := HTMAXBUTTON;
+      var P := ScreenToClient(Screen.MousePos);
+      MouseDown(TMouseButton.mbLeft, [], P.X, P.Y);
+      Exit;
+    end;
+  end;
+end;
+
+procedure TWinUIForm.WMNCLButtonUp(var Message: TWMNCLButtonUp);
+begin
+  var Control := ObjectAtPoint(Screen.MousePos);
+  if Assigned(Control) then
+  begin
+    if Control.GetObject = FButtonMax then
+    begin
+      Message.Result := HTMAXBUTTON;
+      var P := ScreenToClient(Screen.MousePos);
+      MouseUp(TMouseButton.mbLeft, [], P.X, P.Y);
+      Exit;
+    end;
+  end;
+end;
+
 {$ENDIF}
 {$ENDREGION}
 
@@ -242,7 +324,6 @@ begin
   FFocusCornerType := TCornerType.Round;
 
   //
-  FOverrideThemeKind := TSystemThemeKind.Unspecified;
   FAutoScrollToFocused := True;
   FFocusHighlight := True;
 
@@ -274,6 +355,12 @@ begin
       begin
         for var Control in TitleControls do
           Control.Opacity := 1;
+        if Assigned(FButtonClose) then
+          FButtonClose.Opacity := 1;
+        if Assigned(FButtonMin) then
+          FButtonMin.Opacity := 1;
+        if Assigned(FButtonMax) then
+          FButtonMax.Opacity := 1;
       end;
     end);
 
@@ -285,6 +372,12 @@ begin
       begin
         for var Control in TitleControls do
           Control.Opacity := 0.5;
+        if Assigned(FButtonClose) then
+          FButtonClose.Opacity := 0.5;
+        if Assigned(FButtonMin) then
+          FButtonMin.Opacity := 0.5;
+        if Assigned(FButtonMax) then
+          FButtonMax.Opacity := 0.5;
       end;
     end);
 
@@ -318,7 +411,10 @@ procedure TWinUIForm.CreateHandle;
 begin
   inherited;
   {$IFDEF MSWINDOWS}
+  FWindowHandle := FormToHWND(Self);
   AllowDispatchWindowMessages(Self);
+  if FHideTitleBar then
+    SetWindowLong(FWindowHandle, GWL_STYLE, GetWindowLong(FWindowHandle, GWL_STYLE) - WS_SYSMENU);
   {$ENDIF}
 end;
 
@@ -428,6 +524,35 @@ begin
     TimerHintTimer(nil)
   else
     FTimerHint.Enabled := True;
+end;
+
+procedure TWinUIForm.FOnSysClose(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TWinUIForm.FOnSysMax(Sender: TObject);
+begin
+  {$IFDEF MSWINDOWS}
+  if WindowState = TWindowState.wsMaximized then
+    PostMessage(FWindowHandle, WM_SYSCOMMAND, SC_RESTORE, 0)
+  else
+    PostMessage(FWindowHandle, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+  {$ELSE}
+  if WindowState = TWindowState.wsMaximized then
+    WindowState := TWindowState.wsNormal
+  else
+    WindowState := TWindowState.wsMaximized;
+  {$ENDIF}
+end;
+
+procedure TWinUIForm.FOnSysMin(Sender: TObject);
+begin
+  {$IFDEF MSWINDOWS}
+  PostMessage(FWindowHandle, WM_SYSCOMMAND, SC_MINIMIZE, 0);
+  {$ELSE}
+  WindowState := TWindowState.wsMinimized;
+  {$ENDIF}
 end;
 
 procedure TWinUIForm.TimerHintCloseTimer(Sender: TObject);
@@ -634,20 +759,31 @@ begin
   FOffsetControls := Value;
 end;
 
-procedure TWinUIForm.SetOverrideThemeKind(const Value: TSystemThemeKind);
-begin
-  FOverrideThemeKind := Value;
-end;
-
 procedure TWinUIForm.SetPropSystemBackdropType(const Value: TSystemBackdropType);
 begin
   FSystemBackdropType := Value;
+end;
+
+procedure TWinUIForm.SetSystemWindowControls(const AClose, AMax, AMin: TStyledControl);
+begin
+  FButtonClose := AClose;
+  FButtonMin := AMin;
+  FButtonMax := AMax;
+  if Assigned(FButtonClose) then
+    FButtonClose.OnClick := FOnSysClose;
+  if Assigned(FButtonMin) then
+    FButtonMin.OnClick := FOnSysMin;
+  if Assigned(FButtonMax) then
+    FButtonMax.OnClick := FOnSysMax;
 end;
 
 procedure TWinUIForm.SetTitleControls(const Value: TArray<TControl>);
 begin
   FTitleControls := Value;
 end;
+
+initialization
+  TWinUIForm.FOverrideThemeKind := TSystemThemeKind.Unspecified;
 
 end.
 

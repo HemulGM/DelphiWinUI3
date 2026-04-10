@@ -133,7 +133,6 @@ object FormBrowser: TFormBrowser
           Size.PlatformDefault = False
           StyleLookup = 'tabItemstyle_view_add'
           TabOrder = 0
-          TextSettings.Trimming = None
         end
       end
     end
@@ -175,7 +174,6 @@ object FormBrowser: TFormBrowser
             Touch.InteractiveGestures = [LongTap]
             CanFocus = False
             Cursor = crArrow
-            TextSettings.Trimming = None
             Size.Width = 28.000000000000000000
             Size.Height = 24.000000000000000000
             Size.PlatformDefault = False
@@ -195,7 +193,6 @@ object FormBrowser: TFormBrowser
           StyleLookup = 'backtoolbutton'
           TabOrder = 3
           Text = 'ButtonBack'
-          TextSettings.Trimming = None
           OnClick = ButtonBackClick
         end
         object ButtonRefresh: TButton
@@ -209,7 +206,6 @@ object FormBrowser: TFormBrowser
           StyleLookup = 'refreshtoolbutton'
           TabOrder = 2
           Text = 'Button9'
-          TextSettings.Trimming = None
           OnClick = ButtonRefreshClick
         end
         object Button11: TButton
@@ -223,7 +219,6 @@ object FormBrowser: TFormBrowser
           StyleLookup = 'ellipseseditbutton'
           TabOrder = 1
           Text = 'Button9'
-          TextSettings.Trimming = None
         end
       end
       object TabControlView: TTabControl
@@ -245,7 +240,6 @@ object FormBrowser: TFormBrowser
           CustomIcon = <
             item
             end>
-          TextSettings.Trimming = None
           IsSelected = True
           Size.Width = 16.000000000000000000
           Size.Height = 16.000000000000000000

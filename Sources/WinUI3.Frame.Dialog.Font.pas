@@ -89,7 +89,7 @@ uses
   {$IFDEF MACOS}
   MacApi.Appkit, Macapi.CoreFoundation, Macapi.Foundation,
   {$ENDIF}
-  FMX.FontManager;
+  FMX.FontManager, FMX.BehaviorManager;
 
 {$R *.fmx}
 
@@ -145,6 +145,7 @@ end;
 constructor TFrameDialogFont.Create(AOwner: TComponent);
 begin
   inherited;
+  ListBoxFonts.ScrollAnimation := TBehaviorBoolean.True;
   Name := '';
   var FontList := TStringList.Create;
   try
