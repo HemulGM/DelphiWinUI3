@@ -15,7 +15,6 @@ type
   end;
 
   TForm7 = class(TWinUIForm)
-    StyleBookWinUI3: TStyleBook;
     ListBox1: TListBox;
     VertScrollBox1: TVertScrollBox;
     Layout1: TLayout;
@@ -83,6 +82,7 @@ type
     Image6: TImage;
     Label12: TLabel;
     Label13: TLabel;
+    StyleBookWinUI3: TStyleBook;
     procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
@@ -102,7 +102,7 @@ implementation
 
 procedure TFontBehavior.GetDefaultFontFamily(const Context: TFmxObject; var FontFamily: string);
 begin
-  FontFamily := 'Consolas';
+  FontFamily := 'Segoe UI';
 end;
 
 procedure TFontBehavior.GetDefaultFontSize(const Context: TFmxObject; var FontSize: Single);
@@ -112,7 +112,8 @@ end;
 
 procedure TForm7.FormCreate(Sender: TObject);
 begin
-  TBehaviorServices.Current.AddBehaviorService(IFontBehavior, TFontBehavior.Create);
+  //TBehaviorServices.Current.AddBehaviorService(IFontBehavior, TFontBehavior.Create);
+  VertScrollBox1.ViewportPosition := TPointF.Create(0, 1000);
 end;
 
 end.
