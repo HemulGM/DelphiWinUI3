@@ -13,6 +13,7 @@ uses
   WinUI3.Gallery in 'WinUI3.Gallery.pas' {FormGallery},
   {$IFDEF MSWINDOWS}
   WinUI3.NotifyDemo in 'WinUI3.NotifyDemo.pas',
+  FMX.Platform.Win in '..\Fixes\D13\FMX.Platform.Win.pas',
   {$ENDIF }
   WinUI3.Frame.Dialog.Test in 'WinUI3.Frame.Dialog.Test.pas' {FrameTestDialog: TFrame},
   WinUI3.YandexMusic in 'WinUI3.YandexMusic.pas' {FormMusic},
@@ -28,7 +29,6 @@ uses
   FMX.Windows.Hints in '..\FMXWindowsHint\FMX.Windows.Hints.pas',
   FMX.Menus in '..\Fixes\D13\FMX.Menus.pas',
   FMX.Memo.ExtStyle in 'Utils\FMX.Memo.ExtStyle.pas',
-  FMX.Platform.Win in '..\Fixes\D13\FMX.Platform.Win.pas',
   HGM.ColorUtils in '..\Sources\HGM.ColorUtils.pas',
   WinUI3.Dialogs.DataTransferManager in '..\Sources\WinUI3.Dialogs.DataTransferManager.pas',
   WinUI3.Dialogs in '..\Sources\WinUI3.Dialogs.pas',

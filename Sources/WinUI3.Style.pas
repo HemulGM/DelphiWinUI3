@@ -107,17 +107,9 @@ begin
         var Control := TLabel(Item);
         Control.TextSettings.FontColor := UpdateColor(Control.TextSettings.FontColor);
         Item.TagString := '0';
-        {$IFDEF LINUX}
-        if not Edit2.Text.IsEmpty then
-          Control.TextSettings.Font.Family := Edit2.Text;
-        {$ENDIF}
       end
       else if Item is TText then
       begin
-        {$IFDEF LINUX}
-        if not Edit2.Text.IsEmpty then
-          (Item as TText).TextSettings.Font.Family := Edit2.Text;
-        {$ENDIF}
         if Item is TTabStyleTextObject then
         begin
           var Control := TTabStyleTextObject(Item);

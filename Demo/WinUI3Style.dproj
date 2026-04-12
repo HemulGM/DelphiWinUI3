@@ -5,7 +5,7 @@
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>693395</TargetedPlatforms>
         <AppType>Application</AppType>
         <MainSource>WinUI3Style.dpr</MainSource>
@@ -329,6 +329,7 @@
             <Form>FormGallery</Form>
         </DCCReference>
         <DCCReference Include="WinUI3.NotifyDemo.pas"/>
+        <DCCReference Include="..\Fixes\D13\FMX.Platform.Win.pas"/>
         <DCCReference Include="WinUI3.Frame.Dialog.Test.pas">
             <Form>FrameTestDialog</Form>
             <DesignClass>TFrame</DesignClass>
@@ -352,7 +353,6 @@
         <DCCReference Include="..\FMXWindowsHint\FMX.Windows.Hints.pas"/>
         <DCCReference Include="..\Fixes\D13\FMX.Menus.pas"/>
         <DCCReference Include="Utils\FMX.Memo.ExtStyle.pas"/>
-        <DCCReference Include="..\Fixes\D13\FMX.Platform.Win.pas"/>
         <DCCReference Include="..\Sources\HGM.ColorUtils.pas"/>
         <DCCReference Include="..\Sources\WinUI3.Dialogs.DataTransferManager.pas"/>
         <DCCReference Include="..\Sources\WinUI3.Dialogs.pas"/>
