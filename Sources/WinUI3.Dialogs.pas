@@ -69,7 +69,7 @@ procedure ShowUIMessage(Owner: TCustomForm; const Title, Body: string); overload
 implementation
 
 uses
-  WinUI3.Form.Dialog, WinUI3.Frame.Inner.Dialog;
+  WinUI3.Form.Dialog, WinUI3.Frame.Inner.Dialog, System.StrUtils;
 
 procedure ShowUIMessage(Owner: TCustomForm; const Body: string);
 begin
@@ -79,7 +79,7 @@ end;
 procedure ShowUIMessage(Owner: TCustomForm; const Title, Body: string);
 begin
   var Data: TDialogTextParams;
-  Data.Title := Title;
+  Data.Title := IfThen(Title.IsEmpty, Application.Title, Title);
   Data.Body := Body;
   Data.Buttons := [Translate('OK')];
   Data.AccentId := -1;

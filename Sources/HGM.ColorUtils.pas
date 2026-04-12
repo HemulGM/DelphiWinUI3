@@ -20,11 +20,13 @@ function GetAValue(RGB: Cardinal): Byte;
 
 function GrayColor(Color: TColor): TColor;
 
-procedure RGBToHSV(R, G, B: Byte; var H, S, V: Double);
+procedure RGBToHSV(R, G, B: Single; var H, S, V: Single);
 
-procedure HSVtoRGB(H, S, V: Single; var R, G, B: Byte);
+procedure HSVToRGB(H, S, V: Single; var R, G, B: Single);
 
-procedure HSVToColor(H: integer; S, V: Double; var Value: TColor);
+procedure HSVToColor(H: integer; S, V: Single; var Value: TColor);
+
+function MakeColor(R, G, B: Single; A: Single = 1): TAlphaColor; overload;
 
 procedure RGBToCMYK(const R, G, B: Byte; var C: Byte; var M: Byte; var Y: Byte; var K: Byte);
 
@@ -50,7 +52,7 @@ function InvertColor(const Color: TColor): TColor;
 
 function VisibilityColor(const Color: TColor): TColor;
 
-function DecreaseSaturation(const Color: TAlphaColor; Value: Double): TAlphaColor;
+function DecreaseSaturation(const Color: TAlphaColor; Value: Single): TAlphaColor;
 
 function DecreaseHue(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
 
@@ -84,45 +86,45 @@ begin
   Result := RBGval.Color;
 end;
 
-function DecreaseSaturation(const Color: TAlphaColor; Value: Double): TAlphaColor;
+function DecreaseSaturation(const Color: TAlphaColor; Value: Single): TAlphaColor;
 begin
   var Src := TAlphaColorF.Create(Color);
-  var H, S, V: Double;
-  RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
+  var H, S, V: Single;
+  RGBToHSV(Src.R, Src.G, Src.B, H, S, V);
   S := Max(0, Min(1, S * Value));
-  var R, G, B: Byte;
+  var R, G, B: Single;
   HSVtoRGB(H, S, V, R, G, B);
-  Src.R := R / 255;
-  Src.G := G / 255;
-  Src.B := B / 255;
+  Src.R := R;
+  Src.G := G;
+  Src.B := B;
   Result := Src.ToAlphaColor;
 end;
 
 function DecreaseHue(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
 begin
   var Src := TAlphaColorF.Create(Color);
-  var H, S, V: Double;
-  RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
+  var H, S, V: Single;
+  RGBToHSV(Src.R, Src.G, Src.B, H, S, V);
   H := Max(0, Min(1, H - H * (Value / 360)));
-  var R, G, B: Byte;
+  var R, G, B: Single;
   HSVtoRGB(H, S, V, R, G, B);
-  Src.R := R / 255;
-  Src.G := G / 255;
-  Src.B := B / 255;
+  Src.R := R;
+  Src.G := G;
+  Src.B := B;
   Result := Src.ToAlphaColor;
 end;
 
 function DecreaseBrightness(const Color: TAlphaColor; Value: SmallInt): TAlphaColor;
 begin
   var Src := TAlphaColorF.Create(Color);
-  var H, S, V: Double;
-  RGBToHSV(Trunc(Src.R * 255), Trunc(Src.G * 255), Trunc(Src.B * 255), H, S, V);
+  var H, S, V: Single;
+  RGBToHSV(Src.R, Src.G, Src.B, H, S, V);
   V := Max(0, Min(1, V - V * (Value / 100)));
-  var R, G, B: Byte;
+  var R, G, B: Single;
   HSVtoRGB(H, S, V, R, G, B);
-  Src.R := R / 255;
-  Src.G := G / 255;
-  Src.B := B / 255;
+  Src.R := R;
+  Src.G := G;
+  Src.B := B;
   Result := Src.ToAlphaColor;
 end;
 
@@ -201,38 +203,46 @@ begin
   Result := RGBToColor(Gr, Gr, Gr);
 end;
 
-procedure RGBToHSV(R, G, B: Byte; var H, S, V: Double);
+procedure RGBToHSV(R, G, B: Single; var H, S, V: Single);
 var
-  Delta, RGBMin, RGBMax: integer;
+  Delta, RGBMin, RGBMax: Single;
 const
   COneSixth = 1 / 6;
-  COne255th = 1 / $FF;
+  Epsilon   = 1e-12;
 begin
-
   RGBMin := Min(R, Min(G, B));
   RGBMax := Max(R, Max(G, B));
-  V := RGBMax * COne255th;
+  V := RGBMax;
 
   Delta := RGBMax - RGBMin;
-  if RGBMax = 0 then
+
+  // Saturation
+  if RGBMax < Epsilon then
     S := 0
   else
     S := Delta / RGBMax;
 
-  if S = 0.0 then
-    H := 0
-  else
+  // Hue
+  if (S < Epsilon) or (Delta < Epsilon) then
   begin
-    if R = RGBMax then
-      H := COneSixth * (G - B) / Delta
-    else if G = RGBMax then
-      H := COneSixth * (2 + (B - R) / Delta)
-    else if B = RGBMax then
-      H := COneSixth * (4 + (R - G) / Delta);
-
-    if H < 0.0 then
-      H := H + 1;
+    H := 0; // undefined hue → условно 0
+    Exit;
   end;
+
+  if Abs(R - RGBMax) < Epsilon then
+    H := (G - B) / Delta
+  else if Abs(G - RGBMax) < Epsilon then
+    H := 2 + (B - R) / Delta
+  else
+    H := 4 + (R - G) / Delta;
+
+  H := H * COneSixth;
+
+  // Нормализация в [0..1]
+  if H < 0 then
+    H := H + 1
+  else if H > 1 then
+    H := H - 1;
 end;
 
 function RGBFP(R, G, B: Byte): TColor;
@@ -242,61 +252,65 @@ begin
   Result := RGB(Round(RGBMax * R), Round(RGBMax * G), Round(RGBMax * B));
 end;
 
-procedure HSVtoRGB(H, S, V: Single; var R, G, B: Byte);
+procedure HSVToRGB(H, S, V: Single; var R, G, B: Single);
 var
-  Fraction: Single;
-  Sel, Q, P: Integer;
-
-  procedure CopyOutput(const RV, GV, BV: Byte);
-  begin
-    R := Round(RV);
-    G := Round(GV);
-    B := Round(BV);
-  end;
-
+  i: Integer;
+  f, p, q, t: Single;
+const
+  Epsilon = 1e-12;
 begin
-  V := 255 * V;
-
-  if S = 0 then
+  // Серый цвет (без оттенка)
+  if S < Epsilon then
   begin
-    CopyOutput(Trunc(V), Trunc(V), Trunc(V));
+    R := V;
+    G := V;
+    B := V;
     Exit;
   end;
 
-  H := (H - Floor(H)) * 6; // 0 <= H < 6
-  Fraction := H - Floor(H);
+  // Нормализация H в [0..1]
+  H := H - Floor(H);
 
-  Sel := Trunc(H);
-  if (Sel mod 2) = 0 then
-    Fraction := 1 - Fraction;
+  // Разбиваем круг на 6 секторов
+  H := H * 6;
+  i := Floor(H);
+  f := H - i;
 
-  P := Round(V * (1 - S));
-  Q := Round(V * (1 - S * Fraction));
+  p := V * (1 - S);
+  q := V * (1 - S * f);
+  t := V * (1 - S * (1 - f));
 
-  case Sel of
+  case i of
     0:
-      CopyOutput(Trunc(V), Q, P);
+      begin R := V; G := t; B := p; end;
     1:
-      CopyOutput(Q, Trunc(V), P);
+      begin R := q; G := V; B := p; end;
     2:
-      CopyOutput(P, Trunc(V), Q);
+      begin R := p; G := V; B := t; end;
     3:
-      CopyOutput(P, Q, Trunc(V));
+      begin R := p; G := q; B := V; end;
     4:
-      CopyOutput(Q, P, Trunc(V));
-    5:
-      CopyOutput(Trunc(V), P, Q);
+      begin R := t; G := p; B := V; end;
   else
-    CopyOutput(Trunc(V), Trunc(V), Trunc(V));
+    begin R := V; G := p; B := q; end; // сектор 5
   end;
 end;
 
-procedure HSVToColor(H: integer; S, V: Double; var Value: TColor);
+procedure HSVToColor(H: integer; S, V: Single; var Value: TColor);
 var
-  R, G, B: Byte;
+  R, G, B: Single;
+  Color: TAlphaColorF;
 begin
   HSVToRGB(H, S, V, R, G, B);
-  RGBToColor(R, G, B);
+  Color.R := R;
+  Color.G := G;
+  Color.B := B;
+  Value := AlphaColorToColor(Color.ToAlphaColor);
+end;
+
+function MakeColor(R, G, B: Single; A: Single = 1): TAlphaColor;
+begin
+  Result := TAlphaColorF.Create(R, G, B, A).ToAlphaColor;
 end;
 
 procedure RGBToCMYK(const R, G, B: Byte; var C: Byte; var M: Byte; var Y: Byte; var K: Byte);

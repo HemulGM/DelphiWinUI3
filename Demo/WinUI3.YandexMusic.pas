@@ -105,10 +105,6 @@ begin
   FLayoutMode := TLayoutMode.Full;
   UpdateLayoutMode;
   StyleBook := FormMain.StyleBook;
-  if FormMain.IsDark then
-    OverrideThemeKind := TSystemThemeKind.Dark
-  else
-    OverrideThemeKind := TSystemThemeKind.Light;
 end;
 
 procedure TFormMusic.UpdateLayoutMode;

@@ -1,15 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.258,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.Input.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.026,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Inner.InfoBar.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.745,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.Font.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.148,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Form.Dialog.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.007,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.264,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Form.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.909,=D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.461,D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas=</Transaction>
     <Transaction>1899.12.30 00:00:00.000.069,D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.461,D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.909,=D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.264,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Form.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.439,=D:\Projects\#Styles\WinUI3\Fixes\D12\FMX.Menus.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.007,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.pas</Transaction>
     <Transaction>1899.12.30 00:00:00.000.215,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Dialogs.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.745,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.Font.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.258,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.Input.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.148,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Form.Dialog.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.026,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Inner.InfoBar.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.894,D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Menus.pas=</Transaction>
+    <Transaction>2026.04.11 12:24:13.928,=D:\Projects\#Styles\WinUI3\Fixes\D13\FMX.Platform.Win.pas</Transaction>
+    <Transaction>2026.04.11 20:06:29.630,=D:\Projects\#Styles\WinUI3\Sources\HGM.ColorUtils.pas</Transaction>
+    <Transaction>2026.04.11 20:06:29.643,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Dialogs.DataTransferManager.pas</Transaction>
+    <Transaction>2026.04.11 20:06:29.814,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.ColorPicker.pas</Transaction>
+    <Transaction>2026.04.11 20:06:30.033,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Dialog.Text.pas</Transaction>
+    <Transaction>2026.04.11 20:06:30.144,=D:\Projects\#Styles\WinUI3\Sources\WinUI3.Frame.Inner.Dialog.pas</Transaction>
+    <Transaction>2026.04.12 16:01:05.412,=D:\Projects\#Styles\WinUI3\Demo\Unit1.pas</Transaction>
+    <Transaction>2026.04.12 16:01:16.153,D:\Projects\#Styles\WinUI3\Sources\WinUI3.Style.pas=D:\Projects\#Styles\WinUI3\Demo\Unit1.pas</Transaction>
+    <Transaction>2026.04.12 16:13:27.679,=D:\Projects\#Styles\WinUI3\Demo\Unit1.pas</Transaction>
+    <Transaction>2026.04.12 16:13:35.747,D:\Projects\#Styles\WinUI3\Demo\WinUI3.DM.dfm=D:\Projects\#Styles\WinUI3\Demo\Unit1.dfm</Transaction>
+    <Transaction>2026.04.12 16:13:35.747,D:\Projects\#Styles\WinUI3\Demo\WinUI3.DM.pas=D:\Projects\#Styles\WinUI3\Demo\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>

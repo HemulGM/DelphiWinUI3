@@ -10,7 +10,7 @@ uses
   DelphiWindowStyle.Types,
   {$ENDIF}
   FMX.Platform, FMX.Ani, FMX.Filter.Effects, FMX.Effects, FMX.ActnList,
-  DelphiWindowStyle.FMX;
+  DelphiWindowStyle.FMX, System.Messaging;
 
 type
   TSystemThemeKind = FMX.platform.TSystemThemeKind;
@@ -20,9 +20,20 @@ type
 
   TSystemBackdropType = DelphiWindowStyle.FMX.TSystemBackdropType;
 
+  TInternalSettingChangedMessage = class(System.Messaging.TMessage<TCommonCustomForm>)
+  private
+    FStyleBook: TStyleBook;
+  public
+    property StyleBook: TStyleBook read FStyleBook;
+    constructor Create(StyleBook: TStyleBook; Form: TCommonCustomForm); reintroduce;
+  end;
+
   TWinUIForm = class(TForm)
   protected
-    class var FOverrideThemeKind: TSystemThemeKind;
+    class var
+      FThemeKind: TSystemThemeKind;
+      FSystemThemeKind: TSystemThemeKind;
+      FSystemAccentColor: TAlphaColor;
   private
     FModeFocus: Boolean;
     FPopupHint: TPopup;
@@ -42,8 +53,6 @@ type
     FFocusInflate: Single;
     FOffsetControls: TArray<TControl>;
     FTitleControls: TArray<TControl>;
-    FSystemAccentColor: TAlphaColor;
-    FSystemThemeKind: TSystemThemeKind;
     FAutoScrollToFocused: Boolean;
     FFocusHighlight: Boolean;
     FButtonClose: TStyledControl;
@@ -63,6 +72,7 @@ type
     procedure SetPropSystemBackdropType(const Value: TSystemBackdropType);
     procedure SetAutoScrollToFocused(const Value: Boolean);
     procedure SetFocusHighlight(const Value: Boolean);
+    class function GetIsDark: Boolean; static;
   protected
     procedure PaintRects(const UpdateRects: array of TRectF); override;
     procedure CreateHandle; override;
@@ -100,9 +110,11 @@ type
     procedure BeginLauncher(Proc: TProc = nil); virtual;
     procedure EndLauncher(Proc: TProc = nil); virtual;
     procedure SetSystemWindowControls(const AClose, AMax, AMin: TStyledControl); virtual;
-    property SystemAccentColor: TAlphaColor read FSystemAccentColor;
-    property SystemThemeKind: TSystemThemeKind read FSystemThemeKind;
-    class property OverrideThemeKind: TSystemThemeKind read FOverrideThemeKind write FOverrideThemeKind;
+    procedure UpdateSystemBackdropType;
+    class property SystemAccentColor: TAlphaColor read FSystemAccentColor;
+    class property SystemThemeKind: TSystemThemeKind read FSystemThemeKind;
+    class property ThemeKind: TSystemThemeKind read FThemeKind write FThemeKind;
+    class property IsDark: Boolean read GetIsDark;
     property SystemBackdropType: TSystemBackdropType read FSystemBackdropType write SetPropSystemBackdropType;
     //
     /// <summary>
@@ -132,18 +144,21 @@ type
     property AutoScrollToFocused: Boolean read FAutoScrollToFocused write SetAutoScrollToFocused;
   end;
 
-procedure UpdateNavButtons;
-
 implementation
 
 uses
-  FMX.Menus, FMX.DateTimeCtrls, System.Messaging, System.Threading, FMX.Layouts, FMX.Bind.Navigator, Data.Bind.Controls;
+  FMX.Menus, FMX.DateTimeCtrls, System.Threading, FMX.Layouts,
+  FMX.Bind.Navigator, Data.Bind.Controls;
 
-
-procedure UpdateNavButtons;
+procedure RegisterSystemThemeChanging;
 begin
-  //BtnTypePath
-  //BtnTypePath[
+  // Read system style kind
+  var SystemAppearanceService: IFMXSystemAppearanceService;
+  if TPlatformServices.Current.SupportsPlatformService(IFMXSystemAppearanceService, SystemAppearanceService) then
+  begin
+    TWinUIForm.FSystemAccentColor := SystemAppearanceService.GetSystemColor(TSystemColorType.Accent);
+    TWinUIForm.FSystemThemeKind := SystemAppearanceService.ThemeKind;
+  end;
 end;
 
 {$REGION 'WinAPI for no TitleBar'}
@@ -327,14 +342,6 @@ begin
   FAutoScrollToFocused := True;
   FFocusHighlight := True;
 
-  // Read system style kind
-  var SystemAppearanceService: IFMXSystemAppearanceService;
-  if TPlatformServices.Current.SupportsPlatformService(IFMXSystemAppearanceService, SystemAppearanceService) then
-  begin
-    FSystemAccentColor := SystemAppearanceService.GetSystemColor(TSystemColorType.Accent);
-    FSystemThemeKind := SystemAppearanceService.ThemeKind;
-  end;
-
   // Subscribe to change caption
   TMessageManager.DefaultManager.SubscribeToMessage(TMainCaptionChangedMessage,
     procedure(const Sender: TObject; const M: TMessage)
@@ -344,6 +351,18 @@ begin
         var TextControl: ICaption;
         if (Length(TitleControls) > 0) and Supports(TitleControls[0], ICaption, TextControl) then
           TextControl.Text := TMainCaptionChangedMessage(M).Value.Caption;
+      end;
+    end);
+
+  // Subscribe to change internal settings
+  TMessageManager.DefaultManager.SubscribeToMessage(TInternalSettingChangedMessage,
+    procedure(const Sender: TObject; const M: TMessage)
+    begin
+      if TInternalSettingChangedMessage(M).Value <> Self then
+      begin
+        DoOnSettingChange;
+        StyleBook := TInternalSettingChangedMessage(M).StyleBook;
+        TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(TInternalSettingChangedMessage(M).StyleBook, Self), True);
       end;
     end);
 
@@ -393,18 +412,6 @@ begin
   // Style defaults
   FSystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
   inherited;
-                      {
-  var hwnd: HWND;
-  // Получаем HWND окна
-  hwnd := FmxHandleToHWND(Handle);
-  if hwnd = 0 then Exit;
-
-  // Убираем системный заголовок
-  SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) and not (WS_CAPTION));
-
-  // Применяем изменения
-  SetWindowPos(hwnd, 0, 0, 0, 0, 0, SWP_NOSIZE or SWP_NOMOVE or SWP_NOZORDER or SWP_FRAMECHANGED);  }
-  //TAnimation.AniFrameRate := 120;
 end;
 
 procedure TWinUIForm.CreateHandle;
@@ -424,12 +431,8 @@ begin
   FFocusStyle.Free;
 end;
 
-procedure TWinUIForm.DoOnSettingChange;
+procedure TWinUIForm.UpdateSystemBackdropType;
 begin
-  if FOverrideThemeKind <> TSystemThemeKind.Unspecified then
-    SetWindowColorMode(FOverrideThemeKind = TSystemThemeKind.Dark)
-  else
-    SetWindowColorMode(FSystemThemeKind = TSystemThemeKind.Dark);
   if SetSystemBackdropType(FSystemBackdropType) then
   begin
     Fill.Kind := TBrushKind.Solid;
@@ -438,6 +441,18 @@ begin
   end
   else
     Fill.Kind := TBrushKind.None;
+end;
+
+procedure TWinUIForm.DoOnSettingChange;
+begin
+  SetWindowColorMode(IsDark);
+  UpdateSystemBackdropType;
+
+  // Set focus color
+  if IsDark then
+    FocusStyle.Color := TAlphaColorRec.White
+  else
+    FocusStyle.Color := TAlphaColorRec.Black;
 end;
 
 procedure TWinUIForm.BeginLauncher(Proc: TProc);
@@ -553,6 +568,14 @@ begin
   {$ELSE}
   WindowState := TWindowState.wsMinimized;
   {$ENDIF}
+end;
+
+class function TWinUIForm.GetIsDark: Boolean;
+begin
+  if FThemeKind <> TSystemThemeKind.Unspecified then
+    Result := FThemeKind = TSystemThemeKind.Dark
+  else
+    Result := FSystemThemeKind = TSystemThemeKind.Dark;
 end;
 
 procedure TWinUIForm.TimerHintCloseTimer(Sender: TObject);
@@ -782,8 +805,17 @@ begin
   FTitleControls := Value;
 end;
 
+{ TInternalSettingChangedMessage }
+
+constructor TInternalSettingChangedMessage.Create(StyleBook: TStyleBook; Form: TCommonCustomForm);
+begin
+  inherited Create(Form);
+  FStyleBook := StyleBook;
+end;
+
 initialization
-  TWinUIForm.FOverrideThemeKind := TSystemThemeKind.Unspecified;
+  TWinUIForm.FThemeKind := TSystemThemeKind.Unspecified;
+  RegisterSystemThemeChanging;
 
 end.
 

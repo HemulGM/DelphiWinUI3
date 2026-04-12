@@ -1,0 +1,110 @@
+2093a2094,2095
+>   // Fix to correct erase background without blink
+>   ProcEraseBkgnd: TProc<HDC, TCommonCustomForm> = nil;
+2373a2376,2380
+>               // Fix to correct erase background without blink
+>               if Assigned(ProcEraseBkgnd) then
+>               begin
+>                 ProcEraseBkgnd(TWMEraseBkGnd(Message).DC, LForm);
+>               end;
+2433c2440,2442
+<                 PlatformWin.MinimizeApp;
+---
+>                 // Fix to restore maximized window
+>                 if LForm.WindowState <> TWindowState.wsMinimized then
+> 				          PlatformWin.MinimizeApp;
+2883c2892,2897
+<               Halt;
+---
+>               // Fix close app
+>               TThread.ForceQueue(nil,
+>                 procedure
+>                 begin
+>                   Halt;
+>                 end);
+2981,2982c2995,2998
+<   Result := CreateWindowEx(WS_EX_WINDOWEDGE or WS_EX_APPWINDOW, FMAppClass.lpszClassName, PChar(FTitle),
+<                            WS_POPUP or WS_GROUP, 0, 0, 0, 0, GetDesktopWindow, 0, hInstance, nil);
+---
+>   // Fix flags, like in VCL
+>   Result := CreateWindowEx(WS_EX_TOOLWINDOW, FMAppClass.lpszClassName, PChar(FTitle),
+>                            WS_POPUP or WS_CAPTION or WS_CLIPSIBLINGS or WS_SYSMENU or WS_MINIMIZEBOX, 
+> 						   0, 0, 0, 0, GetDesktopWindow, 0, hInstance, nil);
+3105a3122,3124
+>   // Fix regular window's flag
+>   if AForm.FormStyle <> TFormStyle.Popup then
+>     ExStyle := ExStyle or WS_EX_APPWINDOW;
+3245,3282c3264,3265
+<   AnimationEnable: Boolean;
+< 
+<   function GetAnimation: Boolean;
+<   var
+<     Info: TAnimationInfo;
+<   begin
+<     Info.cbSize := SizeOf(TAnimationInfo);
+<     if SystemParametersInfo(SPI_GETANIMATION, Info.cbSize, @Info, 0) then
+<       Result := Info.iMinAnimate <> 0
+<     else
+<       Result := False;
+<   end;
+< 
+<   procedure SetAnimation(Value: Boolean);
+<   var
+<     Info: TAnimationInfo;
+<   begin
+<     Info.cbSize := SizeOf(TAnimationInfo);
+<     Info.iMinAnimate := Integer(BOOL(Value));
+<     SystemParametersInfo(SPI_SETANIMATION, Info.cbSize, @Info, 0);
+<   end;
+< 
+<   procedure MinimiseAllForms;
+<   var
+<     I: Integer;
+<     WindowHandle: HWND;
+<   begin
+<     for I := 0 to Screen.FormCount - 1 do
+<     begin
+<       WindowHandle := FormToHWND(Screen.Forms[I]);
+<       if IsWindowVisible(WindowHandle) then
+<         DefWindowProc(WindowHandle, WM_SYSCOMMAND, SC_MINIMIZE, 0);
+<     end;
+<   end;
+< 
+< var
+<   MainForm: TCommonCustomForm;
+<   WndPos: TPoint;
+---
+>   I: Integer;
+>   WindowHandle: HWND;
+3284,3296c3267,3272
+<   AnimationEnable := GetAnimation;
+<   try
+<     SetAnimation(False);
+<     if Application.MainForm <> nil then
+<     begin
+<       MainForm := Application.MainForm;
+<       WndPos := MultiDisplayWin.DpToPx(TPointF.Create(MainForm.Left, MainForm.Top));
+<       SetWindowPos(ApplicationHWND, FormToHWND(Application.MainForm), WndPos.X, WndPos.Y, Trunc(MainForm.Width), 0, SWP_SHOWWINDOW);
+<       MinimiseAllForms;
+<     end;
+<     DefWindowProc(ApplicationHWND, WM_SYSCOMMAND, SC_MINIMIZE, 0);
+<   finally
+<     SetAnimation(AnimationEnable);
+---
+>   // Fix to correct minimize
+>   for I := 0 to Screen.FormCount - 1 do
+>   begin
+>     WindowHandle := FormToHWND(Screen.Forms[I]);
+>     if IsWindowVisible(WindowHandle) then
+>       DefWindowProc(WindowHandle, WM_SYSCOMMAND, SC_MINIMIZE, 0);
+4885a4862,4871
+>   // Fix to correct erase background without blink
+>   ProcEraseBkgnd := procedure(LDC: HDC; LForm: TCommonCustomForm)
+>   begin
+>     var BS := Winapi.Windows.CreateSolidBrush($00000000);
+>     try
+>       FillRect(LDC, LForm.ClientRect.Round, BS);
+>     finally
+>       DeleteObject(BS);
+>     end;
+>   end;

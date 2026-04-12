@@ -269,10 +269,6 @@ end;
 procedure TFormGallery.FormCreate(Sender: TObject);
 begin
   StyleBook := FormMain.StyleBook;
-  if FormMain.IsDark then
-    OverrideThemeKind := TSystemThemeKind.Dark
-  else
-    OverrideThemeKind := TSystemThemeKind.Light;
   FNavigation := TList<TNavigationItem>.Create;
 
   VertScrollBoxMenu.AniCalculations.Animation := True;

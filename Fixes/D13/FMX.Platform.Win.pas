@@ -2,7 +2,7 @@
 {                                                       }
 {              Delphi FireMonkey Platform               }
 {                                                       }
-{ Copyright(c) 2011-2025 Embarcadero Technologies, Inc. }
+{ Copyright(c) 2011-2026 Embarcadero Technologies, Inc. }
 {              All rights reserved                      }
 {                                                       }
 {*******************************************************}
@@ -706,7 +706,7 @@ constructor TPlatformWin.Create;
 begin
   inherited;
   FIsOutApplicationHWND := False;
-  WindowAtomString := Format('FIREMONKEY%.8X', [GetCurrentProcessID]);
+  WindowAtomString := Format('FIREMONKEY%.8X_%.8X', [GetCurrentProcessID, GetCurrentThreadID]);
   WindowAtom := GlobalAddAtomW(PChar(WindowAtomString));
   ControlAtomString := Format('ControlOfs%.8X%.8X', [HInstance, GetCurrentThreadID]);
   ControlAtom := GlobalAddAtom(PChar(ControlAtomString));
@@ -2091,6 +2091,7 @@ end;
 var
   LastKeyIsDeadKey: Boolean = False;
   LastMousePos: TPoint;
+  // Fix to correct erase background without blink
   ProcEraseBkgnd: TProc<HDC, TCommonCustomForm> = nil;
 
 const
@@ -2372,10 +2373,11 @@ begin
             end;
           WM_ERASEBKGND:
             begin
+              // Fix to correct erase background without blink
               if Assigned(ProcEraseBkgnd) then
               begin
                 ProcEraseBkgnd(TWMEraseBkGnd(Message).DC, LForm);
-                //ProcEraseBkgnd := nil;
+                ProcEraseBkgnd := nil;
               end;
               Result := 1;
             end;
@@ -2436,8 +2438,9 @@ begin
               GetWindowPlacement(hwnd, Placement);
               if (Application.MainForm <> nil) and (LForm = Application.MainForm) and (Placement.showCmd = SW_SHOWMINIMIZED) then
               begin
-                if LForm.WindowState <> TWindowState.wsMinimized then                
-				  PlatformWin.MinimizeApp;
+                // Fix to restore maximized window
+                if LForm.WindowState <> TWindowState.wsMinimized then
+				          PlatformWin.MinimizeApp;
                 Result := DefWindowProc(hwnd, uMsg, wParam, lParam);
               end
               else
@@ -2887,7 +2890,12 @@ begin
             begin
               TMessageManager.DefaultManager.SendMessage(nil, TSaveStateMessage.Create);
               Application.Terminate;
-              Halt;
+              // Fix close app
+              TThread.ForceQueue(nil,
+                procedure
+                begin
+                  Halt;
+                end);
             end;
           end;
         WM_SETTINGCHANGE:
@@ -2985,6 +2993,7 @@ begin
       Winapi.Windows.UnregisterClass(FMAppClass.lpszClassName, hInstance);
     Winapi.Windows.RegisterClass(FMAppClass);
   end;
+  // Fix flags, like in VCL
   Result := CreateWindowEx(WS_EX_TOOLWINDOW, FMAppClass.lpszClassName, PChar(FTitle),
                            WS_POPUP or WS_CAPTION or WS_CLIPSIBLINGS or WS_SYSMENU or WS_MINIMIZEBOX, 
 						   0, 0, 0, 0, GetDesktopWindow, 0, hInstance, nil);
@@ -3111,6 +3120,7 @@ begin
     DefineWindowStyle(AForm, Style, ExStyle);
     ParentWnd := DefineParentWnd(AForm);
   end;
+  // Fix regular window's flag
   if AForm.FormStyle <> TFormStyle.Popup then
     ExStyle := ExStyle or WS_EX_APPWINDOW;
   Wnd := CheckWinapiHandle(CreateWindowEx(ExStyle, WindowClass.lpszClassName, PChar(AForm.Caption), Style,
@@ -3251,30 +3261,16 @@ begin
 end;
 
 procedure TPlatformWin.MinimizeApp;
-
-  procedure MinimiseAllForms;
-  var
-    I: Integer;
-    WindowHandle: HWND;
-  begin
-    for I := 0 to Screen.FormCount - 1 do
-    begin
-      WindowHandle := FormToHWND(Screen.Forms[I]);
-      if IsWindowVisible(WindowHandle) then
-        DefWindowProc(WindowHandle, WM_SYSCOMMAND, SC_MINIMIZE, 0);
-    end;
-  end;
-
 var
-  MainForm: TCommonCustomForm;
-  WndPos: TPoint;
+  I: Integer;
+  WindowHandle: HWND;
 begin
-  if Application.MainForm <> nil then
+  // Fix to correct minimize
+  for I := 0 to Screen.FormCount - 1 do
   begin
-    MainForm := Application.MainForm;
-    WndPos := MultiDisplayWin.DpToPx(TPointF.Create(MainForm.Left, MainForm.Top));
-    //SetWindowPos(ApplicationHWND, FormToHWND(Application.MainForm), WndPos.X, WndPos.Y, Trunc(MainForm.Width), 0, SWP_SHOWWINDOW);
-    MinimiseAllForms;
+    WindowHandle := FormToHWND(Screen.Forms[I]);
+    if IsWindowVisible(WindowHandle) then
+      DefWindowProc(WindowHandle, WM_SYSCOMMAND, SC_MINIMIZE, 0);
   end;
 end;
 
@@ -4864,6 +4860,7 @@ initialization
   OleInitialize(nil);
   CapturedGestureControl := nil;
   LastMousePos := ImpossibleMousePosition;
+  // Fix to correct erase background without blink
   ProcEraseBkgnd := procedure(LDC: HDC; LForm: TCommonCustomForm)
   begin
     var BS := Winapi.Windows.CreateSolidBrush($00000000);

@@ -109,15 +109,15 @@ uses
 
 {$R *.fmx}
 
-function ChangeHSVValue(Color: TAlphaColor; Value: Double): TAlphaColor;
+function ChangeHSVValue(Color: TAlphaColor; Value: Single): TAlphaColor;
 begin
-  var R, G, B: Byte;
+  var R, G, B: Single;
   var TmpColor := TAlphaColorF.Create(Color);
-  R := Trunc(TmpColor.R * 255);
-  G := Trunc(TmpColor.G * 255);
-  B := Trunc(TmpColor.B * 255);
+  R := TmpColor.R;
+  G := TmpColor.G;
+  B := TmpColor.B;
 
-  var H, S, V: Double;
+  var H, S, V: Single;
   RGBToHSV(R, G, B, H, S, V);
   HSVToRGB(H, S, Value, R, G, B);
   Result := MakeColor(R, G, B);
@@ -164,8 +164,8 @@ begin
         end;
       1:
         begin
-          var H, S, V: Double;
-          RGBToHSV(Rec.R, Rec.G, Rec.B, H, S, V);
+          var H, S, V: Single;
+          RGBToHSV(Rec.R / 255, Rec.G / 255, Rec.B / 255, H, S, V);
           EditR.Text := Trunc(H * 360).ToString;
           EditG.Text := Trunc(S * 100).ToString;
           EditB.Text := Trunc(V * 100).ToString;
@@ -178,7 +178,7 @@ begin
     EditA.Text := Rec.A.ToString;
     BWTrackBar.InputColor := FRawColor;
     BWTrackBar.UpdateBitmap;
-    AlphaTrackBar.InputColor := FRawColor;
+    AlphaTrackBar.InputColor := ChangeHSVValue(FRawColor, BWTrackBar.Value);
     AlphaTrackBar.UpdateBitmap;
   finally
     EndUpdate;
@@ -208,11 +208,11 @@ begin
       begin
         var Hue := (((100 / (Bits.Width - 1)) * X) / 100);
         var Sat := 100 - (100 / (Bits.Height - 1)) * Y;
-        var R, G, B: Byte;
+        var R, G, B: Single;
         //if X = Bits.Width - 1 then
         //  Sleep(1);
         HSVToRGB(Hue, Sat / 100, 1, R, G, B);
-        var Color: TAlphaColor := TAlphaColorF.Create(R / 255, G / 255, B / 255, 1).ToAlphaColor;
+        var Color: TAlphaColor := TAlphaColorF.Create(R, G, B, 1).ToAlphaColor;
         Bits.SetPixel(X, Y, Color);
       end;
   finally
@@ -269,14 +269,14 @@ begin
         end;
       1:
         begin
-          var Cl: TAlphaColorRec;
+          var Cl: TAlphaColorF;
           HSVtoRGB(
             Min(StrToInt(EditR.Text), 360) / 359,
             Min(StrToInt(EditG.Text), 100) / 100,
             Min(StrToInt(EditB.Text), 100) / 100,
             Cl.R, Cl.G, Cl.B);
-          Cl.A := StrToInt(EditA.Text);
-          NewColor := Cl.Color;
+          Cl.A := StrToInt(EditA.Text) / 255;
+          NewColor := Cl.ToAlphaColor;
         end;
     end;
   except
@@ -320,25 +320,25 @@ end;
 
 procedure TFrameDialogColorPicker.FindColor(Color: TAlphaColor);
 begin
-  var Rec := TAlphaColorRec.Create(Color);
-  AlphaTrackBar.Value := Rec.A;
-  Rec.A := 255;
-  var H, S, V: Double;
+  var Rec := TAlphaColorF.Create(Color);
+  Rec.A := 1;
+  var H, S, V: Single;
   RGBToHSV(Rec.R, Rec.G, Rec.B, H, S, V);
-  var R, G, B: Byte;
+  var R, G, B: Single;
   HSVtoRGB(H, S, 1, R, G, B);
   Rec.R := R;
   Rec.G := G;
   Rec.B := B;
   BWTrackBar.Value := V;
   var ClosePt := TPoint.Zero;
-  var CloseDiff := 1000;
+  var CloseDiff: Single := 1000;
   var Bits: TBitmapData;
   if FBitmap.Map(TMapAccess.Read, Bits) then
   try
+    var AlphaColor := Rec.ToAlphaColor;
     for var X := 0 to Bits.Width - 1 do
       for var Y := 0 to Bits.Height - 1 do
-        if Bits.GetPixel(X, Y) = Rec.Color then
+        if Bits.GetPixel(X, Y) = AlphaColor then
         begin
           var Pt := TPoint.Create(X, Y);
           CircleBoxPoint.Position.Point := Pt - TPoint.Create(8, 8);
@@ -346,7 +346,7 @@ begin
         end
         else  //more close
         begin
-          var Pix := TAlphaColorRec.Create(Bits.GetPixel(X, Y));
+          var Pix := TAlphaColorF.Create(Bits.GetPixel(X, Y));
           var Diff := Abs(Rec.R - Pix.R) + Abs(Rec.G - Pix.G) + Abs(Rec.B - Pix.B);
           if CloseDiff > Diff then
           begin
@@ -436,14 +436,14 @@ begin
     Rec.A := 255;
   end;
 
-  AlphaTrackBar.Value := Rec.A;
-  AlphaTrackBar.InputColor := FRawColor;
-  AlphaTrackBar.UpdateBitmap;
-
-  var H, S, V: Double;
-  RGBToHSV(Rec.R, Rec.G, Rec.B, H, S, V);
-  BWTrackBar.Value := V;
+  var H, S, V: Single;
+  RGBToHSV(Rec.R / 255, Rec.G / 255, Rec.B / 255, H, S, V);
   FRawColor := Rec.Color;
+  BWTrackBar.Value := V;
+
+  AlphaTrackBar.Value := Rec.A;
+  AlphaTrackBar.InputColor := ChangeHSVValue(FRawColor, V / 100);
+  AlphaTrackBar.UpdateBitmap;
 
   BWTrackBar.InputColor := FRawColor;
   BWTrackBar.UpdateBitmap;

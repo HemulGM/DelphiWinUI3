@@ -53,7 +53,7 @@ type
     MenuItem19: TMenuItem;
     MenuItem20: TMenuItem;
     MenuItem21: TMenuItem;
-    PrototypeBindSource1: TPrototypeBindSource;
+    PrototypeData1: TPrototypeBindSource;
     BindingsList1: TBindingsList;
     MenuBar1: TMenuBar;
     MenuItem32: TMenuItem;
@@ -69,7 +69,7 @@ type
     Button46: TButton;
     EditSearch: TEdit;
     ClearEditButton4: TClearEditButton;
-    PrototypeBindSource2: TPrototypeBindSource;
+    PrototypeData2: TPrototypeBindSource;
     ActionList: TActionList;
     ActionAdd: TAction;
     LayoutContent: TLayout;
@@ -106,7 +106,6 @@ type
     ButtonMenuColors: TButton;
     ButtonMenuNotify: TButton;
     ButtonMenuDialogs: TButton;
-    ImageListDemo: TImageList;
     MenuItem23: TMenuItem;
     MenuItem1: TMenuItem;
     PopupMenuRich: TPopupMenu;
@@ -1307,21 +1306,12 @@ type
     procedure TryOpenTabByName(const Text: string);
     procedure FOnSubMenuClick(Sender: TObject);
     procedure FOnButton15SplitClick(Sender: TObject);
-    procedure ChangeStyleBookColor(StyleBook: TStyleBook; OldColor, NewColor: TAlphaColor; ChangeProgress: Boolean);
   protected
     procedure DoOnSettingChange; override;
-  public
-    IsDark: Boolean;
   end;
 
 var
   FormMain: TFormMain;
-  //
-  OldColor: TAlphaColor = $FF60CDFF;
-  OldColorAccentText: TAlphaColor = $FF99EBFF;
-  //
-  OldColorL: TAlphaColor = $FF005FB8;
-  OldColorAccentTextL: TAlphaColor = $FF003E92;
 
 implementation
 
@@ -1330,7 +1320,7 @@ uses
   HGM.ColorUtils, System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery,
   WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic, WinUI3.RADIDE,
   WinUI3.Browser, FMX.MultiView.Types, WinUI3.MultiView.CustomPresentation,
-  FMX.Styles, FMX.Memo.ExtStyle,
+  FMX.Styles, FMX.Memo.ExtStyle, WinUI3.Style, WinUI3.DM,
   {$IFDEF MSWINDOWS}
   FMX.Platform.Win,
   {$ENDIF}
@@ -1371,7 +1361,9 @@ procedure TFormMain.ButtonDialogColorPickerAlphaClick(Sender: TObject);
 begin
   var Params: TDialogColorParams;
   Params.Title := 'Change color';
-  Params.Color := TAlphaColors.Alpha;
+  var Rec := TAlphaColorF.Create(TAlphaColors.Coral);
+  Rec.A := 0.4;
+  Params.Color := Rec.ToAlphaColor;
   Params.Alpha := True;
   // Params.CheckText := 'Accept?';
   // Params.CheckValue := True;
@@ -1632,7 +1624,21 @@ end;
 
 procedure TFormMain.PopupBoxStyleChange(Sender: TObject);
 begin
-  DoOnSettingChange;
+    // Set window type
+  case PopupBoxStyle.ItemIndex of
+    0: // mica
+      SystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
+    1: // tabbed
+      SystemBackdropType := TSystemBackdropType.DWMSBT_TABBEDWINDOW;
+    2: // acrilyc
+      SystemBackdropType := TSystemBackdropType.DWMSBT_TRANSIENTWINDOW;
+    3: // none
+      begin
+        SystemBackdropType := TSystemBackdropType.DWMSBT_DISABLE;
+        Fill.Kind := TBrushKind.None;
+      end;
+  end;
+  UpdateSystemBackdropType;
 end;
 
 procedure TFormMain.ScrollBoxDemosCalcContentBounds(Sender: TObject; var ContentBounds: TRectF);
@@ -1667,159 +1673,6 @@ begin
   ColorButton3.Color := ColorComboBox1.Color;
 end;
 
-procedure TFormMain.ChangeStyleBookColor(StyleBook: TStyleBook; OldColor, NewColor: TAlphaColor; ChangeProgress: Boolean);
-var
-  OldColorRec: TAlphaColorF;
-  NewColorRec: TAlphaColorF;
-
-  procedure ForAll(Obj: TFmxObject; Proc: TProc<TFmxObject>);
-  begin
-    Proc(Obj);
-    if Assigned(Obj.Children) then
-      for var Child in Obj.Children do
-        ForAll(Child, Proc);
-  end;
-
-begin
-  var Style := StyleBook.Style;
-  RemoveObject(Style);
-  OldColorRec := TAlphaColorF.Create(OldColor);
-  NewColorRec := TAlphaColorF.Create(NewColor);
-
-  // Fix for progresscell style
-  if ChangeProgress then
-  begin
-    var PC_Image := StyleBook.Style.FindStyleResource('progresscell_bmp', False);
-    if Assigned(PC_Image) and (PC_Image is TImage) then
-    begin
-      TImage(PC_Image).Bitmap.Clear(NewColor);
-    end;
-  end;
-
-  ForAll(Style,
-    procedure(Item: TFmxObject)
-    begin
-      Item.TagString := '';
-    end);
-
-  ForAll(Style,
-    procedure(Item: TFmxObject)
-
-      function UpdateColor(TargetColor: TAlphaColor): TAlphaColor;
-      begin
-        var Rec := TAlphaColorF.Create(TargetColor);
-        if (Rec.R = OldColorRec.R) and (Rec.G = OldColorRec.G) and (Rec.B = OldColorRec.B) then
-        begin
-          Rec.R := NewColorRec.R;
-          Rec.G := NewColorRec.G;
-          Rec.B := NewColorRec.B;
-        end;
-        Result := Rec.ToAlphaColor;
-      end;
-
-
-    begin
-      if not Item.TagString.IsEmpty then
-        Exit;
-      if Item is TShape then
-      begin
-        var Control := TRectangle(Item);
-
-        Control.Fill.Color := UpdateColor(Control.Fill.Color);
-        Control.Stroke.Color := UpdateColor(Control.Stroke.Color);
-
-        Item.TagString := '0';
-      end
-      else if Item is TColorObject then
-      begin
-        var Control := TColorObject(Item);
-        Control.Color := UpdateColor(Control.Color);
-        Item.TagString := '0';
-      end
-      else if Item is TBrushObject then
-      begin
-        var Control := TBrushObject(Item);
-        Control.Brush.Color := UpdateColor(Control.Brush.Color);
-        Item.TagString := '0';
-      end
-      else if Item is TColorAnimation then
-      begin
-        var Control := TColorAnimation(Item);
-        Control.StartValue := UpdateColor(Control.StartValue);
-        Control.StopValue := UpdateColor(Control.StopValue);
-        Item.TagString := '0';
-      end
-      else if Item is TLabel then
-      begin
-        var Control := TLabel(Item);
-        Control.TextSettings.FontColor := UpdateColor(Control.TextSettings.FontColor);
-        Item.TagString := '0';
-        {$IFDEF LINUX}
-        if not Edit2.Text.IsEmpty then
-          Control.TextSettings.Font.Family := Edit2.Text;
-        {$ENDIF}
-      end
-      else if Item is TText then
-      begin
-        {$IFDEF LINUX}
-        if not Edit2.Text.IsEmpty then
-          (Item as TText).TextSettings.Font.Family := Edit2.Text;
-        {$ENDIF}
-        if Item is TTabStyleTextObject then
-        begin
-          var Control := TTabStyleTextObject(Item);
-          Control.HotColor := UpdateColor(Control.HotColor);
-          Control.ActiveColor := UpdateColor(Control.ActiveColor);
-          Control.Color := UpdateColor(Control.Color);
-          Item.TagString := '0';
-        end
-        else if Item is TActiveStyleTextObject then
-        begin
-          var Control := TActiveStyleTextObject(Item);
-          Control.ActiveColor := UpdateColor(Control.ActiveColor);
-          Control.Color := UpdateColor(Control.Color);
-          Item.TagString := '0';
-        end
-        else if Item is TButtonStyleTextObject then
-        begin
-          var Control := TButtonStyleTextObject(Item);
-          Control.HotColor := UpdateColor(Control.HotColor);
-          Control.FocusedColor := UpdateColor(Control.FocusedColor);
-          Control.NormalColor := UpdateColor(Control.NormalColor);
-          Control.PressedColor := UpdateColor(Control.PressedColor);
-          Item.TagString := '0';
-        end
-        else
-        begin
-          var Control := TText(Item);
-          Control.TextSettings.FontColor := UpdateColor(Control.TextSettings.FontColor);
-          Item.TagString := '0';
-        end;
-      end
-      else if Item is TSwitchObject then
-      begin
-        var Control := TSwitchObject(Item);
-        Control.Fill.Color := UpdateColor(Control.Fill.Color);
-        Control.FillOn.Color := UpdateColor(Control.FillOn.Color);
-        Control.Stroke.Color := UpdateColor(Control.Stroke.Color);
-        Control.Thumb.Color := UpdateColor(Control.Thumb.Color);
-        Item.TagString := '0';
-      end
-      else if Item is TFillRGBEffect then
-      begin
-        var Control := TFillRGBEffect(Item);
-        Control.Color := UpdateColor(Control.Color);
-        Item.TagString := '0';
-      end;
-    end);
-  ForAll(Style,
-    procedure(Item: TFmxObject)
-    begin
-      Item.TagString := '';
-    end);
-  //
-end;
-
 procedure TFormMain.ComboColorBoxAccentColorChange(Sender: TObject);
 begin
   OverAccentColor := ComboColorBoxAccentColor.Color;
@@ -1828,40 +1681,21 @@ end;
 
 procedure TFormMain.DoOnSettingChange;
 begin
-  // Get accent color
-  var SysAccent: TAlphaColor;
-  // DecreaseSaturation(SystemAccentColor, 0.8);
-
-  // Get theme color
-  IsDark := SystemThemeKind = TSystemThemeKind.Dark;
   // Override theme color
   case OverTheme of
     0:
-      ;
+      ThemeKind := TSystemThemeKind.Unspecified;
     1:
-      IsDark := SystemThemeKind <> TSystemThemeKind.Dark;
+      ThemeKind := TSystemThemeKind.Light;
     2:
-      IsDark := SystemThemeKind = TSystemThemeKind.Dark;
+      ThemeKind := TSystemThemeKind.Dark;
   end;
-
-  if IsDark then
-    OverrideThemeKind := TSystemThemeKind.Dark
-  else
-    OverrideThemeKind := TSystemThemeKind.Light;
-
-  if IsDark then
-    SysAccent := ChangeColorSat(OverAccentColor, 50)
-  else
-    SysAccent := OverAccentColor;
-
-  // Debug
-  //IsDark := True;
 
   // Set stylebook and other for theme
   if IsDark then
   begin
-    // Set focus color
-    FocusStyle.Color := TAlphaColorRec.White;
+    // Get accent color
+    var SysAccent := ChangeColorSat(OverAccentColor, 50);
 
     // Set accent color for stylebook
     if OldColor <> SysAccent then
@@ -1877,8 +1711,8 @@ begin
   end
   else
   begin
-    // Set focus color
-    FocusStyle.Color := TAlphaColorRec.Black;
+    // Get accent color
+    var SysAccent := OverAccentColor;
 
     // Set accent color for stylebook
     if OldColorL <> SysAccent then
@@ -1893,76 +1727,9 @@ begin
     StyleBook := StyleBookWinUI3Light;
   end;
 
-  // Set window theme color
-  SetWindowColorMode(IsDark);
-
-  // Set window type
-  case PopupBoxStyle.ItemIndex of
-    0:
-      begin
-        // mica
-        SetWindowCaptionColor(TColors.SysNone);
-        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
-        begin
-          Fill.Kind := TBrushKind.Solid;
-          Fill.Color := TAlphaColorRec.Null;
-          SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        end
-        else
-          Fill.Kind := TBrushKind.None;
-        StyleLookup := 'backgroundstyle';
-      end;
-    1:
-      begin
-        // tabbed
-        SetWindowCaptionColor(TColors.SysNone);
-        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW) then
-        begin
-          Fill.Kind := TBrushKind.Solid;
-          Fill.Color := TAlphaColorRec.Null;
-          SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        end
-        else
-          Fill.Kind := TBrushKind.None;
-        StyleLookup := 'backgroundstyle';
-      end;
-    2:
-      begin
-        // acrilyc
-        SetWindowCaptionColor(TColors.SysNone);
-        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_TRANSIENTWINDOW) then
-        begin
-          Fill.Kind := TBrushKind.Solid;
-          Fill.Color := TAlphaColorRec.Null;
-          SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        end
-        else
-          Fill.Kind := TBrushKind.None;
-        StyleLookup := 'backgroundstyle';
-      end;
-    3:
-      begin
-        // none
-        SetWindowCaptionColor(TColors.SysNone);
-        if SetSystemBackdropType(TSystemBackdropType.DWMSBT_DISABLE) then
-        begin
-          Fill.Kind := TBrushKind.None;
-          Fill.Color := TAlphaColorRec.Null;
-          SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-        end
-        else
-          Fill.Kind := TBrushKind.None;
-        StyleLookup := 'backgroundstyle';
-
-        // Custom bg colors
-        // Fill.Color := $FF1C1C1C;
-        // Self.SetWindowBorderColor(TColors.Steelblue);
-        // Self.SetWindowCaptionColor(TColors.Steelblue);
-      end;
-  end;
-
+  inherited;
   TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBook, Self), True);
-  //TStyleManager.UpdateScenes;
+  TMessageManager.DefaultManager.SendMessage(Self, TInternalSettingChangedMessage.Create(StyleBook, Self), True);
 end;
 
 procedure TFormMain.DropTarget1Dropped(Sender: TObject; const Data: TDragObject; const Point: TPointF);
@@ -2510,7 +2277,7 @@ begin
 
   Button15.StylesData['arrow.OnClick'] := TValue.From<TNotifyEvent>(FOnButton15SplitClick);
 
-  TMemoExtStyled(Memo1.Presentation).SetSelectedTextColor(TAlphaColorRec.Red);
+  TMemoExtStyled(Memo1.Presentation).SetSelectedTextColor(TAlphaColorRec.White);
 
   TabControlMain.ActiveTab := TabItemButtons;
   TabControlMain.ActiveTab := TabItemHome;
@@ -2527,7 +2294,7 @@ procedure TFormMain.FOnButton15SplitClick(Sender: TObject);
 begin
   var Pt := Button15.AbsoluteRect.TopLeft;
   Pt := ClientToScreen(Pt);
-  PopupMenu1.Popup(Pt.X + 8, Pt.Y + Button15.Height + 16);
+  PopupMenu1.Popup(Pt.X, Pt.Y + Button15.Height);
 end;
 
 procedure TFormMain.ButtonApplyStyleClick(Sender: TObject);
@@ -2555,6 +2322,8 @@ procedure TFormMain.ButtonApplyStyleClick(Sender: TObject);
   end;
 
 begin
+  if not Assigned(ListBoxStyles.Selected) then
+    Exit;
   TreeViewStyle.BeginUpdate;
   try
     TreeViewStyle.Clear;   //StyleBookWinUI3.Styles

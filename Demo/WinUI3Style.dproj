@@ -352,15 +352,22 @@
         <DCCReference Include="..\FMXWindowsHint\FMX.Windows.Hints.pas"/>
         <DCCReference Include="..\Fixes\D13\FMX.Menus.pas"/>
         <DCCReference Include="Utils\FMX.Memo.ExtStyle.pas"/>
+        <DCCReference Include="..\Fixes\D13\FMX.Platform.Win.pas"/>
+        <DCCReference Include="..\Sources\HGM.ColorUtils.pas"/>
+        <DCCReference Include="..\Sources\WinUI3.Dialogs.DataTransferManager.pas"/>
+        <DCCReference Include="..\Sources\WinUI3.Dialogs.pas"/>
+        <DCCReference Include="..\Sources\WinUI3.Form.Dialog.pas">
+            <Form>FormDialogs</Form>
+            <FormType>fmx</FormType>
+        </DCCReference>
         <DCCReference Include="..\Sources\WinUI3.Form.pas"/>
-        <DCCReference Include="..\Sources\WinUI3.Frame.Inner.InfoBar.pas">
-            <Form>FrameInnerInfoBar</Form>
+        <DCCReference Include="..\Sources\WinUI3.Frame.Dialog.ColorPicker.pas">
+            <Form>FrameDialogColorPicker</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="..\Sources\WinUI3.Form.Dialog.pas"/>
-        <DCCReference Include="..\Sources\WinUI3.Frame.Dialog.pas">
-            <Form>FrameDialog</Form>
+        <DCCReference Include="..\Sources\WinUI3.Frame.Dialog.Font.pas">
+            <Form>FrameDialogFont</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -369,11 +376,31 @@
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="..\Sources\WinUI3.Dialogs.pas"/>
-        <DCCReference Include="..\Sources\WinUI3.Frame.Dialog.Font.pas">
-            <Form>FrameDialogFont</Form>
+        <DCCReference Include="..\Sources\WinUI3.Frame.Dialog.pas">
+            <Form>FrameDialog</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\Sources\WinUI3.Frame.Dialog.Text.pas">
+            <Form>FrameDialogText</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\Sources\WinUI3.Frame.Inner.Dialog.pas">
+            <Form>FrameInnerDialog</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\Sources\WinUI3.Frame.Inner.InfoBar.pas">
+            <Form>FrameInnerInfoBar</Form>
+            <FormType>fmx</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\Sources\WinUI3.Style.pas"/>
+        <DCCReference Include="WinUI3.DM.pas">
+            <Form>DataModuleRes</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

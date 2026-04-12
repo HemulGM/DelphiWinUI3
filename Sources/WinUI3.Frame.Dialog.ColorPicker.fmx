@@ -70,6 +70,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
   object EditHEX: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 0
+    AutoSelect = True
     FilterChar = '0123456789#ABCDEFabcdef'
     Position.X = 360.000000000000000000
     Position.Y = 18.000000000000000000
@@ -82,6 +83,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
   object EditR: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 2
+    AutoSelect = True
     MaxLength = 3
     FilterChar = '0123456789'
     Position.X = 360.000000000000000000
@@ -109,6 +111,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
   object EditG: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 3
+    AutoSelect = True
     MaxLength = 3
     FilterChar = '0123456789'
     Position.X = 360.000000000000000000
@@ -136,6 +139,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
   object EditB: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 4
+    AutoSelect = True
     MaxLength = 3
     FilterChar = '0123456789'
     Position.X = 360.000000000000000000
@@ -163,6 +167,7 @@ object FrameDialogColorPicker: TFrameDialogColorPicker
   object EditA: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
     TabOrder = 5
+    AutoSelect = True
     MaxLength = 3
     FilterChar = '0123456789'
     Position.X = 360.000000000000000000

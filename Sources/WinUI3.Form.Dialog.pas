@@ -53,7 +53,7 @@ type
     class function Execute(Owner: TCustomForm; Params: TDialogColorParams): TDialogColorResult; overload;
     class function Execute(Owner: TCustomForm; Params: TDialogFontParams): TDialogFontResult; overload;
     class function Execute(Owner: TCustomForm; const Title: string; const Body: string; Buttons: TArray<string>; AccentId, DefaultId: Integer; CanClose: Boolean; FrameColor: TColor = TColors.Null): Integer; overload;
-    constructor Create(AOwner: TComponent; Proc: TProc<TFormDialogs>); reintroduce;
+    constructor Create(AOwner: TCustomForm; Proc: TProc<TFormDialogs>); reintroduce;
   end;
 
 var
@@ -68,28 +68,10 @@ uses
 
 procedure TFormDialogs.DoOnSettingChange;
 begin
-  if OverrideThemeKind <> TSystemThemeKind.Unspecified then
-    SetWindowColorMode(OverrideThemeKind = TSystemThemeKind.Dark)
-  else
-    SetWindowColorMode(SystemThemeKind = TSystemThemeKind.Dark);
-
-  if SetSystemBackdropType(SystemBackdropType) then
-  begin
-    Fill.Kind := TBrushKind.Solid;
-    Fill.Color := TAlphaColorRec.Null;
-    SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-  end
-  else
-    Fill.Kind := TBrushKind.None;
-
-  //Self.SetWindowColorMode(False);
+  inherited;
   Self.SetWindowCorner(TWindowCornerPreference.DWMWCP_ROUND);
   if FFrameColor <> TColors.Null then
-    Self.SetWindowBorderColor(FFrameColor);  {
-  if SetSystemBackdropType(TSystemBackdropType.DWMSBT_MAINWINDOW) then
-  begin
-    SetExtendFrameIntoClientArea(TRect.Create(-1, -1, -1, -1));
-  end;  }
+    Self.SetWindowBorderColor(FFrameColor);  
 end;
 
 procedure TFormDialogs.ActionCloseExecute(Sender: TObject);
@@ -118,9 +100,11 @@ begin
   FrameDialog.Clear;
 end;
 
-constructor TFormDialogs.Create(AOwner: TComponent; Proc: TProc<TFormDialogs>);
+constructor TFormDialogs.Create(AOwner: TCustomForm; Proc: TProc<TFormDialogs>);
 begin
   inherited Create(AOwner);
+  SetParent(AOwner);
+  //ParentForm := AOwner;
   FrameDialog.ParamsBeginUpdate;
   Proc(Self);
   FrameDialog.ParamsEndUpdate;

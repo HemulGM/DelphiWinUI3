@@ -13,7 +13,6 @@ uses
   WinUI3.Gallery in 'WinUI3.Gallery.pas' {FormGallery},
   {$IFDEF MSWINDOWS}
   WinUI3.NotifyDemo in 'WinUI3.NotifyDemo.pas',
-  FMX.Platform.Win,
   {$ENDIF }
   WinUI3.Frame.Dialog.Test in 'WinUI3.Frame.Dialog.Test.pas' {FrameTestDialog: TFrame},
   WinUI3.YandexMusic in 'WinUI3.YandexMusic.pas' {FormMusic},
@@ -29,13 +28,21 @@ uses
   FMX.Windows.Hints in '..\FMXWindowsHint\FMX.Windows.Hints.pas',
   FMX.Menus in '..\Fixes\D13\FMX.Menus.pas',
   FMX.Memo.ExtStyle in 'Utils\FMX.Memo.ExtStyle.pas',
-  WinUI3.Form in '..\Sources\WinUI3.Form.pas',
-  WinUI3.Frame.Inner.InfoBar in '..\Sources\WinUI3.Frame.Inner.InfoBar.pas' {FrameInnerInfoBar: TFrame},
-  WinUI3.Form.Dialog in '..\Sources\WinUI3.Form.Dialog.pas',
-  WinUI3.Frame.Dialog in '..\Sources\WinUI3.Frame.Dialog.pas' {FrameDialog: TFrame},
-  WinUI3.Frame.Dialog.Input in '..\Sources\WinUI3.Frame.Dialog.Input.pas' {FrameDialogInput: TFrame},
+  FMX.Platform.Win in '..\Fixes\D13\FMX.Platform.Win.pas',
+  HGM.ColorUtils in '..\Sources\HGM.ColorUtils.pas',
+  WinUI3.Dialogs.DataTransferManager in '..\Sources\WinUI3.Dialogs.DataTransferManager.pas',
   WinUI3.Dialogs in '..\Sources\WinUI3.Dialogs.pas',
-  WinUI3.Frame.Dialog.Font in '..\Sources\WinUI3.Frame.Dialog.Font.pas' {FrameDialogFont: TFrame};
+  WinUI3.Form.Dialog in '..\Sources\WinUI3.Form.Dialog.pas' {FormDialogs},
+  WinUI3.Form in '..\Sources\WinUI3.Form.pas',
+  WinUI3.Frame.Dialog.ColorPicker in '..\Sources\WinUI3.Frame.Dialog.ColorPicker.pas' {FrameDialogColorPicker: TFrame},
+  WinUI3.Frame.Dialog.Font in '..\Sources\WinUI3.Frame.Dialog.Font.pas' {FrameDialogFont: TFrame},
+  WinUI3.Frame.Dialog.Input in '..\Sources\WinUI3.Frame.Dialog.Input.pas' {FrameDialogInput: TFrame},
+  WinUI3.Frame.Dialog in '..\Sources\WinUI3.Frame.Dialog.pas' {FrameDialog: TFrame},
+  WinUI3.Frame.Dialog.Text in '..\Sources\WinUI3.Frame.Dialog.Text.pas' {FrameDialogText: TFrame},
+  WinUI3.Frame.Inner.Dialog in '..\Sources\WinUI3.Frame.Inner.Dialog.pas' {FrameInnerDialog: TFrame},
+  WinUI3.Frame.Inner.InfoBar in '..\Sources\WinUI3.Frame.Inner.InfoBar.pas' {FrameInnerInfoBar: TFrame},
+  WinUI3.Style in '..\Sources\WinUI3.Style.pas',
+  WinUI3.DM in 'WinUI3.DM.pas' {DataModuleRes: TDataModule};
 
 {$R *.res}
 
@@ -47,6 +54,8 @@ begin
   Application.Initialize;
   Application.FormFactor.Orientations := [TFormOrientation.Portrait, TFormOrientation.InvertedPortrait, TFormOrientation.Landscape, TFormOrientation.InvertedLandscape];
   Application.CreateForm(TFormMain, FormMain);
+  Application.CreateForm(TFormDialogs, FormDialogs);
+  Application.CreateForm(TDataModuleRes, DataModuleRes);
   Application.Run;
 end.
 
