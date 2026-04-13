@@ -15,10 +15,15 @@ uses
 type
   TSystemThemeKind = FMX.platform.TSystemThemeKind;
 
+  TWindowBackdropType = (//
+    Auto = 0,    // Auto
+    Disable = 1, // None
+    Mica = 2,    // Mica
+    Acrylic = 3, // Acrylic
+    Tabbed = 4); // Tabbed
+
   TPopup = class(FMX.Controls.TPopup)
   end;
-
-  TSystemBackdropType = DelphiWindowStyle.FMX.TSystemBackdropType;
 
   TInternalSettingChangedMessage = class(System.Messaging.TMessage<TCommonCustomForm>)
   private
@@ -35,13 +40,19 @@ type
       FSystemThemeKind: TSystemThemeKind;
       FSystemAccentColor: TAlphaColor;
   private
+    FSubs1: TMessageSubscriptionId;
+    FSubs2: TMessageSubscriptionId;
+    FSubs3: TMessageSubscriptionId;
+    FSubs4: TMessageSubscriptionId;
+    FSubs5: TMessageSubscriptionId;
+  private
     FModeFocus: Boolean;
     FPopupHint: TPopup;
     FTimerHintClose: TTimer;
     FTimerHint: TTimer;
     FLabelHint: TLabel;
     FFloatAnimationHint: TFloatAnimation;
-    FSystemBackdropType: TSystemBackdropType;
+    FSystemBackdropType: TWindowBackdropType;
     FCaptionControls: TArray<TControl>;
     FHideTitleBar: Boolean;
     FFocusStyle: TStrokeBrush;
@@ -60,6 +71,7 @@ type
     FButtonMax: TStyledControl;
     {$IFDEF MSWINDOWS}
     FWindowHandle: HWND;
+    FWindowCaptionColor: TColor;
     {$ENDIF}
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
@@ -69,10 +81,11 @@ type
     procedure SetFocusInflate(const Value: Single);
     procedure SetOffsetControls(const Value: TArray<TControl>);
     procedure SetTitleControls(const Value: TArray<TControl>);
-    procedure SetPropSystemBackdropType(const Value: TSystemBackdropType);
+    procedure SetPropSystemBackdropType(const Value: TWindowBackdropType);
     procedure SetAutoScrollToFocused(const Value: Boolean);
     procedure SetFocusHighlight(const Value: Boolean);
     class function GetIsDark: Boolean; static;
+    procedure SetWindowCaptionColorInternal(const Value: TColor);
   protected
     procedure PaintRects(const UpdateRects: array of TRectF); override;
     procedure CreateHandle; override;
@@ -115,7 +128,8 @@ type
     class property SystemThemeKind: TSystemThemeKind read FSystemThemeKind;
     class property ThemeKind: TSystemThemeKind read FThemeKind write FThemeKind;
     class property IsDark: Boolean read GetIsDark;
-    property SystemBackdropType: TSystemBackdropType read FSystemBackdropType write SetPropSystemBackdropType;
+    property SystemBackdropType: TWindowBackdropType read FSystemBackdropType write SetPropSystemBackdropType;
+    property WindowCaptionColor: TColor read FWindowCaptionColor write SetWindowCaptionColorInternal;
     //
     /// <summary>
     /// Controls for drag form
@@ -343,7 +357,7 @@ begin
   FFocusHighlight := True;
 
   // Subscribe to change caption
-  TMessageManager.DefaultManager.SubscribeToMessage(TMainCaptionChangedMessage,
+  FSubs1 := TMessageManager.DefaultManager.SubscribeToMessage(TMainCaptionChangedMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
       if TMainCaptionChangedMessage(M).Value = Self then
@@ -355,7 +369,7 @@ begin
     end);
 
   // Subscribe to change internal settings
-  TMessageManager.DefaultManager.SubscribeToMessage(TInternalSettingChangedMessage,
+  FSubs2 := TMessageManager.DefaultManager.SubscribeToMessage(TInternalSettingChangedMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
       if TInternalSettingChangedMessage(M).Value <> Self then
@@ -367,7 +381,7 @@ begin
     end);
 
   // Subscribe to activate form
-  TMessageManager.DefaultManager.SubscribeToMessage(TFormActivateMessage,
+  FSubs3 := TMessageManager.DefaultManager.SubscribeToMessage(TFormActivateMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
       if TFormActivateMessage(M).Value = Self then
@@ -384,7 +398,7 @@ begin
     end);
 
   // Subscribe to deactivate form
-  TMessageManager.DefaultManager.SubscribeToMessage(TFormDeactivateMessage,
+  FSubs4 := TMessageManager.DefaultManager.SubscribeToMessage(TFormDeactivateMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
       if TFormActivateMessage(M).Value = Self then
@@ -401,7 +415,7 @@ begin
     end);
 
   // Subscribe to change system theme
-  TMessageManager.DefaultManager.SubscribeToMessage(TSystemAppearanceChangedMessage,
+  FSubs5 := TMessageManager.DefaultManager.SubscribeToMessage(TSystemAppearanceChangedMessage,
     procedure(const Sender: TObject; const M: TMessage)
     begin
       FSystemAccentColor := TSystemAppearanceChangedMessage(M).Value.AccentColor;
@@ -410,7 +424,7 @@ begin
     end);
 
   // Style defaults
-  FSystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
+  FSystemBackdropType := TWindowBackdropType.Mica;
   inherited;
 end;
 
@@ -427,13 +441,18 @@ end;
 
 destructor TWinUIForm.Destroy;
 begin
+  TMessageManager.DefaultManager.Unsubscribe(TMainCaptionChangedMessage, FSubs1);
+  TMessageManager.DefaultManager.Unsubscribe(TInternalSettingChangedMessage, FSubs2);
+  TMessageManager.DefaultManager.Unsubscribe(TFormActivateMessage, FSubs3);
+  TMessageManager.DefaultManager.Unsubscribe(TFormDeactivateMessage, FSubs4);
+  TMessageManager.DefaultManager.Unsubscribe(TSystemAppearanceChangedMessage, FSubs5);
   inherited;
   FFocusStyle.Free;
 end;
 
 procedure TWinUIForm.UpdateSystemBackdropType;
 begin
-  if SetSystemBackdropType(FSystemBackdropType) then
+  if SetSystemBackdropType(TSystemBackdropType(FSystemBackdropType)) then
   begin
     Fill.Kind := TBrushKind.Solid;
     Fill.Color := TAlphaColorRec.Null;
@@ -773,6 +792,11 @@ begin
   FHideTitleBar := Value;
   {$IFDEF MSWINDOWS}
   DwmWinProcProirity := FHideTitleBar;
+  // Disable caption color, if hideen title bar
+  if Value then
+    WindowCaptionColor := TColors.SysNone
+  else
+    WindowCaptionColor := TColors.SysDefault;
   InvalidateNonClient;
   {$ENDIF}
 end;
@@ -782,7 +806,7 @@ begin
   FOffsetControls := Value;
 end;
 
-procedure TWinUIForm.SetPropSystemBackdropType(const Value: TSystemBackdropType);
+procedure TWinUIForm.SetPropSystemBackdropType(const Value: TWindowBackdropType);
 begin
   FSystemBackdropType := Value;
 end;
@@ -803,6 +827,12 @@ end;
 procedure TWinUIForm.SetTitleControls(const Value: TArray<TControl>);
 begin
   FTitleControls := Value;
+end;
+
+procedure TWinUIForm.SetWindowCaptionColorInternal(const Value: TColor);
+begin
+  FWindowCaptionColor := Value;
+  SetWindowCaptionColor(FWindowCaptionColor);
 end;
 
 { TInternalSettingChangedMessage }

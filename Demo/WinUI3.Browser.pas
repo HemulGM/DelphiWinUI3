@@ -19,7 +19,7 @@ type
     HorzScrollBoxTabs: THorzScrollBox;
     LayoutIcon: TLayout;
     LayoutAdd: TLayout;
-    Button8: TButton;
+    TabItemAdd: TButton;
     WebBrowser1: TWebBrowser;
     LayoutNavigation: TLayout;
     EditURL: TEdit;
@@ -34,6 +34,11 @@ type
     RadioButton8: TRadioButton;
     Panel1: TPanel;
     LayoutContent: TLayout;
+    LayoutCaption: TLayout;
+    ButtonSettings: TButton;
+    ButtonWinMin: TButton;
+    ButtonWinMax: TButton;
+    ButtonWinClose: TButton;
     procedure TabItemAddClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure LayoutTabsResize(Sender: TObject);
@@ -45,7 +50,6 @@ type
     procedure WebBrowser1ShouldStartLoadWithRequest(ASender: TObject; const URL: string);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
-    procedure FOnTabCloseClick(Sender: TObject);
     { Private declarations }
   public
     { Public declarations }
@@ -57,7 +61,7 @@ var
 implementation
 
 uses
-  WinUI3.Main, System.Rtti, System.Math, FMX.Utils;
+  WinUI3.Main, System.Rtti, System.Math, FMX.Utils, FMX.Ani;
 
 {$R *.fmx}
 
@@ -82,15 +86,6 @@ begin
   end;
 end;
 
-procedure TFormBrowser.FOnTabCloseClick(Sender: TObject);
-begin
-  var Btn := Sender as TControl;
-  //
-  var Tab := TFMXObjectHelper.GetNearestParentOfClass<TTabItem>(Btn);
-  if Assigned(Tab) then
-    Tab.Release;
-end;
-
 procedure TFormBrowser.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := TCloseAction.caFree;
@@ -102,6 +97,7 @@ begin
   HorzScrollBoxTabs.AniCalculations.Animation := True;
   CaptionControls := [LayoutTitle, TabControlView];
   OffsetControls := [LayoutTitle, LayoutClient];
+  SetSystemWindowControls(ButtonWinClose, ButtonWinMax, ButtonWinMin);
   //TitleControls := [LabelTitle];
   HideTitleBar := True;
 end;
@@ -111,21 +107,24 @@ begin
   var W: Single := 0.0;
   for var Control in HorzScrollBoxTabs.Content.Controls do
     W := W + Control.Width;
-  var SysBtnSize := 140;
+  var SysBtnSize := LayoutCaption.Width;
   var AllowedWidth := LayoutTabs.Width - (LayoutAdd.Width + LayoutIcon.Width + SysBtnSize);
   HorzScrollBoxTabs.Width := Min(W, AllowedWidth);
 end;
 
 procedure TFormBrowser.TabItemAddClick(Sender: TObject);
 begin
-  var Tab := TabControlView.Add;
-  Tab.AutoSize := False;
-  Tab.Width := 180;
-  Tab.StyleLookup := 'tabitemstyle_view';
-  Tab.IsSelected := True;
-  Tab.StylesData['close.OnClick'] := TValue.From<TNotifyEvent>(FOnTabCloseClick);
-  Tab.Text := 'Tab name ' + TabControlView.Tag.ToString;
-  TabControlView.Tag := TabControlView.Tag + 1;
+  var RadioButton6:= TRadioButton.Create(HorzScrollBoxTabs);
+  RadioButton6.Position.X := 100000;
+  RadioButton6.Align := TAlignLayout.Left;
+  RadioButton6.GroupName := 'tabs';
+  RadioButton6.Size.Width := 145;
+  RadioButton6.StyleLookup := 'radiobuttonstyle_tab';
+  RadioButton6.Text := 'Tab name ' + HorzScrollBoxTabs.Content.ControlsCount.ToString;
+  HorzScrollBoxTabs.AddObject(RadioButton6);
+  HorzScrollBoxTabs.ViewportPosition := TPointF.Create(HorzScrollBoxTabs.ContentBounds.Width, 0);
+  RadioButton6.IsChecked := True;
+  LayoutTabsResize(nil);
 end;
 
 procedure TFormBrowser.WebBrowser1DidFinishLoad(ASender: TObject);

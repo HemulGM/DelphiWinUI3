@@ -3,7 +3,7 @@ object FormBrowser: TFormBrowser
   Top = 0
   Caption = 'Form1'
   ClientHeight = 672
-  ClientWidth = 1147
+  ClientWidth = 1105
   StyleBook = FormMain.StyleBookWinUI3
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -14,7 +14,7 @@ object FormBrowser: TFormBrowser
   object LayoutTitleContent: TLayout
     Align = Contents
     Locked = True
-    Size.Width = 1147.000000000000000000
+    Size.Width = 1105.000000000000000000
     Size.Height = 672.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
@@ -22,7 +22,7 @@ object FormBrowser: TFormBrowser
       Align = Top
       Locked = True
       HitTest = True
-      Size.Width = 1147.000000000000000000
+      Size.Width = 1105.000000000000000000
       Size.Height = 42.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
@@ -30,13 +30,13 @@ object FormBrowser: TFormBrowser
   end
   object LayoutClient: TLayout
     Align = Client
-    Size.Width = 1147.000000000000000000
+    Size.Width = 1105.000000000000000000
     Size.Height = 672.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object LayoutTabs: TLayout
       Align = Top
-      Size.Width = 1147.000000000000000000
+      Size.Width = 1105.000000000000000000
       Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
@@ -126,26 +126,81 @@ object FormBrowser: TFormBrowser
         Size.Height = 31.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 2
-        object Button8: TButton
+        object TabItemAdd: TButton
           Align = Center
           Size.Width = 31.000000000000000000
           Size.Height = 31.000000000000000000
           Size.PlatformDefault = False
           StyleLookup = 'tabItemstyle_view_add'
           TabOrder = 0
+          OnClick = TabItemAddClick
+        end
+      end
+      object LayoutCaption: TLayout
+        Align = Right
+        Position.X = 918.000000000000000000
+        Size.Width = 187.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 359
+        object ButtonSettings: TButton
+          Align = Right
+          ImageIndex = 3
+          Margins.Left = 8.000000000000000000
+          Margins.Top = 8.000000000000000000
+          Margins.Right = 8.000000000000000000
+          Margins.Bottom = 8.000000000000000000
+          Position.X = 9.000000000000000000
+          Position.Y = 8.000000000000000000
+          Size.Width = 32.000000000000000000
+          Size.Height = 24.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'settingstoolbutton'
+          TabOrder = 10
+          Text = 'Button99'
+        end
+        object ButtonWinMin: TButton
+          Align = MostRight
+          Position.X = 49.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'win_sys_btn_min'
+          TabOrder = 13
+          Text = 'ButtonWinMin'
+        end
+        object ButtonWinMax: TButton
+          Align = MostRight
+          Position.X = 95.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'win_sys_btn_max'
+          TabOrder = 12
+          Text = 'Button310'
+        end
+        object ButtonWinClose: TButton
+          Align = MostRight
+          Position.X = 141.000000000000000000
+          Size.Width = 46.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'win_sys_btn_close'
+          TabOrder = 11
+          Text = 'Button310'
         end
       end
     end
     object LayoutContent: TLayout
       Align = Client
-      Size.Width = 1147.000000000000000000
+      Size.Width = 1105.000000000000000000
       Size.Height = 632.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
       object Panel1: TPanel
         Align = Contents
         Margins.Top = -1.000000000000000000
-        Size.Width = 1147.000000000000000000
+        Size.Width = 1105.000000000000000000
         Size.Height = 633.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 2
@@ -156,7 +211,7 @@ object FormBrowser: TFormBrowser
         Padding.Top = 4.000000000000000000
         Padding.Right = 4.000000000000000000
         Padding.Bottom = 4.000000000000000000
-        Size.Width = 1147.000000000000000000
+        Size.Width = 1105.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
@@ -165,7 +220,7 @@ object FormBrowser: TFormBrowser
           Align = Client
           StyleLookup = 'editstyle_searchbar'
           TabOrder = 0
-          Size.Width = 1031.000000000000000000
+          Size.Width = 989.000000000000000000
           Size.Height = 32.000000000000000000
           Size.PlatformDefault = False
           TextPrompt = #1042#1074#1077#1076#1080#1090#1077' '#1087#1086#1080#1089#1082#1086#1074#1099#1081' '#1079#1072#1087#1088#1086#1089' '#1080#1083#1080' '#1074#1077#1073'-'#1072#1076#1088#1077#1089
@@ -211,7 +266,7 @@ object FormBrowser: TFormBrowser
         object Button11: TButton
           Align = Right
           Margins.Left = 4.000000000000000000
-          Position.X = 1111.000000000000000000
+          Position.X = 1069.000000000000000000
           Position.Y = 4.000000000000000000
           Size.Width = 32.000000000000000000
           Size.Height = 32.000000000000000000
@@ -224,7 +279,7 @@ object FormBrowser: TFormBrowser
       object TabControlView: TTabControl
         Align = Client
         FullSize = False
-        Size.Width = 1147.000000000000000000
+        Size.Width = 1105.000000000000000000
         Size.Height = 592.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'tabcontrolstyle_view'
@@ -233,7 +288,7 @@ object FormBrowser: TFormBrowser
         TabOrder = 0
         TabPosition = None
         Sizes = (
-          1147s
+          1105s
           592s)
         object TabItem23: TTabItem
           AutoSize = False
@@ -251,7 +306,7 @@ object FormBrowser: TFormBrowser
           ExplicitSize.cy = 32.000000000000000000
           object WebBrowser1: TWebBrowser
             Align = Client
-            Size.Width = 1147.000000000000000000
+            Size.Width = 1105.000000000000000000
             Size.Height = 592.000000000000000000
             Size.PlatformDefault = False
             WindowsEngine = EdgeIfAvailable

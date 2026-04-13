@@ -1164,7 +1164,6 @@ type
     ClearEditButton5: TClearEditButton;
     ButtonSettings: TButton;
     PopupTheme: TPopup;
-    Label121: TLabel;
     ComboColorBoxAccentColor: TComboColorBox;
     ComboColorBoxThemeGradient1: TComboColorBox;
     ComboColorBoxThemeGradient2: TComboColorBox;
@@ -1211,9 +1210,7 @@ type
     PathLabel6: TPathLabel;
     PathLabel7: TPathLabel;
     BindNavigator2: TBindNavigator;
-    procedure FormActivate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
-    procedure FormDeactivate(Sender: TObject);
+    CheckBoxCustomAccent: TCheckBox;
     procedure VertScrollBoxCaruselViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
     procedure TabItemAddClick(Sender: TObject);
     procedure ColorComboBox1Change(Sender: TObject);
@@ -1252,7 +1249,6 @@ type
     procedure HorzScrollBoxFilterViewportPositionChange(Sender: TObject; const OldViewportPosition, NewViewportPosition: TPointF; const ContentSizeChanged: Boolean);
     procedure ButtonScrollFilterLeftClick(Sender: TObject);
     procedure ButtonScrollFilterRightClick(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure ButtonMenuActionsClick(Sender: TObject);
     procedure TabControlMainChange(Sender: TObject);
     procedure ButtonMenuActionsMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
@@ -1280,7 +1276,6 @@ type
     procedure MultiView2StartShowing(Sender: TObject);
     procedure CheckBox11Change(Sender: TObject);
     procedure HeaderItem1Click(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure Viewport3D1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure Viewport3D1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
@@ -1294,6 +1289,7 @@ type
     procedure HorzScrollBoxFilterMouseWheel(Sender: TObject; Shift: TShiftState; WheelDelta: Integer; var Handled: Boolean);
     procedure Memo1PresentationNameChoosing(Sender: TObject; var PresenterName: string);
     procedure SpeedButton7Click(Sender: TObject);
+    procedure CheckBoxCustomAccentChange(Sender: TObject);
   private
     {$IFDEF MSWINDOWS}
     FNotifyDemo: TNotifyDemo;
@@ -1316,11 +1312,11 @@ var
 implementation
 
 uses
-  DelphiWindowStyle.FMX, FMX.BehaviorManager, System.Math, System.IOUtils,
-  HGM.ColorUtils, System.Messaging, FMX.Utils, System.Threading, WinUI3.Gallery,
-  WinUI3.Frame.Dialog.Test, WinUI3.Dialogs, WinUI3.YandexMusic, WinUI3.RADIDE,
-  WinUI3.Browser, FMX.MultiView.Types, WinUI3.MultiView.CustomPresentation,
-  FMX.Styles, FMX.Memo.ExtStyle, WinUI3.Style, WinUI3.DM,
+  FMX.BehaviorManager, System.Math, System.IOUtils, System.Messaging, FMX.Utils,
+  System.Threading, WinUI3.Gallery, WinUI3.Frame.Dialog.Test, WinUI3.Dialogs,
+  WinUI3.YandexMusic, WinUI3.RADIDE, WinUI3.Browser, FMX.MultiView.Types,
+  WinUI3.MultiView.CustomPresentation, FMX.Styles, FMX.Memo.ExtStyle,
+  WinUI3.Style, WinUI3.DM,
   {$IFDEF MSWINDOWS}
   FMX.Platform.Win,
   {$ENDIF}
@@ -1627,14 +1623,14 @@ begin
     // Set window type
   case PopupBoxStyle.ItemIndex of
     0: // mica
-      SystemBackdropType := TSystemBackdropType.DWMSBT_MAINWINDOW;
+      SystemBackdropType := TWindowBackdropType.Mica;
     1: // tabbed
-      SystemBackdropType := TSystemBackdropType.DWMSBT_TABBEDWINDOW;
+      SystemBackdropType := TWindowBackdropType.Tabbed;
     2: // acrilyc
-      SystemBackdropType := TSystemBackdropType.DWMSBT_TRANSIENTWINDOW;
+      SystemBackdropType := TWindowBackdropType.Acrylic;
     3: // none
       begin
-        SystemBackdropType := TSystemBackdropType.DWMSBT_DISABLE;
+        SystemBackdropType := TWindowBackdropType.Disable;
         Fill.Kind := TBrushKind.None;
       end;
   end;
@@ -1675,12 +1671,21 @@ end;
 
 procedure TFormMain.ComboColorBoxAccentColorChange(Sender: TObject);
 begin
-  OverAccentColor := ComboColorBoxAccentColor.Color;
+  if FUpdating > 0 then
+    Exit;
+  BeginUpdate;
+  CheckBoxCustomAccent.IsChecked := True;
+  EndUpdate;
   DoOnSettingChange;
 end;
 
 procedure TFormMain.DoOnSettingChange;
 begin
+  if CheckBoxCustomAccent.IsChecked then
+    OverAccentColor := ComboColorBoxAccentColor.Color
+  else
+    OverAccentColor := SystemAccentColor;
+
   // Override theme color
   case OverTheme of
     0:
@@ -1691,39 +1696,17 @@ begin
       ThemeKind := TSystemThemeKind.Dark;
   end;
 
-  // Set stylebook and other for theme
+  // Set stylebook and color for theme
   if IsDark then
   begin
-    // Get accent color
-    var SysAccent := ChangeColorSat(OverAccentColor, 50);
-
     // Set accent color for stylebook
-    if OldColor <> SysAccent then
-    begin
-      ChangeStyleBookColor(StyleBookWinUI3, OldColor, SysAccent, True);
-      ChangeStyleBookColor(StyleBookWinUI3, OldColorAccentText, DecreaseSaturation(SysAccent, 10), False);
-      OldColor := SysAccent;
-      OldColorAccentText := DecreaseSaturation(SysAccent, 10);
-    end;
-
-    // Set stylebook
+    ChangeStyleBookColor(StyleBookWinUI3, OverAccentColor);
     StyleBook := StyleBookWinUI3;
   end
   else
   begin
-    // Get accent color
-    var SysAccent := OverAccentColor;
-
     // Set accent color for stylebook
-    if OldColorL <> SysAccent then
-    begin
-      ChangeStyleBookColor(StyleBookWinUI3Light, OldColorL, SysAccent, True);
-      ChangeStyleBookColor(StyleBookWinUI3Light, OldColorAccentTextL, DecreaseSaturation(SysAccent, 10), False);
-      OldColorL := SysAccent;
-      OldColorAccentTextL := DecreaseSaturation(SysAccent, 10);
-    end;
-
-    // Set stylebook
+    ChangeStyleBookColor(StyleBookWinUI3Light, OverAccentColor);
     StyleBook := StyleBookWinUI3Light;
   end;
 
@@ -1912,26 +1895,6 @@ begin
     end;
 end;
 
-procedure TFormMain.FormActivate(Sender: TObject);
-begin
-  // Fill.Kind := TBrushKind.Gradient;
-end;
-
-procedure TFormMain.FormDeactivate(Sender: TObject);
-begin
-  // Fill.Kind := TBrushKind.None;
-end;
-
-procedure TFormMain.FormDestroy(Sender: TObject);
-begin
-  //
-end;
-
-procedure TFormMain.FormShow(Sender: TObject);
-begin
-  //
-end;
-
 procedure TFormMain.HeaderItem1Click(Sender: TObject);
 begin
   ShowUIMessage(Self, (Sender as THeaderItem).Index.ToString);
@@ -1963,6 +1926,13 @@ procedure TFormMain.ButtonSettingsClick(Sender: TObject);
 begin
   PopupTheme.PlacementTarget := ButtonSettings;
   PopupTheme.Popup;
+end;
+
+procedure TFormMain.CheckBoxCustomAccentChange(Sender: TObject);
+begin
+  if FUpdating > 0 then
+    Exit;
+  DoOnSettingChange;
 end;
 
 procedure TFormMain.CheckBoxCustomTitleChange(Sender: TObject);
@@ -2173,11 +2143,6 @@ begin
   Viewport3D1.Tag := 0;
 end;
 
-procedure TFormMain.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  //
-end;
-
 procedure TFormMain.FOnSubMenuClick(Sender: TObject);
 begin
   ShowUIMessage(Self, (Sender as TMenuItem).StyleName);
@@ -2186,11 +2151,13 @@ end;
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
   OverAccentColor := SystemAccentColor;
+  BeginUpdate;
   ComboColorBoxAccentColor.Color := OverAccentColor;
-  OverTheme := 1;
-{$IFDEF MSWINDOWS}
+  EndUpdate;
+  OverTheme := 0;
+  {$IFDEF MSWINDOWS}
   FNotifyDemo := TNotifyDemo.Create(Self);
-{$ENDIF}
+  {$ENDIF}
   SetSystemWindowControls(ButtonWinClose, ButtonWinMax, ButtonWinMin);
   CaptionControls := [LayoutCaption, LayoutHead];
   OffsetControls := [LayoutHead];
