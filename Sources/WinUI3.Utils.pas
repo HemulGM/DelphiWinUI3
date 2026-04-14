@@ -36,6 +36,8 @@ uses
 
 function IsWin11OrNewest: Boolean;
 begin
+  if TOSVersion.Platform <> TOSVersion.TPlatform.pfWindows then
+    Exit(False);
   Result := TOSVersion.Check(10) and (TOSVersion.Build > 22000);
   Result := Result or TOSVersion.Check(11);
 end;

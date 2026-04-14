@@ -346,7 +346,6 @@
         <DCCReference Include="WinUI3.Browser.pas">
             <Form>FormBrowser</Form>
         </DCCReference>
-        <DCCReference Include="Utils\WinUI3.MultiView.CustomPresentation.pas"/>
         <DCCReference Include="..\Fixes\D12\FMX.Calendar.Style.pas"/>
         <DCCReference Include="..\Fixes\D12\FMX.MultiView.Presentations.pas"/>
         <DCCReference Include="..\Fixes\D12\FMX.StyledContextMenu.pas"/>
@@ -402,6 +401,8 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
+        <DCCReference Include="WinUI3.MultiView.CustomPresentation.pas"/>
+        <DCCReference Include="..\Sources\WinUI3.Utils.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

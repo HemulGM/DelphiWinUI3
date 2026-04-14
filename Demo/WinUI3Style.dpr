@@ -22,7 +22,6 @@ uses
   FMX.RichEdit.Code in 'Utils\Code\FMX.RichEdit.Code.pas',
   FMX.RichEdit.Code.Pascal in 'Utils\Code\FMX.RichEdit.Code.Pascal.pas',
   WinUI3.Browser in 'WinUI3.Browser.pas' {FormBrowser},
-  WinUI3.MultiView.CustomPresentation in 'Utils\WinUI3.MultiView.CustomPresentation.pas',
   FMX.Calendar.Style in '..\Fixes\D12\FMX.Calendar.Style.pas',
   FMX.MultiView.Presentations in '..\Fixes\D12\FMX.MultiView.Presentations.pas',
   FMX.StyledContextMenu in '..\Fixes\D12\FMX.StyledContextMenu.pas',
@@ -42,7 +41,9 @@ uses
   WinUI3.Frame.Inner.Dialog in '..\Sources\WinUI3.Frame.Inner.Dialog.pas' {FrameInnerDialog: TFrame},
   WinUI3.Frame.Inner.InfoBar in '..\Sources\WinUI3.Frame.Inner.InfoBar.pas' {FrameInnerInfoBar: TFrame},
   WinUI3.Style in '..\Sources\WinUI3.Style.pas',
-  WinUI3.DM in 'WinUI3.DM.pas' {DataModuleRes: TDataModule};
+  WinUI3.DM in 'WinUI3.DM.pas' {DataModuleRes: TDataModule},
+  WinUI3.MultiView.CustomPresentation in 'WinUI3.MultiView.CustomPresentation.pas',
+  WinUI3.Utils in '..\Sources\WinUI3.Utils.pas';
 
 {$R *.res}
 

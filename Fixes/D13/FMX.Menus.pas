@@ -733,6 +733,8 @@ begin
   FDelay := 0;
   if TPlatformServices.Current.SupportsPlatformService(IFMXSystemInformationService, SystemInfoSrv) then
     FDelay := SystemInfoSrv.GetMenuShowDelay;
+  if FDelay > 0 then
+    FDelay := Round(FDelay * 0.5);
   if FDelay <= 0 then
     FDelay := 200;
   Interval := Max(FDelay div 2, 10);
@@ -1057,9 +1059,9 @@ procedure AnimateMenu(Menu: TMenuView);
 begin
   //Menu.Opacity := 0;
   Menu.Margins.Rect := TRectF.Create(0, -50, 0, 50);
-  TAnimator.AnimateFloat(Menu, 'Margins.Top', 0);
-  TAnimator.AnimateFloat(Menu, 'Margins.Bottom', 0);
-  //TAnimator.AnimateFloat(Menu, 'Opacity', 1);
+  TAnimator.AnimateFloat(Menu, 'Margins.Top', 0, 0.1);
+  TAnimator.AnimateFloat(Menu, 'Margins.Bottom', 0, 0.1);
+  //TAnimator.AnimateFloat(Menu, 'Opacity', 1, 0.5);
 end;
 
 // HGM End
@@ -1110,24 +1112,10 @@ end;
 
 procedure TPopupOfMenu.OnFormShow(Sender: TObject);
 begin
-  if not FClearBG then
-  begin
-    //TCustomPopupForm(Sender).SetAccentPolicy(TColorRec.Black)
-    TCustomPopupForm(Sender).Padding.Rect := TRectF.Create(12, 12, 12, 12);
-  end
-  else
-  begin
-    //TCustomPopupForm(Sender).SetWindowColorMode(True);
-    //TCustomPopupForm(Sender).SetSystemBackdropType(TSystemBackdropType.DWMSBT_TABBEDWINDOW);
-    //TCustomPopupForm(Sender).Fill.Kind := TBrushKind.Solid;
-    //TCustomPopupForm(Sender).Fill.Color := TAlphaColors.Null;
-    //TCustomPopupForm(Sender).SetExtendFrameIntoClientArea(TRect.Create(0, 0, 0, 0));
-    //TCustomPopupForm(Sender).SetWindowCorner(TWindowCornerPreference.DWMWCP_ROUND);
+  if FClearBG then
     FClearBG := TCustomPopupForm(Sender).SetAccentPolicy(TColorRec.Null);
-    if not FClearBG then
-      TCustomPopupForm(Sender).Padding.Rect := TRectF.Create(12, 12, 12, 12);
-  end;
-  //TCustomPopupForm(Sender).BringToFront;
+  if not FClearBG then
+    TCustomPopupForm(Sender).Padding.Rect := TRectF.Create(12, 12, 12, 12);
   TCustomPopupForm(Sender).MouseCapture;
 end;
 
@@ -1928,7 +1916,7 @@ begin
 
       // hgm
       if TPopupOfMenu(Popup).FClearBG then
-        Menu.StylesData['bg.Opacity'] := 0.5;
+        Menu.StylesData['bg.Opacity'] := 0.6;
       Popup.BorderWidth := 0;
       // hgm end
 
@@ -2748,7 +2736,7 @@ begin
 
     // hgm
     if TPopupOfMenu(Popup).FClearBG then
-      Menu.StylesData['bg.Opacity'] := 0.5;
+      Menu.StylesData['bg.Opacity'] := 0.6;
     Popup.BorderWidth := 0;
     Menu.Align := TAlignLayout.Client;
     // hgm end
