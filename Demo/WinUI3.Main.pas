@@ -2294,7 +2294,8 @@ begin
   TreeViewStyle.BeginUpdate;
   try
     TreeViewStyle.Clear;   //StyleBookWinUI3.Styles
-    var Style := TStyleCollectionItem(StyleBookWinUI3.Styles.FindItemID(ListBoxStyles.Selected.Tag)).Style;
+    var StyleItem := TStyleCollectionItem(StyleBookWinUI3.Styles.FindItemID(ListBoxStyles.Selected.Tag));
+    var Style := StyleItem.Style;
     TStyleManager.SetStyle(Style);
     //var Style := TStyleManager.ActiveStyle(nil);
     Style.Sort(
@@ -2341,7 +2342,7 @@ begin
   ListBoxStyles.BeginUpdate;
   try
     ListBoxStyles.Clear;
-    for var Item in StyleBookWinUI3.Styles do
+    for var Item in StyleBook.Styles do
     begin
       var ListItem := TListBoxItem.Create(ListBoxStyles);
       ListItem.Text := Item.ID.ToString + ': ' + Item.DisplayName;
@@ -2353,9 +2354,9 @@ begin
   end;
   TreeViewStyle.BeginUpdate;
   try
-    TreeViewStyle.Clear;   //StyleBookWinUI3.Styles
-    var Style := StyleBookWinUI3.Style;
-    TStyleManager.SetStyle(StyleBookWinUI3.Style);
+    TreeViewStyle.Clear;   //StyleBook.Styles
+    var Style := StyleBook.Style;
+    TStyleManager.SetStyle(StyleBook.Style);
     //var Style := TStyleManager.ActiveStyle(nil);
     Style.Sort(
       function(Left, Right: TFmxObject): integer

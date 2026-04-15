@@ -1,4 +1,4 @@
-﻿unit WinUI3.Frame.Inner.InfoBar;
+﻿ unit WinUI3.Frame.Inner.InfoBar;
 
 interface
 

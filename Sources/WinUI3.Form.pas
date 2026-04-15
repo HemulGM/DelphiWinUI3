@@ -69,9 +69,9 @@ type
     FButtonClose: TStyledControl;
     FButtonMin: TStyledControl;
     FButtonMax: TStyledControl;
+    FWindowCaptionColor: TColor;
     {$IFDEF MSWINDOWS}
     FWindowHandle: HWND;
-    FWindowCaptionColor: TColor;
     {$ENDIF}
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
