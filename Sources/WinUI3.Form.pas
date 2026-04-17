@@ -64,6 +64,7 @@ type
     FFocusInflate: Single;
     FOffsetControls: TArray<TControl>;
     FTitleControls: TArray<TControl>;
+    FIconControl: TControl;
     FAutoScrollToFocused: Boolean;
     FFocusHighlight: Boolean;
     FButtonClose: TStyledControl;
@@ -72,6 +73,7 @@ type
     FWindowCaptionColor: TColor;
     {$IFDEF MSWINDOWS}
     FWindowHandle: HWND;
+    FStayOnTop: Boolean;
     {$ENDIF}
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
@@ -86,6 +88,8 @@ type
     procedure SetFocusHighlight(const Value: Boolean);
     class function GetIsDark: Boolean; static;
     procedure SetWindowCaptionColorInternal(const Value: TColor);
+    procedure SetIconControl(const Value: TControl);
+    procedure SetStayOnTop(const Value: Boolean);
   protected
     procedure PaintRects(const UpdateRects: array of TRectF); override;
     procedure CreateHandle; override;
@@ -143,6 +147,7 @@ type
     /// Control for form catpion text
     /// </summary>
     property TitleControls: TArray<TControl> read FTitleControls write SetTitleControls;
+    property IconControl: TControl read FIconControl write SetIconControl;
     property HideTitleBar: Boolean read FHideTitleBar write SetHideTitleBar;
     /// <summary>
     /// Enables/disables the highlight of the control in focus when using the keyboard (Tab)
@@ -156,6 +161,7 @@ type
     property FocusCornerType: TCornerType read FFocusCornerType write SetFocusCornerType;
     property FocusInflate: Single read FFocusInflate write SetFocusInflate;
     property AutoScrollToFocused: Boolean read FAutoScrollToFocused write SetAutoScrollToFocused;
+    property StayOnTop: Boolean read FStayOnTop write SetStayOnTop;
   end;
 
 implementation
@@ -205,7 +211,8 @@ begin
     for var Item in OffsetControls do
       Item.Margins.Top := Offset;
 
-    Inc(Message.CalcSize_Params.rgrc[0].Top, R.Top);
+    Inc(Message.CalcSize_Params.rgrc0.Top, R.Top);
+   //Message.CalcSize_Params.rgrc[0].Left := 0;
     //Message.CalcSize_Params.rgrc[0].Top := 48;
     Message.Result := 0;
   end
@@ -262,9 +269,11 @@ begin
         var P := ScreenToClient(Screen.MousePos).Round;
         if P.Y > FCaptionControls[0].Height then
           Exit;
-        var R := TRect.Create(5, 5, 32, 32);
         // sys menu
-        if (P.X < R.Right) and ((WindowState = TWindowState.wsMaximized) or ((P.Y >= R.Top) and (P.Y < R.Bottom))) then
+        var R := TRect.Create(5, 5, 32, 32);
+        if Assigned(FIconControl) then
+          R := FIconControl.AbsoluteRect.Truncate;
+        if R.Contains(P) then
           Message.Result := HTSYSMENU
         else  // top resize
         if (P.Y < 5) and (BorderStyle in [TFmxFormBorderStyle.Sizeable, TFmxFormBorderStyle.SizeToolWin]) then
@@ -436,6 +445,8 @@ begin
   AllowDispatchWindowMessages(Self);
   if FHideTitleBar then
     SetWindowLong(FWindowHandle, GWL_STYLE, GetWindowLong(FWindowHandle, GWL_STYLE) - WS_SYSMENU);
+  if TFmxFormState.WasNotShown not in FormState then
+    DoOnSettingChange;
   {$ENDIF}
 end;
 
@@ -801,6 +812,11 @@ begin
   {$ENDIF}
 end;
 
+procedure TWinUIForm.SetIconControl(const Value: TControl);
+begin
+  FIconControl := Value;
+end;
+
 procedure TWinUIForm.SetOffsetControls(const Value: TArray<TControl>);
 begin
   FOffsetControls := Value;
@@ -809,6 +825,22 @@ end;
 procedure TWinUIForm.SetPropSystemBackdropType(const Value: TWindowBackdropType);
 begin
   FSystemBackdropType := Value;
+end;
+
+procedure TWinUIForm.SetStayOnTop(const Value: Boolean);
+begin
+  FStayOnTop := Value;
+  {$IFDEF MSWINDOWS}
+  if FStayOnTop then
+    SetWindowPos(FWindowHandle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE or SWP_NOACTIVATE)
+  else
+    SetWindowPos(FWindowHandle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE or SWP_NOACTIVATE);
+  {$ELSE}
+  if FStayOnTop then
+    FormStyle := TFormStyle.StayOnTop
+  else
+    FormStyle := TFormStyle.Normal;
+  {$ENDIF}
 end;
 
 procedure TWinUIForm.SetSystemWindowControls(const AClose, AMax, AMin: TStyledControl);
