@@ -89,9 +89,48 @@ uses
   {$IFDEF MACOS}
   MacApi.Appkit, Macapi.CoreFoundation, Macapi.Foundation,
   {$ENDIF}
+  {$IFDEF ANDROID}
+  Androidapi.JNIBridge, Androidapi.JNI.GraphicsContentViewText,
+  Androidapi.JNI.JavaTypes, Androidapi.Helpers,
+  {$ENDIF}
   FMX.FontManager, FMX.BehaviorManager;
 
 {$R *.fmx}
+
+{$IFDEF ANDROID}
+type
+  JFont = interface;
+
+  JFontClass = interface(JObjectClass)
+    ['{D9E3C3A5-6B9A-4F8A-9D4E-123456789001}']
+  end;
+
+  [JavaSignature('android/graphics/fonts/Font')]
+  JFont = interface(JObject)
+    ['{D9E3C3A5-6B9A-4F8A-9D4E-123456789002}']
+    function getFile: JFile; cdecl;
+    function getStyle: JObject; cdecl;
+  end;
+
+  TJFont = class(TJavaGenericImport<JFontClass, JFont>)
+  end;
+
+  JSystemFonts = interface;
+
+  JSystemFontsClass = interface(JObjectClass)
+    ['{D9E3C3A5-6B9A-4F8A-9D4E-123456789003}']
+    function getAvailableFonts: JSet; cdecl;
+  end;
+
+  [JavaSignature('android/graphics/fonts/SystemFonts')]
+  JSystemFonts = interface(JObject)
+    ['{D9E3C3A5-6B9A-4F8A-9D4E-123456789004}']
+  end;
+
+  TJSystemFonts = class(TJavaGenericImport<JSystemFontsClass, JSystemFonts>)
+  end;
+
+{$ENDIF}
 
 {$IFDEF MACOS}
 
@@ -102,6 +141,29 @@ begin
   if Assigned(FontFamilies) then
     for var i := 0 to FontFamilies.Count - 1 do
       FontList.Add(string(TNSString.Wrap(FontFamilies.objectAtIndex(i)).UTF8String));
+end;
+{$ENDIF}
+
+{$IFDEF ANDROID}
+
+procedure GetSystemFonts(FontList: TStringlist);
+var
+  FontSet: JSet;
+  Iterator: JIterator;
+  Font: JFont;
+  FileObj: JFile;
+begin
+  FontSet := TJSystemFonts.JavaClass.getAvailableFonts;
+  Iterator := FontSet.iterator;
+
+  while Iterator.hasNext do
+  begin
+    Font := TJFont.Wrap(Iterator.next);
+
+    FileObj := Font.getFile;
+    if FileObj <> nil then
+      FontList.Add(JStringToString(FileObj.getAbsolutePath));
+  end;
 end;
 {$ENDIF}
 

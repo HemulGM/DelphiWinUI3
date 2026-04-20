@@ -71,9 +71,9 @@ type
     FButtonMin: TStyledControl;
     FButtonMax: TStyledControl;
     FWindowCaptionColor: TColor;
+    FStayOnTop: Boolean;
     {$IFDEF MSWINDOWS}
     FWindowHandle: HWND;
-    FStayOnTop: Boolean;
     {$ENDIF}
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
