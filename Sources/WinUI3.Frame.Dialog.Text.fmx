@@ -1,4 +1,5 @@
 object FrameDialogText: TFrameDialogText
+  Align = Top
   Size.Width = 320.000000000000000000
   Size.Height = 139.000000000000000000
   Size.PlatformDefault = False

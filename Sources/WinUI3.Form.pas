@@ -739,7 +739,9 @@ begin
     Canvas.BeginScene(@FUpdateRects, ContextHandle);
     try
       // draw all form if focus mode is on
+      var Save := Canvas.SaveState;
       inherited PaintRects(FUpdateRects);
+      Canvas.RestoreState(Save);
 
       var R := TControl(Focused).AbsoluteRect;
       Canvas.Stroke.Assign(FFocusStyle);
