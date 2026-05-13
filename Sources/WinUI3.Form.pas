@@ -447,7 +447,6 @@ begin
     SetWindowLong(FWindowHandle, GWL_STYLE, GetWindowLong(FWindowHandle, GWL_STYLE) - WS_SYSMENU);
   if TFmxFormState.WasNotShown not in FormState then
     DoOnSettingChange;
-  InvalidateNonClient;
   {$ENDIF}
 end;
 
