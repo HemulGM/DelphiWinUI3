@@ -447,6 +447,7 @@ begin
     SetWindowLong(FWindowHandle, GWL_STYLE, GetWindowLong(FWindowHandle, GWL_STYLE) - WS_SYSMENU);
   if TFmxFormState.WasNotShown not in FormState then
     DoOnSettingChange;
+  InvalidateNonClient;
   {$ENDIF}
 end;
 
@@ -739,7 +740,9 @@ begin
     Canvas.BeginScene(@FUpdateRects, ContextHandle);
     try
       // draw all form if focus mode is on
+      var Save := Canvas.SaveState;
       inherited PaintRects(FUpdateRects);
+      Canvas.RestoreState(Save);
 
       var R := TControl(Focused).AbsoluteRect;
       Canvas.Stroke.Assign(FFocusStyle);

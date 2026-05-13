@@ -49,6 +49,7 @@ uses
 
 begin
   //GlobalUseDirect2D := False; //(for xp)
+  //GlobalUseGDIPlusClearType := True;
   {$IFDEF ANDROID}
   GlobalUseSkia := True;
   {$ENDIF}

@@ -118,7 +118,7 @@ type
     LayoutCaption: TLayout;
     LayoutHead: TLayout;
     Layout42: TLayout;
-    Image7: TImage;
+    ImageIcon: TImage;
     LabelTitle: TLabel;
     PopupBoxStyle: TPopupBox;
     Layout41: TLayout;
@@ -1711,6 +1711,7 @@ begin
   end;
 
   inherited;
+  //Fill.Kind := TBrushKind.None;
   TMessageManager.DefaultManager.SendMessage(Self, TStyleChangedMessage.Create(StyleBook, Self), True);
   TMessageManager.DefaultManager.SendMessage(Self, TInternalSettingChangedMessage.Create(StyleBook, Self), True);
 end;
@@ -2162,6 +2163,7 @@ begin
   CaptionControls := [LayoutCaption, LayoutHead];
   OffsetControls := [LayoutHead];
   TitleControls := [LabelTitle];
+  IconControl := ImageIcon;
   HideTitleBar := True;
 
   ScrollBox1.AniCalculations.Animation := True;

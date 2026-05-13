@@ -2377,7 +2377,7 @@ begin
               if Assigned(ProcEraseBkgnd) then
               begin
                 ProcEraseBkgnd(TWMEraseBkGnd(Message).DC, LForm);
-                ProcEraseBkgnd := nil;
+                //ProcEraseBkgnd := nil;
               end;
               Result := 1;
             end;
