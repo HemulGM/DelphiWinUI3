@@ -805,6 +805,7 @@ begin
     WinApi.Windows.DestroyWindow(FApplicationHWND);
     FApplicationHWND := 0;
   end;
+  PostQuitMessage(0);
 end;
 
 function TPlatformWin.HandleMessage: Boolean;
@@ -2248,9 +2249,9 @@ var
       begin
         // AltGr + Char (in German keyboard)
         Shift := Shift - [ssAlt, ssCtrl];
-      end;
+      end;    {
       if [ssAlt, ssCtrl, ssCommand] * Shift = [] then
-        Key := 0;
+        Key := 0;  }
     end;
     if ((([ssCtrl, ssCommand] * Shift) <> []) or (Ch < ' ')) and (Key > 0) then
       Ch := #0;
@@ -2377,7 +2378,7 @@ begin
               if Assigned(ProcEraseBkgnd) then
               begin
                 ProcEraseBkgnd(TWMEraseBkGnd(Message).DC, LForm);
-                //ProcEraseBkgnd := nil;
+                ProcEraseBkgnd := nil;
               end;
               Result := 1;
             end;
