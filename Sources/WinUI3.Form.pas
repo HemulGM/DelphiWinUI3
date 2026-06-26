@@ -121,6 +121,7 @@ type
     procedure AfterConstruction; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; AFormX, AFormY: Single); override;
     procedure KeyDown(var Key: Word; var KeyChar: System.WideChar; Shift: TShiftState); override;
+    function DispatchDialogKey(const AKey: Word; const AKeyChar: WideChar; const AShift: TShiftState): Boolean; override;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   public
@@ -459,6 +460,21 @@ begin
   TMessageManager.DefaultManager.Unsubscribe(TSystemAppearanceChangedMessage, FSubs5);
   inherited;
   FFocusStyle.Free;
+end;
+
+function TWinUIForm.DispatchDialogKey(const AKey: Word; const AKeyChar: WideChar; const AShift: TShiftState): Boolean;
+begin
+  // Fix. Pass the DialogKey to the control in focus,
+  // which processes the DialogKey (keyboard shortcuts) in KeyDown
+  if Focused <> nil then
+  begin
+    var LKey: Word := AKey;
+    var LKeyChar: WideChar := AKeyChar;
+    Focused.KeyDown(LKey, LKeyChar, AShift);
+    if LKey = 0 then
+      Exit(True);
+  end;
+  Result := inherited;
 end;
 
 procedure TWinUIForm.UpdateSystemBackdropType;
