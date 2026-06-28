@@ -1917,6 +1917,9 @@ begin
       // hgm
       if TPopupOfMenu(Popup).FClearBG then
         Menu.StylesData['bg.Opacity'] := 0.6;
+      {$IFNDEF MSWINDOWS}
+      Menu.StylesData['fill.Visible'] := False;
+      {$ENDIF}
       Popup.BorderWidth := 0;
       // hgm end
 
@@ -2737,6 +2740,9 @@ begin
     // hgm
     if TPopupOfMenu(Popup).FClearBG then
       Menu.StylesData['bg.Opacity'] := 0.6;
+    {$IFNDEF MSWINDOWS}
+    Menu.StylesData['fill.Visible'] := False;
+    {$ENDIF}
     Popup.BorderWidth := 0;
     Menu.Align := TAlignLayout.Client;
     // hgm end
