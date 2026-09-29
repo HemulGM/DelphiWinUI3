@@ -74,9 +74,9 @@ type
     FStayOnTop: Boolean;
     FSubscribeToChangeStyleBook: Boolean;
     FChangeStyleBookMsgId: Int64;
+    FSystemButtonsContainer: TControl;
     {$IFDEF MSWINDOWS}
     FWindowHandle: HWND;
-    FSystemButtonsContainer: TControl;
     {$ENDIF}
     procedure SetFocusCorners(const Value: TCorners);
     procedure SetFocusCornerType(const Value: TCornerType);
