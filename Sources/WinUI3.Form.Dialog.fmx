@@ -22,21 +22,6 @@ object FormDialogs: TFormDialogs
     Left = 312
     Top = 128
   end
-  inline FrameDialog: TFrameDialog
-    Size.Width = 540.000000000000000000
-    Size.Height = 290.000000000000000000
-    Size.PlatformDefault = False
-    OnResize = FrameDialogResize
-    OnResized = FrameDialogResize
-    inherited LayoutClient: TLayout
-      inherited LayoutContent: TLayout
-        inherited VertScrollBoxBody: TVertScrollBox
-          Viewport.Width = 492.000000000000000000
-          Viewport.Height = 90.000000000000000000
-        end
-      end
-    end
-  end
   object ActionList: TActionList
     Left = 256
     Top = 128

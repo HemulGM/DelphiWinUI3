@@ -207,6 +207,7 @@ end;
 constructor TFrameDialogFont.Create(AOwner: TComponent);
 begin
   inherited;
+  SpinBoxFontSize.OnChange := CheckBoxBoldChange;
   ListBoxFonts.ScrollAnimation := TBehaviorBoolean.True;
   Name := '';
   var FontList := TStringList.Create;
@@ -245,10 +246,11 @@ begin
       Break;
     end;
   SpinBoxFontSize.Value := FSize;
-  CheckBoxBold.IsChecked := TFontStyle.fsBold in FStyleExt.SimpleStyle;
-  CheckBoxItalic.IsChecked := TFontStyle.fsItalic in FStyleExt.SimpleStyle;
-  CheckBoxUnderline.IsChecked := TFontStyle.fsUnderline in FStyleExt.SimpleStyle;
-  CheckBoxStrikeout.IsChecked := TFontStyle.fsStrikeOut in FStyleExt.SimpleStyle;
+  var SimpleStyle: TFontStyles := FStyleExt;
+  CheckBoxBold.IsChecked := TFontStyle.fsBold in SimpleStyle;
+  CheckBoxItalic.IsChecked := TFontStyle.fsItalic in SimpleStyle;
+  CheckBoxUnderline.IsChecked := TFontStyle.fsUnderline in SimpleStyle;
+  CheckBoxStrikeout.IsChecked := TFontStyle.fsStrikeOut in SimpleStyle;
   FFilling := False;
   UpdateSelectedFont;
 end;
@@ -271,9 +273,9 @@ procedure TFrameDialogFont.UpdateSelectedFont;
 begin
   if FFilling then
     Exit;
-  if not Assigned(ListBoxFonts.Selected) then
-    Exit;
-  FFamily := ListBoxFonts.Selected.Text;
+  if Assigned(ListBoxFonts.Selected) then
+    FFamily := ListBoxFonts.Selected.Text;
+  FSize := SpinBoxFontSize.Value;
   var Style: TFontStyles := [];
   if CheckBoxBold.IsChecked then
     Include(Style, TFontStyle.fsBold);
@@ -283,9 +285,23 @@ begin
     Include(Style, TFontStyle.fsUnderline);
   if CheckBoxStrikeout.IsChecked then
     Include(Style, TFontStyle.fsStrikeOut);
-  FStyleExt := TFontStyleExt.Create(Style);
+  // Preserve extended weights/slants until the corresponding flag changes.
+  var PreviousStyle: TFontStyles := FStyleExt;
+  if (TFontStyle.fsBold in Style) <> (TFontStyle.fsBold in PreviousStyle) then
+    if CheckBoxBold.IsChecked then
+      FStyleExt.Weight := TFontWeight.Bold
+    else
+      FStyleExt.Weight := TFontWeight.Regular;
+  if (TFontStyle.fsItalic in Style) <> (TFontStyle.fsItalic in PreviousStyle) then
+    if CheckBoxItalic.IsChecked then
+      FStyleExt.Slant := TFontSlant.Oblique
+    else
+      FStyleExt.Slant := TFontSlant.Regular;
+  FStyleExt.SimpleStyle := Style - [TFontStyle.fsBold, TFontStyle.fsItalic];
 
-  LabelSample.Font.Family := ListBoxFonts.Selected.Text;
+  LabelSample.StyledSettings := LabelSample.StyledSettings - [TStyledSetting.Size];
+  LabelSample.Font.Family := FFamily;
+  LabelSample.Font.Size := FSize;
   LabelSample.Font.StyleExt := FStyleExt;
 end;
 

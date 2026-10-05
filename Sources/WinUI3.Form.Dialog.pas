@@ -68,7 +68,14 @@ uses
 
 procedure TFormDialogs.DoOnSettingChange;
 begin
+  SystemBackdropType := TWindowBackdropType.Disable;
   inherited;
+  // Content dialogs use an opaque surface above their owner window.
+  Fill.Kind := TBrushKind.Solid;
+  if IsDark then
+    Fill.Color := $FF2B2B2B
+  else
+    Fill.Color := $FFFFFFFF;
   Self.SetWindowCorner(TWindowCornerPreference.DWMWCP_ROUND);
   if FFrameColor <> TColors.Null then
     Self.SetWindowBorderColor(FFrameColor);  
@@ -103,6 +110,15 @@ end;
 constructor TFormDialogs.Create(AOwner: TCustomForm; Proc: TProc<TFormDialogs>);
 begin
   inherited Create(AOwner);
+  // Support forms without an inline frame in their designer resource.
+  if FrameDialog = nil then
+  begin
+    FrameDialog := TFrameDialog.Create(Self);
+    FrameDialog.Parent := Self;
+    FrameDialog.SetBounds(0, 0, ClientWidth, ClientHeight);
+    FrameDialog.OnResize := FrameDialogResize;
+    FrameDialog.OnResized := FrameDialogResize;
+  end;
   SetParent(AOwner);
   //ParentForm := AOwner;
   FrameDialog.ParamsBeginUpdate;
