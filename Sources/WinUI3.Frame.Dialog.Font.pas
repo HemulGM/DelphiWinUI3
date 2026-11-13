@@ -91,7 +91,7 @@ uses
   {$ENDIF}
   {$IFDEF ANDROID}
   Androidapi.JNIBridge, Androidapi.JNI.GraphicsContentViewText,
-  Androidapi.JNI.JavaTypes, Androidapi.Helpers,
+  Androidapi.JNI.JavaTypes, Androidapi.JNI.Os, Androidapi.Helpers,
   {$ENDIF}
   FMX.FontManager, FMX.BehaviorManager;
 
@@ -153,7 +153,16 @@ var
   Font: JFont;
   FileObj: JFile;
 begin
+  // android.graphics.fonts.SystemFonts and Font are public from API 29.
+  // Older Android still provides these built-in generic font families.
+  if TJBuild_VERSION.JavaClass.SDK_INT < 29 then
+  begin
+    FontList.AddStrings(['sans-serif', 'serif', 'monospace', 'sans-serif-condensed']);
+    Exit;
+  end;
   FontSet := TJSystemFonts.JavaClass.getAvailableFonts;
+  if FontSet = nil then
+    Exit;
   Iterator := FontSet.iterator;
 
   while Iterator.hasNext do
